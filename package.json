@@ -1,0 +1,14 @@
+{
+  "name": "jc-fullstack-mono",
+  "devDependencies": {
+    "turbo": "^2.3.4"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build"
+  }
+}
