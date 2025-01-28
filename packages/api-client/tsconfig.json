@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+      "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true,
+      "isolatedModules": true,
+      "module": "CommonJS", //required by NestJS
+      "preserveWatchOutput": true,
+      "skipLibCheck": true,
+      "strict": true,
+      "rootDir": "src",
+      "outDir": "dist",
+      "types": ["node"],
+      "declaration": true // create .d.ts files
+    },
+    "exclude": ["node_modules", "./dist/**/*"]
+  }
+  
