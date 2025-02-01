@@ -2,10 +2,11 @@ import commonjs from "@rollup/plugin-commonjs";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { defineConfig } from "vite";
+import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [TanStackRouterVite({ autoCodeSplitting: true }), react()],
   build: {
     rollupOptions: {
       plugins: [commonjs()],
