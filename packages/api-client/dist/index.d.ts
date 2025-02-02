@@ -1,4 +1,5 @@
 import { z } from "zod";
+export * from "./schemas/index";
 export declare const NotFoundSchema: z.ZodObject<{
     message: z.ZodString;
 }, "strip", z.ZodTypeAny, {
@@ -39,7 +40,7 @@ export declare const contract: {
                 name: string;
                 user_id: number;
             }>;
-            path: "/ingredients";
+            path: "/api/ingredients";
             responses: {
                 201: z.ZodObject<{
                     id: z.ZodNumber;
@@ -63,6 +64,34 @@ export declare const contract: {
                     message: string;
                 }, {
                     message: string;
+                }>;
+            };
+        };
+    };
+    auth: {
+        signup: {
+            method: "POST";
+            body: z.ZodObject<{
+                email: z.ZodString;
+                password: z.ZodString;
+            }, "strip", z.ZodTypeAny, {
+                email: string;
+                password: string;
+            }, {
+                email: string;
+                password: string;
+            }>;
+            path: "/api/signup";
+            responses: {
+                201: z.ZodObject<{
+                    access_token: z.ZodString;
+                    refresh_token: z.ZodString;
+                }, "strip", z.ZodTypeAny, {
+                    access_token: string;
+                    refresh_token: string;
+                }, {
+                    access_token: string;
+                    refresh_token: string;
                 }>;
             };
         };

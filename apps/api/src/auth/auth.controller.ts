@@ -1,27 +1,23 @@
-import { Controller, Post } from '@nestjs/common';
+import { contract } from '@jcmono/api-contract';
+import { Controller } from '@nestjs/common';
+import { tsRestHandler, TsRestHandler } from '@ts-rest/nest';
 import { AuthService } from './auth.service';
 
-@Controller('auth')
+@Controller()
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('/local/signup')
-  signupLocal() {
-    this.authService.signupLocal();
-  }
+  @TsRestHandler(contract.auth)
+  async signupLocal() {
+    return tsRestHandler(contract.auth, {
+      signup: async ({ body: { email, password } }) => {
+        const tokens = await this.authService.signupLocal({ email, password });
 
-  @Post('/local/signin')
-  signinLocal() {
-    this.authService.signinLocal();
-  }
-
-  @Post('/local/logout')
-  logout() {
-    this.authService.logout();
-  }
-
-  @Post('/local/refresh')
-  refreshToken() {
-    this.authService.refreshToken();
+        return {
+          status: 201,
+          body: tokens,
+        };
+      },
+    });
   }
 }
