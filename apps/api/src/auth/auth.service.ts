@@ -1,5 +1,5 @@
 import { AuthDto, Tokens } from '@jcmono/api-contract';
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -60,6 +60,32 @@ export class AuthService {
     return tokens;
   }
 
+  async signinLocal(dto: AuthDto):Promise<Tokens> {
+    const user = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+    });
+
+    if (!user) {
+      throw new ForbiddenException('Access Denied');
+    }
+
+    const { id, email, hash } = user;
+
+    const passwordMatches = await bcrypt.compare(dto.password, hash);
+
+    if (!passwordMatches) throw new ForbiddenException('Access Denied');
+
+    const tokens = await this.getToken(id, email);
+
+    await this.updateRtHash(id, tokens.refresh_token);
+
+    return tokens;
+  }
+
+  async logout() {
+    return 'logout';
+  }
+
   async updateRtHash(userId: number, rt: string) {
     //Save the refresh token in the database
     const hashedRt = await this.hashData(rt);
@@ -70,13 +96,6 @@ export class AuthService {
     });
   }
 
-  signinLocal() {
-    return 'signinLocal';
-  }
-
-  logout() {
-    return 'logout';
-  }
   refreshToken() {
     return 'refreshToken';
   }
