@@ -1,5 +1,9 @@
 import { AuthDto, Tokens } from '@jcmono/api-contract';
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -99,7 +103,25 @@ export class AuthService {
     });
   }
 
-  refreshToken() {
-    return 'refreshToken';
+  async refreshTokens(userId: number, rt: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) throw new ForbiddenException('Access Denied');
+
+    if (!user.hashedRt) throw new NotFoundException('Refresh token not found');
+
+    const rtMatches = await bcrypt.compare(rt, user.hashedRt);
+
+    if (!rtMatches) throw new ForbiddenException('Access Denied');
+
+    const { id, email } = user;
+
+    const tokens = await this.getToken(id, email);
+
+    await this.updateRtHash(id, tokens.refresh_token);
+
+    return tokens;
   }
 }

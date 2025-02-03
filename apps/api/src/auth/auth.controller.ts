@@ -1,14 +1,10 @@
 import { contract } from '@jcmono/api-contract';
-import {
-  Controller,
-  Req,
-  UnauthorizedException,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, UseGuards } from '@nestjs/common';
 import { tsRestHandler, TsRestHandler } from '@ts-rest/nest';
+import { GetCurrentUserId } from 'src/common/decorators/get-current-user-id.decorator';
+import { GetCurrentUser } from 'src/common/decorators/get-current-user.decorator';
+import { AtGuard, RtGuard } from 'src/common/guards';
 import { AuthService } from './auth.service';
-import { AuthGuard } from '@nestjs/passport';
-import { Request } from 'express';
 
 @Controller()
 export class AuthController {
@@ -36,20 +32,11 @@ export class AuthController {
     });
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AtGuard)
   @TsRestHandler(contract.logout)
-  async logout(@Req() req: Request) {
+  async logout(@GetCurrentUserId() userId: number) {
     return tsRestHandler(contract.logout, async () => {
-      const user = req.user as { sub: number };
-
-      if (user) {
-        await this.authService.logout(user?.sub);
-
-        return {
-          status: 200,
-          body: null,
-        };
-      }
+      await this.authService.logout(userId);
 
       return {
         status: 200,
@@ -58,15 +45,18 @@ export class AuthController {
     });
   }
 
-  @UseGuards(AuthGuard('jwt-refresh'))
+  @UseGuards(RtGuard)
   @TsRestHandler(contract.refreshToken)
-  async refreshToken() {
-    return tsRestHandler(contract.logout, async () => {
-      await this.authService.logout(1);
+  async refreshToken(
+    @GetCurrentUser('refreshToken') refreshToken: string,
+    @GetCurrentUserId() userId: number,
+  ) {
+    return tsRestHandler(contract.refreshToken, async () => {
+      const tokens = await this.authService.refreshTokens(userId, refreshToken);
 
       return {
         status: 200,
-        body: null,
+        body: tokens,
       };
     });
   }

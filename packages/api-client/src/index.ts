@@ -63,7 +63,7 @@ export const contract = c.router(
       path: "/refresh",
       body: null,
       responses: {
-        200: null,
+        200: TokensSchema,
       },
     }
   },

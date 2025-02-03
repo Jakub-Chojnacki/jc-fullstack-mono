@@ -135,7 +135,16 @@ export declare const contract: {
         body: null;
         path: "/api/refresh";
         responses: {
-            200: null;
+            200: z.ZodObject<{
+                access_token: z.ZodString;
+                refresh_token: z.ZodString;
+            }, "strip", z.ZodTypeAny, {
+                access_token: string;
+                refresh_token: string;
+            }, {
+                access_token: string;
+                refresh_token: string;
+            }>;
         };
     };
 };
