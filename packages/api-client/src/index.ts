@@ -41,7 +41,31 @@ export const contract = c.router(
           201: TokensSchema,
         },
       },
+      signin: {
+        method: "POST",
+        path: "/signin",
+        body: LoginSchema,
+        responses: {
+          200: TokensSchema,
+        },
+      },
     },
+    logout: {
+      method: "POST",
+      path: "/logout",
+      body: null,
+      responses: {
+        200: null,
+      },
+    },
+    refreshToken:{
+      method: "POST",
+      path: "/refresh",
+      body: null,
+      responses: {
+        200: null,
+      },
+    }
   },
   {
     pathPrefix: "/api",

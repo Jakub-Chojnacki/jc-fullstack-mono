@@ -50,7 +50,31 @@ exports.contract = c.router({
                 201: index_1.TokensSchema,
             },
         },
+        signin: {
+            method: "POST",
+            path: "/signin",
+            body: index_1.LoginSchema,
+            responses: {
+                200: index_1.TokensSchema,
+            },
+        },
     },
+    logout: {
+        method: "POST",
+        path: "/logout",
+        body: null,
+        responses: {
+            200: null,
+        },
+    },
+    refreshToken: {
+        method: "POST",
+        path: "/refresh",
+        body: null,
+        responses: {
+            200: null,
+        },
+    }
 }, {
     pathPrefix: "/api",
 });

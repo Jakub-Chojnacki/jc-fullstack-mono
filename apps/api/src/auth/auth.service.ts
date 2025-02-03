@@ -60,7 +60,7 @@ export class AuthService {
     return tokens;
   }
 
-  async signinLocal(dto: AuthDto):Promise<Tokens> {
+  async signinLocal(dto: AuthDto): Promise<Tokens> {
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
@@ -82,8 +82,11 @@ export class AuthService {
     return tokens;
   }
 
-  async logout() {
-    return 'logout';
+  async logout(userId: number) {
+    await this.prisma.user.updateMany({
+      where: { id: userId, hashedRt: { not: null } },
+      data: { hashedRt: null },
+    });
   }
 
   async updateRtHash(userId: number, rt: string) {

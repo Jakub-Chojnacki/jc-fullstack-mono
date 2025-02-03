@@ -95,5 +95,47 @@ export declare const contract: {
                 }>;
             };
         };
+        signin: {
+            method: "POST";
+            body: z.ZodObject<{
+                email: z.ZodString;
+                password: z.ZodString;
+            }, "strip", z.ZodTypeAny, {
+                email: string;
+                password: string;
+            }, {
+                email: string;
+                password: string;
+            }>;
+            path: "/api/signin";
+            responses: {
+                200: z.ZodObject<{
+                    access_token: z.ZodString;
+                    refresh_token: z.ZodString;
+                }, "strip", z.ZodTypeAny, {
+                    access_token: string;
+                    refresh_token: string;
+                }, {
+                    access_token: string;
+                    refresh_token: string;
+                }>;
+            };
+        };
+    };
+    logout: {
+        method: "POST";
+        body: null;
+        path: "/api/logout";
+        responses: {
+            200: null;
+        };
+    };
+    refreshToken: {
+        method: "POST";
+        body: null;
+        path: "/api/refresh";
+        responses: {
+            200: null;
+        };
     };
 };
