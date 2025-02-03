@@ -1,8 +1,11 @@
 import { contract } from '@jcmono/api-contract';
 import { Controller, UseGuards } from '@nestjs/common';
 import { tsRestHandler, TsRestHandler } from '@ts-rest/nest';
-import { GetCurrentUserId } from 'src/common/decorators/get-current-user-id.decorator';
-import { GetCurrentUser } from 'src/common/decorators/get-current-user.decorator';
+import {
+  GetCurrentUser,
+  GetCurrentUserId,
+  Public,
+} from 'src/common/decorators';
 import { AtGuard, RtGuard } from 'src/common/guards';
 import { AuthService } from './auth.service';
 
@@ -10,6 +13,7 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @Public()
   @TsRestHandler(contract.auth)
   async signupLocal() {
     return tsRestHandler(contract.auth, {
@@ -45,6 +49,7 @@ export class AuthController {
     });
   }
 
+  @Public()
   @UseGuards(RtGuard)
   @TsRestHandler(contract.refreshToken)
   async refreshToken(
