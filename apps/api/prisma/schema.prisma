@@ -13,6 +13,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum QuantityUnit {
+  GRAMS
+  LITERS
+  MILLILITERS
+  PIECES
+  UNITS
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
@@ -23,5 +31,97 @@ model User {
   hashedRt String?
   name     String?
 
+  ingredients    Ingredient[]
+  recipes        Recipe[]
+  scheduledMeals ScheduledMeal[]
+  ShoppingList   ShoppingList[]
+
   @@map("users")
+}
+
+model Ingredient {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name   String
+  userId Int
+  user   User   @relation(fields: [userId], references: [id])
+
+  recipeIngredients      RecipeIngredient[]
+  ShoppingListIngredient ShoppingListIngredient[]
+
+  @@map("ingredients")
+}
+
+model RecipeIngredient {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  amount Float
+  unit   QuantityUnit
+
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
+  recipeId Int
+
+  ingredientId Int
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+}
+
+model Recipe {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name        String
+  description String
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  scheduledMeals    ScheduledMeal[]
+  recipeIngredients RecipeIngredient[]
+
+  @@map("recipes")
+}
+
+model ScheduledMeal {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  recipeId Int
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
+
+  @@map("scheduled_meals")
+}
+
+model ShoppingListIngredient {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  amount Float
+  unit   QuantityUnit
+
+  ingredientId Int
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+
+  shoppingListId Int
+  shoppingList   ShoppingList @relation(fields: [shoppingListId], references: [id])
+}
+
+model ShoppingList {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  ingredients ShoppingListIngredient[]
 }
