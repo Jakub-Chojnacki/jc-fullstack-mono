@@ -47,6 +47,7 @@ model Ingredient {
   name   String
   userId Int
   user   User   @relation(fields: [userId], references: [id])
+  isGlobal Boolean @default(false)
 
   recipeIngredients      RecipeIngredient[]
   ShoppingListIngredient ShoppingListIngredient[]
@@ -61,6 +62,7 @@ model RecipeIngredient {
 
   amount Float
   unit   QuantityUnit
+  isGlobal Boolean @default(false)
 
   recipe   Recipe @relation(fields: [recipeId], references: [id])
   recipeId Int
@@ -76,6 +78,7 @@ model Recipe {
 
   name        String
   description String
+  isGlobal Boolean @default(false)
 
   userId Int
   user   User @relation(fields: [userId], references: [id])
