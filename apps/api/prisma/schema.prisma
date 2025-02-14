@@ -50,7 +50,7 @@ model Ingredient {
   isGlobal Boolean @default(false)
 
   recipeIngredients      RecipeIngredient[]
-  ShoppingListIngredient ShoppingListIngredient[]
+  shoppingListIngredient ShoppingListIngredient[]
 
   @@map("ingredients")
 }

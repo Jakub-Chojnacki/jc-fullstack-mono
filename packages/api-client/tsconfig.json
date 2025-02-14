@@ -10,6 +10,7 @@
       "rootDir": "src",
       "outDir": "dist",
       "types": ["node"],
+      "strictNullChecks": true,
       "declaration": true // create .d.ts files
     },
     "exclude": ["node_modules", "./dist/**/*"]

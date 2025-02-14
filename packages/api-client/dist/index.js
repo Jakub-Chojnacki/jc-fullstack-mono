@@ -14,7 +14,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.contract = exports.IngredientSchema = exports.NotFoundSchema = void 0;
+exports.contract = exports.NotFoundSchema = void 0;
 var core_1 = require("@ts-rest/core");
 var zod_1 = require("zod");
 var index_1 = require("./schemas/index");
@@ -23,20 +23,56 @@ var c = (0, core_1.initContract)();
 exports.NotFoundSchema = zod_1.z.object({
     message: zod_1.z.string(),
 });
-exports.IngredientSchema = zod_1.z.object({
-    id: zod_1.z.number(),
-    created_at: zod_1.z.string(),
-    name: zod_1.z.string(),
-    user_id: zod_1.z.number(),
-});
 exports.contract = c.router({
     ingredients: {
+        getAll: {
+            method: "GET",
+            path: "/ingredients",
+            responses: {
+                200: zod_1.z.array(index_1.IngredientSchema),
+            },
+        },
+        getForUser: {
+            method: "GET",
+            path: "/ingredients/:userId",
+            pathParams: zod_1.z.object({ userId: zod_1.z.number() }),
+            responses: {
+                200: zod_1.z.array(index_1.IngredientSchema),
+            },
+        },
         create: {
             method: "POST",
             path: "/ingredients",
-            body: exports.IngredientSchema.omit({ id: true, created_at: true }),
+            body: index_1.IngredientSchema.omit({
+                id: true,
+                createdAt: true,
+                updatedAt: true,
+            }),
             responses: {
-                201: exports.IngredientSchema,
+                201: index_1.IngredientSchema,
+                400: exports.NotFoundSchema,
+            },
+        },
+        update: {
+            method: "PUT",
+            path: "/ingredients/:id",
+            pathParams: zod_1.z.object({ id: zod_1.z.number() }),
+            body: index_1.IngredientSchema.omit({
+                id: true,
+                createdAt: true,
+                updatedAt: true,
+            }),
+            responses: {
+                200: index_1.IngredientSchema,
+                404: exports.NotFoundSchema,
+            },
+        },
+        delete: {
+            method: "DELETE",
+            path: "/ingredients/:id",
+            pathParams: zod_1.z.object({ id: zod_1.z.number() }),
+            responses: {
+                200: null,
                 404: exports.NotFoundSchema,
             },
         },
@@ -74,7 +110,7 @@ exports.contract = c.router({
         responses: {
             200: index_1.TokensSchema,
         },
-    }
+    },
 }, {
     pathPrefix: "/api",
 });

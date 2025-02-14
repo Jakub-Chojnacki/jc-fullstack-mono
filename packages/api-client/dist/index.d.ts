@@ -7,57 +7,192 @@ export declare const NotFoundSchema: z.ZodObject<{
 }, {
     message: string;
 }>;
-export declare const IngredientSchema: z.ZodObject<{
-    id: z.ZodNumber;
-    created_at: z.ZodString;
-    name: z.ZodString;
-    user_id: z.ZodNumber;
-}, "strip", z.ZodTypeAny, {
-    id: number;
-    created_at: string;
-    name: string;
-    user_id: number;
-}, {
-    id: number;
-    created_at: string;
-    name: string;
-    user_id: number;
-}>;
-export type TIngredient = z.infer<typeof IngredientSchema>;
 export declare const contract: {
     ingredients: {
+        getAll: {
+            method: "GET";
+            path: "/api/ingredients";
+            responses: {
+                200: z.ZodArray<z.ZodObject<{
+                    id: z.ZodNumber;
+                    createdAt: z.ZodDate;
+                    updatedAt: z.ZodDate;
+                    name: z.ZodString;
+                    userId: z.ZodNumber;
+                    isGlobal: z.ZodBoolean;
+                }, "strip", z.ZodTypeAny, {
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    name: string;
+                    userId: number;
+                    isGlobal: boolean;
+                }, {
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    name: string;
+                    userId: number;
+                    isGlobal: boolean;
+                }>, "many">;
+            };
+        };
+        getForUser: {
+            pathParams: z.ZodObject<{
+                userId: z.ZodNumber;
+            }, "strip", z.ZodTypeAny, {
+                userId: number;
+            }, {
+                userId: number;
+            }>;
+            method: "GET";
+            path: "/api/ingredients/:userId";
+            responses: {
+                200: z.ZodArray<z.ZodObject<{
+                    id: z.ZodNumber;
+                    createdAt: z.ZodDate;
+                    updatedAt: z.ZodDate;
+                    name: z.ZodString;
+                    userId: z.ZodNumber;
+                    isGlobal: z.ZodBoolean;
+                }, "strip", z.ZodTypeAny, {
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    name: string;
+                    userId: number;
+                    isGlobal: boolean;
+                }, {
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    name: string;
+                    userId: number;
+                    isGlobal: boolean;
+                }>, "many">;
+            };
+        };
         create: {
             method: "POST";
             body: z.ZodObject<Omit<{
                 id: z.ZodNumber;
-                created_at: z.ZodString;
+                createdAt: z.ZodDate;
+                updatedAt: z.ZodDate;
                 name: z.ZodString;
-                user_id: z.ZodNumber;
-            }, "id" | "created_at">, "strip", z.ZodTypeAny, {
+                userId: z.ZodNumber;
+                isGlobal: z.ZodBoolean;
+            }, "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
                 name: string;
-                user_id: number;
+                userId: number;
+                isGlobal: boolean;
             }, {
                 name: string;
-                user_id: number;
+                userId: number;
+                isGlobal: boolean;
             }>;
             path: "/api/ingredients";
             responses: {
                 201: z.ZodObject<{
                     id: z.ZodNumber;
-                    created_at: z.ZodString;
+                    createdAt: z.ZodDate;
+                    updatedAt: z.ZodDate;
                     name: z.ZodString;
-                    user_id: z.ZodNumber;
+                    userId: z.ZodNumber;
+                    isGlobal: z.ZodBoolean;
                 }, "strip", z.ZodTypeAny, {
                     id: number;
-                    created_at: string;
+                    createdAt: Date;
+                    updatedAt: Date;
                     name: string;
-                    user_id: number;
+                    userId: number;
+                    isGlobal: boolean;
                 }, {
                     id: number;
-                    created_at: string;
+                    createdAt: Date;
+                    updatedAt: Date;
                     name: string;
-                    user_id: number;
+                    userId: number;
+                    isGlobal: boolean;
                 }>;
+                400: z.ZodObject<{
+                    message: z.ZodString;
+                }, "strip", z.ZodTypeAny, {
+                    message: string;
+                }, {
+                    message: string;
+                }>;
+            };
+        };
+        update: {
+            pathParams: z.ZodObject<{
+                id: z.ZodNumber;
+            }, "strip", z.ZodTypeAny, {
+                id: number;
+            }, {
+                id: number;
+            }>;
+            method: "PUT";
+            body: z.ZodObject<Omit<{
+                id: z.ZodNumber;
+                createdAt: z.ZodDate;
+                updatedAt: z.ZodDate;
+                name: z.ZodString;
+                userId: z.ZodNumber;
+                isGlobal: z.ZodBoolean;
+            }, "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
+                name: string;
+                userId: number;
+                isGlobal: boolean;
+            }, {
+                name: string;
+                userId: number;
+                isGlobal: boolean;
+            }>;
+            path: "/api/ingredients/:id";
+            responses: {
+                200: z.ZodObject<{
+                    id: z.ZodNumber;
+                    createdAt: z.ZodDate;
+                    updatedAt: z.ZodDate;
+                    name: z.ZodString;
+                    userId: z.ZodNumber;
+                    isGlobal: z.ZodBoolean;
+                }, "strip", z.ZodTypeAny, {
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    name: string;
+                    userId: number;
+                    isGlobal: boolean;
+                }, {
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    name: string;
+                    userId: number;
+                    isGlobal: boolean;
+                }>;
+                404: z.ZodObject<{
+                    message: z.ZodString;
+                }, "strip", z.ZodTypeAny, {
+                    message: string;
+                }, {
+                    message: string;
+                }>;
+            };
+        };
+        delete: {
+            pathParams: z.ZodObject<{
+                id: z.ZodNumber;
+            }, "strip", z.ZodTypeAny, {
+                id: number;
+            }, {
+                id: number;
+            }>;
+            method: "DELETE";
+            path: "/api/ingredients/:id";
+            responses: {
+                200: null;
                 404: z.ZodObject<{
                     message: z.ZodString;
                 }, "strip", z.ZodTypeAny, {

@@ -1,6 +1,6 @@
 import { initContract } from "@ts-rest/core";
 import { z } from "zod";
-import { LoginSchema, TokensSchema } from "./schemas/index";
+import { IngredientSchema, LoginSchema, TokensSchema } from "./schemas/index";
 
 export * from "./schemas/index";
 
@@ -10,24 +10,57 @@ export const NotFoundSchema = z.object({
   message: z.string(),
 });
 
-export const IngredientSchema = z.object({
-  id: z.number(),
-  created_at: z.string(),
-  name: z.string(),
-  user_id: z.number(),
-});
-
-export type TIngredient = z.infer<typeof IngredientSchema>;
-
 export const contract = c.router(
   {
     ingredients: {
+      getAll: {
+        method: "GET",
+        path: "/ingredients",
+        responses: {
+          200: z.array(IngredientSchema),
+        },
+      },
+      getForUser: {
+        method: "GET",
+        path: "/ingredients/:userId",
+        pathParams: z.object({ userId: z.number() }),
+        responses: {
+          200: z.array(IngredientSchema),
+        },
+      },
       create: {
         method: "POST",
         path: "/ingredients",
-        body: IngredientSchema.omit({ id: true, created_at: true }),
+        body: IngredientSchema.omit({
+          id: true,
+          createdAt: true,
+          updatedAt: true,
+        }),
         responses: {
           201: IngredientSchema,
+          400: NotFoundSchema,
+        },
+      },
+      update: {
+        method: "PUT",
+        path: "/ingredients/:id",
+        pathParams: z.object({ id: z.number() }),
+        body: IngredientSchema.omit({
+          id: true,
+          createdAt: true,
+          updatedAt: true,
+        }),
+        responses: {
+          200: IngredientSchema,
+          404: NotFoundSchema,
+        },
+      },
+      delete: {
+        method: "DELETE",
+        path: "/ingredients/:id",
+        pathParams: z.object({ id: z.number() }),
+        responses: {
+          200: null,
           404: NotFoundSchema,
         },
       },
@@ -58,14 +91,14 @@ export const contract = c.router(
         200: null,
       },
     },
-    refreshToken:{
+    refreshToken: {
       method: "POST",
       path: "/refresh",
       body: null,
       responses: {
         200: TokensSchema,
       },
-    }
+    },
   },
   {
     pathPrefix: "/api",
