@@ -1,56 +1,65 @@
 import { z } from "zod";
-export declare const IngredientSchema: z.ZodObject<{
+export declare const RecipeSchema: z.ZodObject<{
     id: z.ZodNumber;
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
-    name: z.ZodString;
     userId: z.ZodNumber;
     isGlobal: z.ZodBoolean;
+    name: z.ZodString;
+    description: z.ZodString;
 }, "strip", z.ZodTypeAny, {
     id: number;
     createdAt: Date;
     updatedAt: Date;
-    name: string;
     userId: number;
     isGlobal: boolean;
+    name: string;
+    description: string;
 }, {
     id: number;
     createdAt: Date;
     updatedAt: Date;
-    name: string;
     userId: number;
     isGlobal: boolean;
+    name: string;
+    description: string;
 }>;
-export type TIngredient = z.infer<typeof IngredientSchema>;
-export declare const IngredientCreateSchema: z.ZodObject<Omit<{
+export type TRecipe = z.infer<typeof RecipeSchema>;
+export declare const RecipeCreateSchema: z.ZodObject<Omit<{
     id: z.ZodNumber;
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
-    name: z.ZodString;
     userId: z.ZodNumber;
     isGlobal: z.ZodBoolean;
+    name: z.ZodString;
+    description: z.ZodString;
 }, "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
-    name: string;
     userId: number;
     isGlobal: boolean;
+    name: string;
+    description: string;
 }, {
-    name: string;
     userId: number;
     isGlobal: boolean;
+    name: string;
+    description: string;
 }>;
-export type TIngredientCreate = z.infer<typeof IngredientCreateSchema>;
-export declare const IngredientUpdateSchema: z.ZodObject<Omit<{
+export type TRecipeCreate = z.infer<typeof RecipeCreateSchema>;
+export declare const RecipeUpdateSchema: z.ZodObject<Omit<{
     id: z.ZodNumber;
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
-    name: z.ZodString;
     userId: z.ZodNumber;
     isGlobal: z.ZodBoolean;
+    name: z.ZodString;
+    description: z.ZodString;
 }, "id" | "createdAt" | "updatedAt" | "userId">, "strip", z.ZodTypeAny, {
-    name: string;
     isGlobal: boolean;
+    name: string;
+    description: string;
 }, {
-    name: string;
     isGlobal: boolean;
+    name: string;
+    description: string;
 }>;
-export type TIngredientUpdate = z.infer<typeof IngredientUpdateSchema>;
+export type TRecipeUpdate = z.infer<typeof RecipeUpdateSchema>;

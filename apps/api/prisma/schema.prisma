@@ -77,7 +77,7 @@ model Recipe {
   updatedAt DateTime @updatedAt
 
   name        String
-  description String
+  description String 
   isGlobal Boolean @default(false)
 
   userId Int

@@ -1,3 +1,4 @@
 export * from "./auth";
 export * from "./ingredients";
-export * from './utils'
+export * from './recipes';
+export * from './utils';

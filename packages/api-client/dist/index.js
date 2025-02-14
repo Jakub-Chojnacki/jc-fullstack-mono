@@ -78,6 +78,60 @@ exports.contract = c.router({
             },
         },
     },
+    recipes: {
+        getGlobal: {
+            method: "GET",
+            path: "/recipes",
+            responses: {
+                200: zod_1.z.array(index_1.RecipeSchema),
+            },
+        },
+        getForUser: {
+            method: "GET",
+            path: "/recipes/:userId",
+            pathParams: zod_1.z.object({ userId: index_1.StringToNumberSchema }),
+            responses: {
+                200: zod_1.z.array(index_1.RecipeSchema),
+            },
+        },
+        create: {
+            method: "POST",
+            path: "/recipes",
+            body: index_1.RecipeSchema.omit({
+                id: true,
+                createdAt: true,
+                updatedAt: true,
+            }),
+            responses: {
+                201: index_1.RecipeSchema,
+                400: exports.NotFoundSchema,
+            },
+        },
+        update: {
+            method: "PUT",
+            path: "/recipes/:id",
+            pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
+            body: index_1.RecipeSchema.omit({
+                id: true,
+                createdAt: true,
+                updatedAt: true,
+                userId: true,
+            }),
+            responses: {
+                200: index_1.RecipeSchema,
+                404: exports.NotFoundSchema,
+            },
+        },
+        delete: {
+            method: "DELETE",
+            path: "/recipes/:id",
+            pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
+            responses: {
+                200: index_1.RecipeSchema || null,
+                404: exports.NotFoundSchema,
+            },
+        },
+    },
     auth: {
         signup: {
             method: "POST",

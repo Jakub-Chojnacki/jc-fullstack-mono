@@ -1,5 +1,5 @@
+import { TIngredientCreate, TIngredientUpdate } from '@jcmono/api-contract';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { type TIngredient } from 'api-contract';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -25,7 +25,7 @@ export class IngredientsService {
     return ingredients;
   }
 
-  async create(body: TIngredient) {
+  async create(body: TIngredientCreate) {
     const ingredient = await this.prisma.ingredient.create({
       data: body,
     });
@@ -58,7 +58,7 @@ export class IngredientsService {
     return deletedIngredient;
   }
 
-  async update(id: number, body: TIngredient) {
+  async update(id: number, body: TIngredientUpdate) {
     await this.findIngredient(id);
 
     const updatedIngredient = await this.prisma.ingredient.update({
