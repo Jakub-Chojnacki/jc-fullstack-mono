@@ -9,7 +9,7 @@ export declare const NotFoundSchema: z.ZodObject<{
 }>;
 export declare const contract: {
     ingredients: {
-        getAll: {
+        getGlobal: {
             method: "GET";
             path: "/api/ingredients";
             responses: {
@@ -39,11 +39,11 @@ export declare const contract: {
         };
         getForUser: {
             pathParams: z.ZodObject<{
-                userId: z.ZodNumber;
+                userId: z.ZodUnion<[z.ZodEffects<z.ZodString, number, string>, z.ZodNumber]>;
             }, "strip", z.ZodTypeAny, {
                 userId: number;
             }, {
-                userId: number;
+                userId: string | number;
             }>;
             method: "GET";
             path: "/api/ingredients/:userId";
@@ -125,11 +125,11 @@ export declare const contract: {
         };
         update: {
             pathParams: z.ZodObject<{
-                id: z.ZodNumber;
+                id: z.ZodUnion<[z.ZodEffects<z.ZodString, number, string>, z.ZodNumber]>;
             }, "strip", z.ZodTypeAny, {
                 id: number;
             }, {
-                id: number;
+                id: string | number;
             }>;
             method: "PUT";
             body: z.ZodObject<Omit<{
@@ -139,13 +139,11 @@ export declare const contract: {
                 name: z.ZodString;
                 userId: z.ZodNumber;
                 isGlobal: z.ZodBoolean;
-            }, "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
+            }, "id" | "createdAt" | "updatedAt" | "userId">, "strip", z.ZodTypeAny, {
                 name: string;
-                userId: number;
                 isGlobal: boolean;
             }, {
                 name: string;
-                userId: number;
                 isGlobal: boolean;
             }>;
             path: "/api/ingredients/:id";
@@ -183,16 +181,37 @@ export declare const contract: {
         };
         delete: {
             pathParams: z.ZodObject<{
-                id: z.ZodNumber;
+                id: z.ZodUnion<[z.ZodEffects<z.ZodString, number, string>, z.ZodNumber]>;
             }, "strip", z.ZodTypeAny, {
                 id: number;
             }, {
-                id: number;
+                id: string | number;
             }>;
             method: "DELETE";
             path: "/api/ingredients/:id";
             responses: {
-                200: null;
+                200: z.ZodObject<{
+                    id: z.ZodNumber;
+                    createdAt: z.ZodDate;
+                    updatedAt: z.ZodDate;
+                    name: z.ZodString;
+                    userId: z.ZodNumber;
+                    isGlobal: z.ZodBoolean;
+                }, "strip", z.ZodTypeAny, {
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    name: string;
+                    userId: number;
+                    isGlobal: boolean;
+                }, {
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    name: string;
+                    userId: number;
+                    isGlobal: boolean;
+                }>;
                 404: z.ZodObject<{
                     message: z.ZodString;
                 }, "strip", z.ZodTypeAny, {

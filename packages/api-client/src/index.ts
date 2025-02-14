@@ -1,6 +1,11 @@
 import { initContract } from "@ts-rest/core";
 import { z } from "zod";
-import { IngredientSchema, LoginSchema, TokensSchema } from "./schemas/index";
+import {
+  IngredientSchema,
+  LoginSchema,
+  StringToNumberSchema,
+  TokensSchema,
+} from "./schemas/index";
 
 export * from "./schemas/index";
 
@@ -13,7 +18,7 @@ export const NotFoundSchema = z.object({
 export const contract = c.router(
   {
     ingredients: {
-      getAll: {
+      getGlobal: {
         method: "GET",
         path: "/ingredients",
         responses: {
@@ -23,7 +28,7 @@ export const contract = c.router(
       getForUser: {
         method: "GET",
         path: "/ingredients/:userId",
-        pathParams: z.object({ userId: z.number() }),
+        pathParams: z.object({ userId: StringToNumberSchema }),
         responses: {
           200: z.array(IngredientSchema),
         },
@@ -44,11 +49,12 @@ export const contract = c.router(
       update: {
         method: "PUT",
         path: "/ingredients/:id",
-        pathParams: z.object({ id: z.number() }),
+        pathParams: z.object({ id: StringToNumberSchema }),
         body: IngredientSchema.omit({
           id: true,
           createdAt: true,
           updatedAt: true,
+          userId: true,
         }),
         responses: {
           200: IngredientSchema,
@@ -58,9 +64,9 @@ export const contract = c.router(
       delete: {
         method: "DELETE",
         path: "/ingredients/:id",
-        pathParams: z.object({ id: z.number() }),
+        pathParams: z.object({ id: StringToNumberSchema }),
         responses: {
-          200: null,
+          200: IngredientSchema || null,
           404: NotFoundSchema,
         },
       },

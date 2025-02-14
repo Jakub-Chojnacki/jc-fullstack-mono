@@ -25,7 +25,7 @@ exports.NotFoundSchema = zod_1.z.object({
 });
 exports.contract = c.router({
     ingredients: {
-        getAll: {
+        getGlobal: {
             method: "GET",
             path: "/ingredients",
             responses: {
@@ -35,7 +35,7 @@ exports.contract = c.router({
         getForUser: {
             method: "GET",
             path: "/ingredients/:userId",
-            pathParams: zod_1.z.object({ userId: zod_1.z.number() }),
+            pathParams: zod_1.z.object({ userId: index_1.StringToNumberSchema }),
             responses: {
                 200: zod_1.z.array(index_1.IngredientSchema),
             },
@@ -56,11 +56,12 @@ exports.contract = c.router({
         update: {
             method: "PUT",
             path: "/ingredients/:id",
-            pathParams: zod_1.z.object({ id: zod_1.z.number() }),
+            pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
             body: index_1.IngredientSchema.omit({
                 id: true,
                 createdAt: true,
                 updatedAt: true,
+                userId: true,
             }),
             responses: {
                 200: index_1.IngredientSchema,
@@ -70,9 +71,9 @@ exports.contract = c.router({
         delete: {
             method: "DELETE",
             path: "/ingredients/:id",
-            pathParams: zod_1.z.object({ id: zod_1.z.number() }),
+            pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
             responses: {
-                200: null,
+                200: index_1.IngredientSchema || null,
                 404: exports.NotFoundSchema,
             },
         },

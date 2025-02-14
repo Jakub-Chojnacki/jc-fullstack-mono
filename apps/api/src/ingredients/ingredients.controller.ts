@@ -24,8 +24,7 @@ export class IngredientsController {
   async getForUser() {
     return tsRestHandler(
       contract.ingredients.getForUser,
-      async ({ params }) => {
-        const { userId } = params;
+      async ({ params: { userId } }) => {
         const ingredients = await this.ingredientsService.getForUser(userId);
 
         return {
@@ -36,21 +35,45 @@ export class IngredientsController {
     );
   }
 
-  @TsRestHandler(contract.ingredients.getAll)
-  async getOneIngredient() {
-    return tsRestHandler(contract.ingredients.getAll, async () => {
-      const ingredients = await this.ingredientsService.getAll();
-
-      if (!ingredients)
-        return {
-          status: 404,
-          body: { message: 'Ingredients not found!' },
-        };
+  @TsRestHandler(contract.ingredients.getGlobal)
+  async getGlobalIngredients() {
+    return tsRestHandler(contract.ingredients.getGlobal, async () => {
+      const ingredients = await this.ingredientsService.getGlobal();
 
       return {
         status: 200,
         body: ingredients,
       };
     });
+  }
+
+  @TsRestHandler(contract.ingredients.delete)
+  async deleteIngredient() {
+    return tsRestHandler(
+      contract.ingredients.delete,
+      async ({ params: { id } }) => {
+        const ingredients = await this.ingredientsService.delete(id);
+
+        return {
+          status: 200,
+          body: ingredients,
+        };
+      },
+    );
+  }
+
+  @TsRestHandler(contract.ingredients.update)
+  async updateIngredient() {
+    return tsRestHandler(
+      contract.ingredients.update,
+      async ({ params: { id }, body }) => {
+        const ingredients = await this.ingredientsService.update(id, body);
+
+        return {
+          status: 200,
+          body: ingredients,
+        };
+      },
+    );
   }
 }
