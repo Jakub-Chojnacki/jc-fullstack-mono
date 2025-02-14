@@ -27,3 +27,32 @@ export const IngredientUpdateSchema = IngredientSchema.omit({
 });
 
 export type TIngredientUpdate = z.infer<typeof IngredientUpdateSchema>;
+
+const QuantityUnit = [
+  "GRAMS",
+  "LITERS",
+  "MILLILITERS",
+  "PIECES",
+  "UNITS",
+] as const;
+
+export const RecipeIngredientSchema = z.object({
+  id: z.number(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  amount: z.number(),
+  unit: z.enum(QuantityUnit),
+  isGlobal: z.boolean(),
+  ingredientId: z.number(),
+  recipeId: z.number(),
+});
+
+export const RecipeIngredientCreateSchema = RecipeIngredientSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type TRecipeIngredientCreate = z.infer<
+  typeof RecipeIngredientCreateSchema
+>;

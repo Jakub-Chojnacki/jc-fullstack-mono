@@ -54,3 +54,54 @@ export declare const IngredientUpdateSchema: z.ZodObject<Omit<{
     isGlobal: boolean;
 }>;
 export type TIngredientUpdate = z.infer<typeof IngredientUpdateSchema>;
+export declare const RecipeIngredientSchema: z.ZodObject<{
+    id: z.ZodNumber;
+    createdAt: z.ZodDate;
+    updatedAt: z.ZodDate;
+    amount: z.ZodNumber;
+    unit: z.ZodEnum<["GRAMS", "LITERS", "MILLILITERS", "PIECES", "UNITS"]>;
+    isGlobal: z.ZodBoolean;
+    ingredientId: z.ZodNumber;
+    recipeId: z.ZodNumber;
+}, "strip", z.ZodTypeAny, {
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    isGlobal: boolean;
+    amount: number;
+    unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
+    ingredientId: number;
+    recipeId: number;
+}, {
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    isGlobal: boolean;
+    amount: number;
+    unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
+    ingredientId: number;
+    recipeId: number;
+}>;
+export declare const RecipeIngredientCreateSchema: z.ZodObject<Omit<{
+    id: z.ZodNumber;
+    createdAt: z.ZodDate;
+    updatedAt: z.ZodDate;
+    amount: z.ZodNumber;
+    unit: z.ZodEnum<["GRAMS", "LITERS", "MILLILITERS", "PIECES", "UNITS"]>;
+    isGlobal: z.ZodBoolean;
+    ingredientId: z.ZodNumber;
+    recipeId: z.ZodNumber;
+}, "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
+    isGlobal: boolean;
+    amount: number;
+    unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
+    ingredientId: number;
+    recipeId: number;
+}, {
+    isGlobal: boolean;
+    amount: number;
+    unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
+    ingredientId: number;
+    recipeId: number;
+}>;
+export type TRecipeIngredientCreate = z.infer<typeof RecipeIngredientCreateSchema>;

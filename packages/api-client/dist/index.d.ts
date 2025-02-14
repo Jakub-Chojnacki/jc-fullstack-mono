@@ -457,6 +457,64 @@ export declare const contract: {
             };
         };
     };
+    recipeIngredients: {
+        create: {
+            method: "POST";
+            body: z.ZodObject<Omit<{
+                id: z.ZodNumber;
+                createdAt: z.ZodDate;
+                updatedAt: z.ZodDate;
+                amount: z.ZodNumber;
+                unit: z.ZodEnum<["GRAMS", "LITERS", "MILLILITERS", "PIECES", "UNITS"]>;
+                isGlobal: z.ZodBoolean;
+                ingredientId: z.ZodNumber;
+                recipeId: z.ZodNumber;
+            }, "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
+                isGlobal: boolean;
+                amount: number;
+                unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
+                ingredientId: number;
+                recipeId: number;
+            }, {
+                isGlobal: boolean;
+                amount: number;
+                unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
+                ingredientId: number;
+                recipeId: number;
+            }>;
+            path: "/api/recipeIngredients";
+            responses: {
+                201: z.ZodObject<{
+                    id: z.ZodNumber;
+                    createdAt: z.ZodDate;
+                    updatedAt: z.ZodDate;
+                    amount: z.ZodNumber;
+                    unit: z.ZodEnum<["GRAMS", "LITERS", "MILLILITERS", "PIECES", "UNITS"]>;
+                    isGlobal: z.ZodBoolean;
+                    ingredientId: z.ZodNumber;
+                    recipeId: z.ZodNumber;
+                }, "strip", z.ZodTypeAny, {
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    isGlobal: boolean;
+                    amount: number;
+                    unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
+                    ingredientId: number;
+                    recipeId: number;
+                }, {
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    isGlobal: boolean;
+                    amount: number;
+                    unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
+                    ingredientId: number;
+                    recipeId: number;
+                }>;
+            };
+        };
+    };
     auth: {
         signup: {
             method: "POST";

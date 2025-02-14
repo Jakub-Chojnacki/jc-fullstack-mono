@@ -6,6 +6,7 @@ import { AtGuard } from './common/guards';
 import { IngredientsModule } from './ingredients/ingredients.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { RecipesModule } from './recipes/recipes.module';
+import { RecipeIngredientsModule } from './recipe-ingredients/recipe-ingredients.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { RecipesModule } from './recipes/recipes.module';
     AuthModule,
     PrismaModule,
     RecipesModule,
+    RecipeIngredientsModule,
   ],
   providers: [
     {

@@ -132,6 +132,16 @@ exports.contract = c.router({
             },
         },
     },
+    recipeIngredients: {
+        create: {
+            method: "POST",
+            path: "/recipeIngredients",
+            body: index_1.RecipeIngredientCreateSchema,
+            responses: {
+                201: index_1.RecipeIngredientSchema,
+            },
+        },
+    },
     auth: {
         signup: {
             method: "POST",

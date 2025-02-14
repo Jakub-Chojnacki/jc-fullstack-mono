@@ -3,6 +3,8 @@ import { z } from "zod";
 import {
   IngredientSchema,
   LoginSchema,
+  RecipeIngredientCreateSchema,
+  RecipeIngredientSchema,
   RecipeSchema,
   StringToNumberSchema,
   TokensSchema,
@@ -123,6 +125,16 @@ export const contract = c.router(
         responses: {
           200: RecipeSchema || null,
           404: NotFoundSchema,
+        },
+      },
+    },
+    recipeIngredients: {
+      create: {
+        method: "POST",
+        path: "/recipeIngredients",
+        body: RecipeIngredientCreateSchema,
+        responses: {
+          201: RecipeIngredientSchema,
         },
       },
     },
