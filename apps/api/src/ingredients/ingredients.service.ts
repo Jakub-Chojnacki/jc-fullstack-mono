@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { type TIngredient } from 'api-contract';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -35,7 +35,6 @@ export class IngredientsService {
 
   async findIngredient(id: number) {
     //check if ingredient exists or throw error
-    Logger.log(id, 'testLOgger')
     const foundIngredient = await this.prisma.ingredient.findFirst({
       where: {
         id,
