@@ -103,7 +103,8 @@ model ScheduledMeal {
 
   userId   Int
   user     User     @relation(fields: [userId], references: [id])
-  mealType MealType @default(DINNER)
+  mealType MealType? @default(DINNER)
+  scheduledAt DateTime
 
   recipeId Int
   recipe   Recipe @relation(fields: [recipeId], references: [id])

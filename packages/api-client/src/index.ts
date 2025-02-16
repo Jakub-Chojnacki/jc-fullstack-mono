@@ -9,6 +9,10 @@ import {
   StringToNumberSchema,
   TokensSchema,
 } from "./schemas/index";
+import {
+  ScheduleMealsCreateSchema,
+  ScheduleMealsSchema,
+} from "./schemas/scheduleMeals";
 
 export * from "./schemas/index";
 
@@ -153,6 +157,44 @@ export const contract = c.router(
         pathParams: z.object({ id: StringToNumberSchema }),
         responses: {
           200: RecipeIngredientSchema,
+          404: NotFoundSchema,
+        },
+      },
+    },
+    scheduleMeals: {
+      getForUser: {
+        method: "GET",
+        path: "/scheduleMeals/:userId",
+        pathParams: z.object({ userId: StringToNumberSchema }),
+        responses: {
+          200: z.array(ScheduleMealsSchema),
+        },
+      },
+      create: {
+        method: "POST",
+        path: "/scheduleMeals",
+        body: ScheduleMealsCreateSchema,
+        responses: {
+          201: ScheduleMealsSchema,
+          400: NotFoundSchema,
+        },
+      },
+      update: {
+        method: "PUT",
+        path: "/scheduleMeals/:id",
+        pathParams: z.object({ id: StringToNumberSchema }),
+        body: ScheduleMealsCreateSchema,
+        responses: {
+          200: ScheduleMealsSchema,
+          404: NotFoundSchema,
+        },
+      },
+      delete: {
+        method: "DELETE",
+        path: "/scheduleMeals/:id",
+        pathParams: z.object({ id: StringToNumberSchema }),
+        responses: {
+          200: ScheduleMealsSchema,
           404: NotFoundSchema,
         },
       },

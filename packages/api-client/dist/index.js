@@ -18,6 +18,7 @@ exports.contract = exports.NotFoundSchema = void 0;
 var core_1 = require("@ts-rest/core");
 var zod_1 = require("zod");
 var index_1 = require("./schemas/index");
+var scheduleMeals_1 = require("./schemas/scheduleMeals");
 __exportStar(require("./schemas/index"), exports);
 var c = (0, core_1.initContract)();
 exports.NotFoundSchema = zod_1.z.object({
@@ -157,6 +158,44 @@ exports.contract = c.router({
             pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
             responses: {
                 200: index_1.RecipeIngredientSchema,
+                404: exports.NotFoundSchema,
+            },
+        },
+    },
+    scheduleMeals: {
+        getForUser: {
+            method: "GET",
+            path: "/scheduleMeals/:userId",
+            pathParams: zod_1.z.object({ userId: index_1.StringToNumberSchema }),
+            responses: {
+                200: zod_1.z.array(scheduleMeals_1.ScheduleMealsSchema),
+            },
+        },
+        create: {
+            method: "POST",
+            path: "/scheduleMeals",
+            body: scheduleMeals_1.ScheduleMealsCreateSchema,
+            responses: {
+                201: scheduleMeals_1.ScheduleMealsSchema,
+                400: exports.NotFoundSchema,
+            },
+        },
+        update: {
+            method: "PUT",
+            path: "/scheduleMeals/:id",
+            pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
+            body: scheduleMeals_1.ScheduleMealsCreateSchema,
+            responses: {
+                200: scheduleMeals_1.ScheduleMealsSchema,
+                404: exports.NotFoundSchema,
+            },
+        },
+        delete: {
+            method: "DELETE",
+            path: "/scheduleMeals/:id",
+            pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
+            responses: {
+                200: scheduleMeals_1.ScheduleMealsSchema,
                 404: exports.NotFoundSchema,
             },
         },
