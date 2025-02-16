@@ -141,6 +141,25 @@ exports.contract = c.router({
                 201: index_1.RecipeIngredientSchema,
             },
         },
+        update: {
+            method: "PUT",
+            path: "/recipeIngredients/:id",
+            pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
+            body: index_1.RecipeIngredientCreateSchema,
+            responses: {
+                200: index_1.RecipeIngredientSchema,
+                404: exports.NotFoundSchema,
+            },
+        },
+        delete: {
+            method: "DELETE",
+            path: "/recipeIngredients/:id",
+            pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
+            responses: {
+                200: index_1.RecipeIngredientSchema,
+                404: exports.NotFoundSchema,
+            },
+        },
     },
     auth: {
         signup: {

@@ -137,6 +137,25 @@ export const contract = c.router(
           201: RecipeIngredientSchema,
         },
       },
+      update: {
+        method: "PUT",
+        path: "/recipeIngredients/:id",
+        pathParams: z.object({ id: StringToNumberSchema }),
+        body: RecipeIngredientCreateSchema,
+        responses: {
+          200: RecipeIngredientSchema,
+          404: NotFoundSchema,
+        },
+      },
+      delete: {
+        method: "DELETE",
+        path: "/recipeIngredients/:id",
+        pathParams: z.object({ id: StringToNumberSchema }),
+        responses: {
+          200: RecipeIngredientSchema,
+          404: NotFoundSchema,
+        },
+      },
     },
     auth: {
       signup: {

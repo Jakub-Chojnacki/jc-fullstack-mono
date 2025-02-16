@@ -13,4 +13,21 @@ export class RecipeIngredientsService {
 
     return createdRecipeIngredient;
   }
+
+  async update(id: number, body: TRecipeIngredientCreate) {
+    const updatedRecipeIngredient = await this.prisma.recipeIngredient.update({
+      where: { id },
+      data: body,
+    });
+
+    return updatedRecipeIngredient;
+  }
+
+  async delete(id: number) {
+    const deletedRecipeIngredient = await this.prisma.recipeIngredient.delete({
+      where: { id },
+    });
+
+    return deletedRecipeIngredient;
+  }
 }

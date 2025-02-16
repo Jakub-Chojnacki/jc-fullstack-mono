@@ -24,4 +24,36 @@ export class RecipeIngredientsController {
       },
     );
   }
+
+  @TsRestHandler(contract.recipeIngredients.update)
+  async update() {
+    return tsRestHandler(
+      contract.recipeIngredients.update,
+      async ({ body, params: { id } }) => {
+        const updatedRecipeIngredient =
+          await this.recipeIngredientsService.update(id, body);
+
+        return {
+          status: 201,
+          body: updatedRecipeIngredient,
+        };
+      },
+    );
+  }
+
+  @TsRestHandler(contract.recipeIngredients.delete)
+  async delete() {
+    return tsRestHandler(
+      contract.recipeIngredients.delete,
+      async ({ params: { id } }) => {
+        const deletedRecipeIngredient =
+          await this.recipeIngredientsService.delete(id);
+
+        return {
+          status: 201,
+          body: deletedRecipeIngredient,
+        };
+      },
+    );
+  }
 }
