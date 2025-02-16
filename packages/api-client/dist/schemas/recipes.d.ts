@@ -11,17 +11,17 @@ export declare const RecipeSchema: z.ZodObject<{
     id: number;
     createdAt: Date;
     updatedAt: Date;
+    name: string;
     userId: number;
     isGlobal: boolean;
-    name: string;
     description: string;
 }, {
     id: number;
     createdAt: Date;
     updatedAt: Date;
+    name: string;
     userId: number;
     isGlobal: boolean;
-    name: string;
     description: string;
 }>;
 export type TRecipe = z.infer<typeof RecipeSchema>;
@@ -34,14 +34,14 @@ export declare const RecipeCreateSchema: z.ZodObject<Omit<{
     name: z.ZodString;
     description: z.ZodString;
 }, "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
+    name: string;
     userId: number;
     isGlobal: boolean;
-    name: string;
     description: string;
 }, {
+    name: string;
     userId: number;
     isGlobal: boolean;
-    name: string;
     description: string;
 }>;
 export type TRecipeCreate = z.infer<typeof RecipeCreateSchema>;
@@ -54,12 +54,12 @@ export declare const RecipeUpdateSchema: z.ZodObject<Omit<{
     name: z.ZodString;
     description: z.ZodString;
 }, "id" | "createdAt" | "updatedAt" | "userId">, "strip", z.ZodTypeAny, {
-    isGlobal: boolean;
     name: string;
+    isGlobal: boolean;
     description: string;
 }, {
-    isGlobal: boolean;
     name: string;
+    isGlobal: boolean;
     description: string;
 }>;
 export type TRecipeUpdate = z.infer<typeof RecipeUpdateSchema>;
