@@ -18,3 +18,4 @@ __exportStar(require("./auth"), exports);
 __exportStar(require("./ingredients"), exports);
 __exportStar(require("./recipes"), exports);
 __exportStar(require("./utils"), exports);
+__exportStar(require("./scheduleMeals"), exports);

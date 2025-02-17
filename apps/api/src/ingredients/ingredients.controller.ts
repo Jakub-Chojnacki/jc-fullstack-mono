@@ -1,8 +1,9 @@
 import { contract } from '@jcmono/api-contract';
-import { Controller } from '@nestjs/common';
+import { Controller, Req } from '@nestjs/common';
 import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
 
 import { IngredientsService } from './ingredients.service';
+import { GetCurrentUserId } from 'src/common/decorators';
 
 @Controller()
 export class IngredientsController {
@@ -21,18 +22,15 @@ export class IngredientsController {
   }
 
   @TsRestHandler(contract.ingredients.getForUser)
-  async getForUser() {
-    return tsRestHandler(
-      contract.ingredients.getForUser,
-      async ({ params: { userId } }) => {
-        const ingredients = await this.ingredientsService.getForUser(userId);
+  async getForUser(@GetCurrentUserId() userId: number) {
+    return tsRestHandler(contract.ingredients.getForUser, async () => {
+      const ingredients = await this.ingredientsService.getForUser(userId);
 
-        return {
-          status: 200,
-          body: ingredients,
-        };
-      },
-    );
+      return {
+        status: 200,
+        body: ingredients,
+      };
+    });
   }
 
   @TsRestHandler(contract.ingredients.getGlobal)

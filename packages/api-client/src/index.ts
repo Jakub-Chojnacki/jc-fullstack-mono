@@ -12,6 +12,7 @@ import {
 import {
   ScheduleMealsCreateSchema,
   ScheduleMealsSchema,
+  ScheduleMealsUpdateSchema,
 } from "./schemas/scheduleMeals";
 
 export * from "./schemas/index";
@@ -27,15 +28,14 @@ export const contract = c.router(
     ingredients: {
       getGlobal: {
         method: "GET",
-        path: "/ingredients",
+        path: "/ingredients/global",
         responses: {
           200: z.array(IngredientSchema),
         },
       },
       getForUser: {
         method: "GET",
-        path: "/ingredients/:userId",
-        pathParams: z.object({ userId: StringToNumberSchema }),
+        path: "/ingredients",
         responses: {
           200: z.array(IngredientSchema),
         },
@@ -81,15 +81,14 @@ export const contract = c.router(
     recipes: {
       getGlobal: {
         method: "GET",
-        path: "/recipes",
+        path: "/recipes/global",
         responses: {
           200: z.array(RecipeSchema),
         },
       },
       getForUser: {
         method: "GET",
-        path: "/recipes/:userId",
-        pathParams: z.object({ userId: StringToNumberSchema }),
+        path: "/recipes",
         responses: {
           200: z.array(RecipeSchema),
         },
@@ -162,10 +161,9 @@ export const contract = c.router(
       },
     },
     scheduleMeals: {
-      getForUser: {
+      get: {
         method: "GET",
-        path: "/scheduleMeals/:userId",
-        pathParams: z.object({ userId: StringToNumberSchema }),
+        path: "/scheduleMeals",
         responses: {
           200: z.array(ScheduleMealsSchema),
         },
@@ -183,7 +181,7 @@ export const contract = c.router(
         method: "PUT",
         path: "/scheduleMeals/:id",
         pathParams: z.object({ id: StringToNumberSchema }),
-        body: ScheduleMealsCreateSchema,
+        body: ScheduleMealsUpdateSchema,
         responses: {
           200: ScheduleMealsSchema,
           404: NotFoundSchema,

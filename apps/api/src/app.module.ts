@@ -7,6 +7,7 @@ import { IngredientsModule } from './ingredients/ingredients.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { RecipesModule } from './recipes/recipes.module';
 import { RecipeIngredientsModule } from './recipe-ingredients/recipe-ingredients.module';
+import { ScheduleMealsModule } from './schedule-meals/schedule-meals.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { RecipeIngredientsModule } from './recipe-ingredients/recipe-ingredients
     PrismaModule,
     RecipesModule,
     RecipeIngredientsModule,
+    ScheduleMealsModule,
   ],
   providers: [
     {

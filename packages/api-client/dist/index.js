@@ -28,15 +28,14 @@ exports.contract = c.router({
     ingredients: {
         getGlobal: {
             method: "GET",
-            path: "/ingredients",
+            path: "/ingredients/global",
             responses: {
                 200: zod_1.z.array(index_1.IngredientSchema),
             },
         },
         getForUser: {
             method: "GET",
-            path: "/ingredients/:userId",
-            pathParams: zod_1.z.object({ userId: index_1.StringToNumberSchema }),
+            path: "/ingredients",
             responses: {
                 200: zod_1.z.array(index_1.IngredientSchema),
             },
@@ -82,15 +81,14 @@ exports.contract = c.router({
     recipes: {
         getGlobal: {
             method: "GET",
-            path: "/recipes",
+            path: "/recipes/global",
             responses: {
                 200: zod_1.z.array(index_1.RecipeSchema),
             },
         },
         getForUser: {
             method: "GET",
-            path: "/recipes/:userId",
-            pathParams: zod_1.z.object({ userId: index_1.StringToNumberSchema }),
+            path: "/recipes",
             responses: {
                 200: zod_1.z.array(index_1.RecipeSchema),
             },
@@ -163,10 +161,9 @@ exports.contract = c.router({
         },
     },
     scheduleMeals: {
-        getForUser: {
+        get: {
             method: "GET",
-            path: "/scheduleMeals/:userId",
-            pathParams: zod_1.z.object({ userId: index_1.StringToNumberSchema }),
+            path: "/scheduleMeals",
             responses: {
                 200: zod_1.z.array(scheduleMeals_1.ScheduleMealsSchema),
             },
@@ -184,7 +181,7 @@ exports.contract = c.router({
             method: "PUT",
             path: "/scheduleMeals/:id",
             pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
-            body: scheduleMeals_1.ScheduleMealsCreateSchema,
+            body: scheduleMeals_1.ScheduleMealsUpdateSchema,
             responses: {
                 200: scheduleMeals_1.ScheduleMealsSchema,
                 404: exports.NotFoundSchema,

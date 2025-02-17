@@ -2,8 +2,9 @@ import { Controller } from '@nestjs/common';
 import { RecipesService } from './recipes.service';
 import { tsRestHandler, TsRestHandler } from '@ts-rest/nest';
 import { contract } from '@jcmono/api-contract';
+import { GetCurrentUserId } from 'src/common/decorators';
 
-@Controller('recipes')
+@Controller()
 export class RecipesController {
   constructor(private readonly recipesService: RecipesService) {}
 
@@ -20,18 +21,15 @@ export class RecipesController {
   }
 
   @TsRestHandler(contract.recipes.getForUser)
-  async getForUser() {
-    return tsRestHandler(
-      contract.recipes.getForUser,
-      async ({ params: { userId } }) => {
-        const recipes = await this.recipesService.getForUser(userId);
+  async getForUser(@GetCurrentUserId() userId: number) {
+    return tsRestHandler(contract.recipes.getForUser, async () => {
+      const recipes = await this.recipesService.getForUser(userId);
 
-        return {
-          status: 200,
-          body: recipes,
-        };
-      },
-    );
+      return {
+        status: 200,
+        body: recipes,
+      };
+    });
   }
 
   @TsRestHandler(contract.recipes.getGlobal)

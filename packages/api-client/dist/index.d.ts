@@ -11,6 +11,34 @@ export declare const contract: {
     ingredients: {
         getGlobal: {
             method: "GET";
+            path: "/api/ingredients/global";
+            responses: {
+                200: z.ZodArray<z.ZodObject<{
+                    id: z.ZodNumber;
+                    createdAt: z.ZodDate;
+                    updatedAt: z.ZodDate;
+                    name: z.ZodString;
+                    userId: z.ZodNumber;
+                    isGlobal: z.ZodBoolean;
+                }, "strip", z.ZodTypeAny, {
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    name: string;
+                    userId: number;
+                    isGlobal: boolean;
+                }, {
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    name: string;
+                    userId: number;
+                    isGlobal: boolean;
+                }>, "many">;
+            };
+        };
+        getForUser: {
+            method: "GET";
             path: "/api/ingredients";
             responses: {
                 200: z.ZodArray<z.ZodObject<{
@@ -24,50 +52,15 @@ export declare const contract: {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    userId: number;
                     name: string;
+                    userId: number;
                     isGlobal: boolean;
                 }, {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    userId: number;
                     name: string;
-                    isGlobal: boolean;
-                }>, "many">;
-            };
-        };
-        getForUser: {
-            pathParams: z.ZodObject<{
-                userId: z.ZodUnion<[z.ZodEffects<z.ZodString, number, string>, z.ZodNumber]>;
-            }, "strip", z.ZodTypeAny, {
-                userId: number;
-            }, {
-                userId: string | number;
-            }>;
-            method: "GET";
-            path: "/api/ingredients/:userId";
-            responses: {
-                200: z.ZodArray<z.ZodObject<{
-                    id: z.ZodNumber;
-                    createdAt: z.ZodDate;
-                    updatedAt: z.ZodDate;
-                    name: z.ZodString;
-                    userId: z.ZodNumber;
-                    isGlobal: z.ZodBoolean;
-                }, "strip", z.ZodTypeAny, {
-                    id: number;
-                    createdAt: Date;
-                    updatedAt: Date;
                     userId: number;
-                    name: string;
-                    isGlobal: boolean;
-                }, {
-                    id: number;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    userId: number;
-                    name: string;
                     isGlobal: boolean;
                 }>, "many">;
             };
@@ -82,12 +75,12 @@ export declare const contract: {
                 userId: z.ZodNumber;
                 isGlobal: z.ZodBoolean;
             }, "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
-                userId: number;
                 name: string;
+                userId: number;
                 isGlobal: boolean;
             }, {
-                userId: number;
                 name: string;
+                userId: number;
                 isGlobal: boolean;
             }>;
             path: "/api/ingredients";
@@ -103,15 +96,15 @@ export declare const contract: {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    userId: number;
                     name: string;
+                    userId: number;
                     isGlobal: boolean;
                 }, {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    userId: number;
                     name: string;
+                    userId: number;
                     isGlobal: boolean;
                 }>;
                 400: z.ZodObject<{
@@ -159,15 +152,15 @@ export declare const contract: {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    userId: number;
                     name: string;
+                    userId: number;
                     isGlobal: boolean;
                 }, {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    userId: number;
                     name: string;
+                    userId: number;
                     isGlobal: boolean;
                 }>;
                 404: z.ZodObject<{
@@ -201,15 +194,15 @@ export declare const contract: {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    userId: number;
                     name: string;
+                    userId: number;
                     isGlobal: boolean;
                 }, {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    userId: number;
                     name: string;
+                    userId: number;
                     isGlobal: boolean;
                 }>;
                 404: z.ZodObject<{
@@ -225,6 +218,37 @@ export declare const contract: {
     recipes: {
         getGlobal: {
             method: "GET";
+            path: "/api/recipes/global";
+            responses: {
+                200: z.ZodArray<z.ZodObject<{
+                    id: z.ZodNumber;
+                    createdAt: z.ZodDate;
+                    updatedAt: z.ZodDate;
+                    userId: z.ZodNumber;
+                    isGlobal: z.ZodBoolean;
+                    name: z.ZodString;
+                    description: z.ZodString;
+                }, "strip", z.ZodTypeAny, {
+                    description: string;
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    name: string;
+                    userId: number;
+                    isGlobal: boolean;
+                }, {
+                    description: string;
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    name: string;
+                    userId: number;
+                    isGlobal: boolean;
+                }>, "many">;
+            };
+        };
+        getForUser: {
+            method: "GET";
             path: "/api/recipes";
             responses: {
                 200: z.ZodArray<z.ZodObject<{
@@ -236,58 +260,20 @@ export declare const contract: {
                     name: z.ZodString;
                     description: z.ZodString;
                 }, "strip", z.ZodTypeAny, {
+                    description: string;
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    userId: number;
-                    description: string;
                     name: string;
+                    userId: number;
                     isGlobal: boolean;
                 }, {
+                    description: string;
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    userId: number;
-                    description: string;
                     name: string;
-                    isGlobal: boolean;
-                }>, "many">;
-            };
-        };
-        getForUser: {
-            pathParams: z.ZodObject<{
-                userId: z.ZodUnion<[z.ZodEffects<z.ZodString, number, string>, z.ZodNumber]>;
-            }, "strip", z.ZodTypeAny, {
-                userId: number;
-            }, {
-                userId: string | number;
-            }>;
-            method: "GET";
-            path: "/api/recipes/:userId";
-            responses: {
-                200: z.ZodArray<z.ZodObject<{
-                    id: z.ZodNumber;
-                    createdAt: z.ZodDate;
-                    updatedAt: z.ZodDate;
-                    userId: z.ZodNumber;
-                    isGlobal: z.ZodBoolean;
-                    name: z.ZodString;
-                    description: z.ZodString;
-                }, "strip", z.ZodTypeAny, {
-                    id: number;
-                    createdAt: Date;
-                    updatedAt: Date;
                     userId: number;
-                    description: string;
-                    name: string;
-                    isGlobal: boolean;
-                }, {
-                    id: number;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    userId: number;
-                    description: string;
-                    name: string;
                     isGlobal: boolean;
                 }>, "many">;
             };
@@ -303,14 +289,14 @@ export declare const contract: {
                 name: z.ZodString;
                 description: z.ZodString;
             }, "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
-                userId: number;
                 description: string;
                 name: string;
+                userId: number;
                 isGlobal: boolean;
             }, {
-                userId: number;
                 description: string;
                 name: string;
+                userId: number;
                 isGlobal: boolean;
             }>;
             path: "/api/recipes";
@@ -324,20 +310,20 @@ export declare const contract: {
                     name: z.ZodString;
                     description: z.ZodString;
                 }, "strip", z.ZodTypeAny, {
+                    description: string;
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    userId: number;
-                    description: string;
                     name: string;
+                    userId: number;
                     isGlobal: boolean;
                 }, {
+                    description: string;
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    userId: number;
-                    description: string;
                     name: string;
+                    userId: number;
                     isGlobal: boolean;
                 }>;
                 400: z.ZodObject<{
@@ -386,20 +372,20 @@ export declare const contract: {
                     name: z.ZodString;
                     description: z.ZodString;
                 }, "strip", z.ZodTypeAny, {
+                    description: string;
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    userId: number;
-                    description: string;
                     name: string;
+                    userId: number;
                     isGlobal: boolean;
                 }, {
+                    description: string;
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    userId: number;
-                    description: string;
                     name: string;
+                    userId: number;
                     isGlobal: boolean;
                 }>;
                 404: z.ZodObject<{
@@ -431,20 +417,20 @@ export declare const contract: {
                     name: z.ZodString;
                     description: z.ZodString;
                 }, "strip", z.ZodTypeAny, {
+                    description: string;
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    userId: number;
-                    description: string;
                     name: string;
+                    userId: number;
                     isGlobal: boolean;
                 }, {
+                    description: string;
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    userId: number;
-                    description: string;
                     name: string;
+                    userId: number;
                     isGlobal: boolean;
                 }>;
                 404: z.ZodObject<{
@@ -470,17 +456,17 @@ export declare const contract: {
                 ingredientId: z.ZodNumber;
                 recipeId: z.ZodNumber;
             }, "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
-                recipeId: number;
                 isGlobal: boolean;
                 amount: number;
                 unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
                 ingredientId: number;
+                recipeId: number;
             }, {
-                recipeId: number;
                 isGlobal: boolean;
                 amount: number;
                 unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
                 ingredientId: number;
+                recipeId: number;
             }>;
             path: "/api/recipeIngredients";
             responses: {
@@ -497,20 +483,20 @@ export declare const contract: {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    recipeId: number;
                     isGlobal: boolean;
                     amount: number;
                     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
                     ingredientId: number;
+                    recipeId: number;
                 }, {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    recipeId: number;
                     isGlobal: boolean;
                     amount: number;
                     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
                     ingredientId: number;
+                    recipeId: number;
                 }>;
             };
         };
@@ -533,17 +519,17 @@ export declare const contract: {
                 ingredientId: z.ZodNumber;
                 recipeId: z.ZodNumber;
             }, "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
-                recipeId: number;
                 isGlobal: boolean;
                 amount: number;
                 unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
                 ingredientId: number;
+                recipeId: number;
             }, {
-                recipeId: number;
                 isGlobal: boolean;
                 amount: number;
                 unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
                 ingredientId: number;
+                recipeId: number;
             }>;
             path: "/api/recipeIngredients/:id";
             responses: {
@@ -560,20 +546,20 @@ export declare const contract: {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    recipeId: number;
                     isGlobal: boolean;
                     amount: number;
                     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
                     ingredientId: number;
+                    recipeId: number;
                 }, {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    recipeId: number;
                     isGlobal: boolean;
                     amount: number;
                     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
                     ingredientId: number;
+                    recipeId: number;
                 }>;
                 404: z.ZodObject<{
                     message: z.ZodString;
@@ -608,20 +594,20 @@ export declare const contract: {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    recipeId: number;
                     isGlobal: boolean;
                     amount: number;
                     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
                     ingredientId: number;
+                    recipeId: number;
                 }, {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    recipeId: number;
                     isGlobal: boolean;
                     amount: number;
                     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
                     ingredientId: number;
+                    recipeId: number;
                 }>;
                 404: z.ZodObject<{
                     message: z.ZodString;
@@ -634,16 +620,9 @@ export declare const contract: {
         };
     };
     scheduleMeals: {
-        getForUser: {
-            pathParams: z.ZodObject<{
-                userId: z.ZodUnion<[z.ZodEffects<z.ZodString, number, string>, z.ZodNumber]>;
-            }, "strip", z.ZodTypeAny, {
-                userId: number;
-            }, {
-                userId: string | number;
-            }>;
+        get: {
             method: "GET";
-            path: "/api/scheduleMeals/:userId";
+            path: "/api/scheduleMeals";
             responses: {
                 200: z.ZodArray<z.ZodObject<z.objectUtil.extendShape<{
                     id: z.ZodNumber;
@@ -750,13 +729,11 @@ export declare const contract: {
                 recipeId: z.ZodNumber;
                 mealType: z.ZodOptional<z.ZodNullable<z.ZodEnum<["BREAKFAST", "LUNCH", "DINNER", "SNACK"]>>>;
                 scheduledAt: z.ZodDate;
-            }>, "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
-                userId: number;
+            }>, "id" | "createdAt" | "updatedAt" | "userId">, "strip", z.ZodTypeAny, {
                 recipeId: number;
                 scheduledAt: Date;
                 mealType?: "BREAKFAST" | "LUNCH" | "DINNER" | "SNACK" | null | undefined;
             }, {
-                userId: number;
                 recipeId: number;
                 scheduledAt: Date;
                 mealType?: "BREAKFAST" | "LUNCH" | "DINNER" | "SNACK" | null | undefined;

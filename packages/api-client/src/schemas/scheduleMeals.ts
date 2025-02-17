@@ -15,3 +15,14 @@ export const ScheduleMealsCreateSchema = ScheduleMealsSchema.omit({
   createdAt: true,
   updatedAt: true,
 });
+
+export const ScheduleMealsUpdateSchema = ScheduleMealsSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  userId: true,
+});
+
+export type TScheduleMeals = z.infer<typeof ScheduleMealsSchema>;
+export type TScheduleMealsCreate = z.infer<typeof ScheduleMealsCreateSchema>;
+export type TScheduleMealsUpdate = z.infer<typeof ScheduleMealsUpdateSchema>;
