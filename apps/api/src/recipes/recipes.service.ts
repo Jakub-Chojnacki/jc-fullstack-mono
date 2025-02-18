@@ -34,41 +34,25 @@ export class RecipesService {
     return recipe;
   }
 
-  async findRecipe(id: number) {
-    //check if recipe exists or throw error
-    const foundRecipe = await this.prisma.recipe.findFirst({
-      where: {
-        id,
-      },
-    });
-
-    if (!foundRecipe) throw new NotFoundException('Recipe not found');
-
-    return foundRecipe;
-  }
-
   async delete(id: number) {
-    await this.findRecipe(id);
-
-    const deletedRecipe = await this.prisma.recipe.delete({
-      where: {
-        id,
-      },
-    });
-
-    return deletedRecipe;
+    try {
+      return await this.prisma.recipe.delete({ where: { id } });
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException('Recipe not found');
+      }
+      throw error;
+    }
   }
 
   async update(id: number, body: TRecipeUpdate) {
-    await this.findRecipe(id);
-
-    const updatedRecipe = await this.prisma.recipe.update({
-      where: {
-        id,
-      },
-      data: body,
-    });
-
-    return updatedRecipe;
+    try {
+      return await this.prisma.recipe.update({ where: { id }, data: body });
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException('Recipe not found');
+      }
+      throw error;
+    }
   }
 }

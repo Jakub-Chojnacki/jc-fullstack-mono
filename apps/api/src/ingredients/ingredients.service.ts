@@ -33,41 +33,34 @@ export class IngredientsService {
     return ingredient;
   }
 
-  async findIngredient(id: number) {
-    //check if ingredient exists or throw error
-    const foundIngredient = await this.prisma.ingredient.findFirst({
-      where: {
-        id,
-      },
-    });
-
-    if (!foundIngredient) throw new NotFoundException('Ingredient not found');
-
-    return foundIngredient;
-  }
-
   async delete(id: number) {
-    await this.findIngredient(id);
-
-    const deletedIngredient = await this.prisma.ingredient.delete({
-      where: {
-        id,
-      },
-    });
-
-    return deletedIngredient;
+    try {
+      return await this.prisma.ingredient.delete({
+        where: {
+          id,
+        },
+      });
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException('Ingredient not found');
+      }
+      throw error;
+    }
   }
 
   async update(id: number, body: TIngredientUpdate) {
-    await this.findIngredient(id);
-
-    const updatedIngredient = await this.prisma.ingredient.update({
-      where: {
-        id,
-      },
-      data: body,
-    });
-
-    return updatedIngredient;
+    try {
+      return await this.prisma.ingredient.update({
+        where: {
+          id,
+        },
+        data: body,
+      });
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException('Ingredient not found');
+      }
+      throw error;
+    }
   }
 }
