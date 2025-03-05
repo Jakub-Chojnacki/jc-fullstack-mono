@@ -18,14 +18,14 @@ export class ScheduleMealsService {
   }
 
   async update(id: number, body: TScheduleMealsUpdate) {
-    const updatedRecipe = await this.prisma.scheduledMeal.update({
+    const updatedScheduledMeal= await this.prisma.scheduledMeal.update({
       where: {
         id,
       },
       data: body,
     });
 
-    return updatedRecipe;
+    return updatedScheduledMeal;
   }
 
   async delete(id: number) {
@@ -39,12 +39,12 @@ export class ScheduleMealsService {
   }
 
   async get(userId: number) {
-    const recipes = await this.prisma.scheduledMeal.findMany({
+    const scheduledMeals = await this.prisma.scheduledMeal.findMany({
       where: {
         userId,
       },
     });
 
-    return recipes;
+    return scheduledMeals;
   }
 }
