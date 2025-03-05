@@ -4,7 +4,7 @@ import { tsRestHandler, TsRestHandler } from '@ts-rest/nest';
 import { GetCurrentUserId } from 'src/common/decorators';
 import { ShoppingListService } from './shopping-list.service';
 
-@Controller('shopping-list')
+@Controller()
 export class ShoppingListController {
   constructor(private readonly shoppingListService: ShoppingListService) {}
 

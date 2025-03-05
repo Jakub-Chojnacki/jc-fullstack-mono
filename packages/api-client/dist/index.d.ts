@@ -863,6 +863,182 @@ export declare const contract: {
             };
         };
     };
+    shoppingListIngredient: {
+        create: {
+            method: "POST";
+            body: z.ZodObject<Omit<{
+                id: z.ZodNumber;
+                createdAt: z.ZodDate;
+                updatedAt: z.ZodDate;
+                amount: z.ZodNumber;
+                unit: z.ZodEnum<["GRAMS", "LITERS", "MILLILITERS", "PIECES", "UNITS"]>;
+                isDone: z.ZodBoolean;
+                ingredientId: z.ZodNumber;
+                shoppingListId: z.ZodNumber;
+            }, "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
+                amount: number;
+                unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
+                ingredientId: number;
+                isDone: boolean;
+                shoppingListId: number;
+            }, {
+                amount: number;
+                unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
+                ingredientId: number;
+                isDone: boolean;
+                shoppingListId: number;
+            }>;
+            path: "/api/shoppingListIngredient";
+            responses: {
+                201: z.ZodObject<{
+                    id: z.ZodNumber;
+                    createdAt: z.ZodDate;
+                    updatedAt: z.ZodDate;
+                    amount: z.ZodNumber;
+                    unit: z.ZodEnum<["GRAMS", "LITERS", "MILLILITERS", "PIECES", "UNITS"]>;
+                    isDone: z.ZodBoolean;
+                    ingredientId: z.ZodNumber;
+                    shoppingListId: z.ZodNumber;
+                }, "strip", z.ZodTypeAny, {
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    amount: number;
+                    unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
+                    ingredientId: number;
+                    isDone: boolean;
+                    shoppingListId: number;
+                }, {
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    amount: number;
+                    unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
+                    ingredientId: number;
+                    isDone: boolean;
+                    shoppingListId: number;
+                }>;
+            };
+        };
+        update: {
+            pathParams: z.ZodObject<{
+                id: z.ZodUnion<[z.ZodEffects<z.ZodString, number, string>, z.ZodNumber]>;
+            }, "strip", z.ZodTypeAny, {
+                id: number;
+            }, {
+                id: string | number;
+            }>;
+            method: "PUT";
+            body: z.ZodObject<Omit<{
+                id: z.ZodNumber;
+                createdAt: z.ZodDate;
+                updatedAt: z.ZodDate;
+                amount: z.ZodNumber;
+                unit: z.ZodEnum<["GRAMS", "LITERS", "MILLILITERS", "PIECES", "UNITS"]>;
+                isDone: z.ZodBoolean;
+                ingredientId: z.ZodNumber;
+                shoppingListId: z.ZodNumber;
+            }, "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
+                amount: number;
+                unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
+                ingredientId: number;
+                isDone: boolean;
+                shoppingListId: number;
+            }, {
+                amount: number;
+                unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
+                ingredientId: number;
+                isDone: boolean;
+                shoppingListId: number;
+            }>;
+            path: "/api/shoppingListIngredient/:id";
+            responses: {
+                200: z.ZodObject<{
+                    id: z.ZodNumber;
+                    createdAt: z.ZodDate;
+                    updatedAt: z.ZodDate;
+                    amount: z.ZodNumber;
+                    unit: z.ZodEnum<["GRAMS", "LITERS", "MILLILITERS", "PIECES", "UNITS"]>;
+                    isDone: z.ZodBoolean;
+                    ingredientId: z.ZodNumber;
+                    shoppingListId: z.ZodNumber;
+                }, "strip", z.ZodTypeAny, {
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    amount: number;
+                    unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
+                    ingredientId: number;
+                    isDone: boolean;
+                    shoppingListId: number;
+                }, {
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    amount: number;
+                    unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
+                    ingredientId: number;
+                    isDone: boolean;
+                    shoppingListId: number;
+                }>;
+                404: z.ZodObject<{
+                    message: z.ZodString;
+                }, "strip", z.ZodTypeAny, {
+                    message: string;
+                }, {
+                    message: string;
+                }>;
+            };
+        };
+        delete: {
+            pathParams: z.ZodObject<{
+                id: z.ZodUnion<[z.ZodEffects<z.ZodString, number, string>, z.ZodNumber]>;
+            }, "strip", z.ZodTypeAny, {
+                id: number;
+            }, {
+                id: string | number;
+            }>;
+            method: "DELETE";
+            path: "/api/shoppingListIngredient/:id";
+            responses: {
+                200: z.ZodObject<{
+                    id: z.ZodNumber;
+                    createdAt: z.ZodDate;
+                    updatedAt: z.ZodDate;
+                    amount: z.ZodNumber;
+                    unit: z.ZodEnum<["GRAMS", "LITERS", "MILLILITERS", "PIECES", "UNITS"]>;
+                    isDone: z.ZodBoolean;
+                    ingredientId: z.ZodNumber;
+                    shoppingListId: z.ZodNumber;
+                }, "strip", z.ZodTypeAny, {
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    amount: number;
+                    unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
+                    ingredientId: number;
+                    isDone: boolean;
+                    shoppingListId: number;
+                }, {
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    amount: number;
+                    unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
+                    ingredientId: number;
+                    isDone: boolean;
+                    shoppingListId: number;
+                }>;
+                404: z.ZodObject<{
+                    message: z.ZodString;
+                }, "strip", z.ZodTypeAny, {
+                    message: string;
+                }, {
+                    message: string;
+                }>;
+            };
+        };
+    };
     scheduleMeals: {
         get: {
             method: "GET";

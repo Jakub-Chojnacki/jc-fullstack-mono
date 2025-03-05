@@ -186,6 +186,35 @@ exports.contract = c.router({
             },
         },
     },
+    shoppingListIngredient: {
+        create: {
+            method: "POST",
+            path: "/shoppingListIngredient",
+            body: index_1.ShoppingListIngredientCreateSchema,
+            responses: {
+                201: index_1.ShoppingListIngredientSchema,
+            },
+        },
+        update: {
+            method: "PUT",
+            path: "/shoppingListIngredient/:id",
+            pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
+            body: index_1.ShoppingListIngredientUpdateSchema,
+            responses: {
+                200: index_1.ShoppingListIngredientSchema,
+                404: exports.NotFoundSchema,
+            },
+        },
+        delete: {
+            method: "DELETE",
+            path: "/shoppingListIngredient/:id",
+            pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
+            responses: {
+                200: index_1.ShoppingListIngredientSchema,
+                404: exports.NotFoundSchema,
+            },
+        },
+    },
     scheduleMeals: {
         get: {
             method: "GET",

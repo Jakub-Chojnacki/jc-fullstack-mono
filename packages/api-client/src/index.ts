@@ -7,6 +7,9 @@ import {
   RecipeIngredientSchema,
   RecipeSchema,
   ShoppingListCreateSchema,
+  ShoppingListIngredientCreateSchema,
+  ShoppingListIngredientSchema,
+  ShoppingListIngredientUpdateSchema,
   ShoppingListSchema,
   StringToNumberSchema,
   TokensSchema,
@@ -184,6 +187,35 @@ export const contract = c.router(
         pathParams: z.object({ id: StringToNumberSchema }),
         responses: {
           200: ShoppingListSchema.omit({ ingredients: true }),
+          404: NotFoundSchema,
+        },
+      },
+    },
+    shoppingListIngredient: {
+      create: {
+        method: "POST",
+        path: "/shoppingListIngredient",
+        body: ShoppingListIngredientCreateSchema,
+        responses: {
+          201: ShoppingListIngredientSchema,
+        },
+      },
+      update: {
+        method: "PUT",
+        path: "/shoppingListIngredient/:id",
+        pathParams: z.object({ id: StringToNumberSchema }),
+        body: ShoppingListIngredientUpdateSchema,
+        responses: {
+          200: ShoppingListIngredientSchema,
+          404: NotFoundSchema,
+        },
+      },
+      delete: {
+        method: "DELETE",
+        path: "/shoppingListIngredient/:id",
+        pathParams: z.object({ id: StringToNumberSchema }),
+        responses: {
+          200: ShoppingListIngredientSchema,
           404: NotFoundSchema,
         },
       },

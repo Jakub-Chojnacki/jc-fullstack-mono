@@ -9,6 +9,7 @@ import { RecipesModule } from './recipes/recipes.module';
 import { RecipeIngredientsModule } from './recipe-ingredients/recipe-ingredients.module';
 import { ScheduleMealsModule } from './schedule-meals/schedule-meals.module';
 import { ShoppingListModule } from './shopping-list/shopping-list.module';
+import { ShoppingListIngredientsModule } from './shopping-list-ingredients/shopping-list-ingredients.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ShoppingListModule } from './shopping-list/shopping-list.module';
     RecipeIngredientsModule,
     ScheduleMealsModule,
     ShoppingListModule,
+    ShoppingListIngredientsModule,
   ],
   providers: [
     {
