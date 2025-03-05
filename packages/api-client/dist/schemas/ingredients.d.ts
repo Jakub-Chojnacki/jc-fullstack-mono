@@ -54,6 +54,7 @@ export declare const IngredientUpdateSchema: z.ZodObject<Omit<{
     isGlobal: boolean;
 }>;
 export type TIngredientUpdate = z.infer<typeof IngredientUpdateSchema>;
+export declare const QuantityUnit: readonly ["GRAMS", "LITERS", "MILLILITERS", "PIECES", "UNITS"];
 export declare const RecipeIngredientSchema: z.ZodObject<{
     id: z.ZodNumber;
     createdAt: z.ZodDate;

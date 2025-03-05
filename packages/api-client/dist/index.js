@@ -160,6 +160,42 @@ exports.contract = c.router({
             },
         },
     },
+    shoppingList: {
+        get: {
+            method: "GET",
+            path: "/shoppingList",
+            responses: {
+                200: zod_1.z.array(index_1.ShoppingListSchema),
+            },
+        },
+        create: {
+            method: "POST",
+            path: "/shoppingList",
+            body: index_1.ShoppingListCreateSchema,
+            responses: {
+                201: index_1.ShoppingListSchema,
+            },
+        },
+        update: {
+            method: "PUT",
+            path: "/shoppingList/:id",
+            pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
+            body: index_1.ShoppingListUpdateSchema,
+            responses: {
+                200: index_1.ShoppingListSchema,
+                404: exports.NotFoundSchema,
+            },
+        },
+        delete: {
+            method: "DELETE",
+            path: "/shoppingList/:id",
+            pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
+            responses: {
+                200: index_1.ShoppingListSchema,
+                404: exports.NotFoundSchema,
+            },
+        },
+    },
     scheduleMeals: {
         get: {
             method: "GET",

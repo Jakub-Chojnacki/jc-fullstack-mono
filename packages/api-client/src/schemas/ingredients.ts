@@ -28,7 +28,7 @@ export const IngredientUpdateSchema = IngredientSchema.omit({
 
 export type TIngredientUpdate = z.infer<typeof IngredientUpdateSchema>;
 
-const QuantityUnit = [
+export const QuantityUnit = [
   "GRAMS",
   "LITERS",
   "MILLILITERS",

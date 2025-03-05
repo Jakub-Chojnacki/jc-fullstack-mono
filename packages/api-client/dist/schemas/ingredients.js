@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RecipeIngredientCreateSchema = exports.RecipeIngredientSchema = exports.IngredientUpdateSchema = exports.IngredientCreateSchema = exports.IngredientSchema = void 0;
+exports.RecipeIngredientCreateSchema = exports.RecipeIngredientSchema = exports.QuantityUnit = exports.IngredientUpdateSchema = exports.IngredientCreateSchema = exports.IngredientSchema = void 0;
 var zod_1 = require("zod");
 exports.IngredientSchema = zod_1.z.object({
     id: zod_1.z.number(),
@@ -21,7 +21,7 @@ exports.IngredientUpdateSchema = exports.IngredientSchema.omit({
     updatedAt: true,
     userId: true,
 });
-var QuantityUnit = [
+exports.QuantityUnit = [
     "GRAMS",
     "LITERS",
     "MILLILITERS",
@@ -33,7 +33,7 @@ exports.RecipeIngredientSchema = zod_1.z.object({
     createdAt: zod_1.z.date(),
     updatedAt: zod_1.z.date(),
     amount: zod_1.z.number(),
-    unit: zod_1.z.enum(QuantityUnit),
+    unit: zod_1.z.enum(exports.QuantityUnit),
     isGlobal: zod_1.z.boolean(),
     ingredientId: zod_1.z.number(),
     recipeId: zod_1.z.number(),
