@@ -725,29 +725,9 @@ export declare const contract: {
                     isDone: boolean;
                     shoppingListId: number;
                 }>, "many">;
-            }, "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
-                ingredients: {
-                    id: number;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    amount: number;
-                    unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-                    ingredientId: number;
-                    isDone: boolean;
-                    shoppingListId: number;
-                }[];
+            }, "ingredients" | "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
                 userId: number;
             }, {
-                ingredients: {
-                    id: number;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    amount: number;
-                    unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-                    ingredientId: number;
-                    isDone: boolean;
-                    shoppingListId: number;
-                }[];
                 userId: number;
             }>;
             path: "/api/shoppingList";
@@ -818,146 +798,6 @@ export declare const contract: {
                 }>;
             };
         };
-        update: {
-            pathParams: z.ZodObject<{
-                id: z.ZodUnion<[z.ZodEffects<z.ZodString, number, string>, z.ZodNumber]>;
-            }, "strip", z.ZodTypeAny, {
-                id: number;
-            }, {
-                id: string | number;
-            }>;
-            method: "PUT";
-            body: z.ZodObject<Omit<{
-                id: z.ZodNumber;
-                createdAt: z.ZodDate;
-                updatedAt: z.ZodDate;
-                userId: z.ZodNumber;
-                ingredients: z.ZodArray<z.ZodObject<{
-                    id: z.ZodNumber;
-                    createdAt: z.ZodDate;
-                    updatedAt: z.ZodDate;
-                    amount: z.ZodNumber;
-                    unit: z.ZodEnum<["GRAMS", "LITERS", "MILLILITERS", "PIECES", "UNITS"]>;
-                    isDone: z.ZodBoolean;
-                    ingredientId: z.ZodNumber;
-                    shoppingListId: z.ZodNumber;
-                }, "strip", z.ZodTypeAny, {
-                    id: number;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    amount: number;
-                    unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-                    ingredientId: number;
-                    isDone: boolean;
-                    shoppingListId: number;
-                }, {
-                    id: number;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    amount: number;
-                    unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-                    ingredientId: number;
-                    isDone: boolean;
-                    shoppingListId: number;
-                }>, "many">;
-            }, "id" | "createdAt" | "updatedAt" | "userId">, "strip", z.ZodTypeAny, {
-                ingredients: {
-                    id: number;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    amount: number;
-                    unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-                    ingredientId: number;
-                    isDone: boolean;
-                    shoppingListId: number;
-                }[];
-            }, {
-                ingredients: {
-                    id: number;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    amount: number;
-                    unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-                    ingredientId: number;
-                    isDone: boolean;
-                    shoppingListId: number;
-                }[];
-            }>;
-            path: "/api/shoppingList/:id";
-            responses: {
-                200: z.ZodObject<{
-                    id: z.ZodNumber;
-                    createdAt: z.ZodDate;
-                    updatedAt: z.ZodDate;
-                    userId: z.ZodNumber;
-                    ingredients: z.ZodArray<z.ZodObject<{
-                        id: z.ZodNumber;
-                        createdAt: z.ZodDate;
-                        updatedAt: z.ZodDate;
-                        amount: z.ZodNumber;
-                        unit: z.ZodEnum<["GRAMS", "LITERS", "MILLILITERS", "PIECES", "UNITS"]>;
-                        isDone: z.ZodBoolean;
-                        ingredientId: z.ZodNumber;
-                        shoppingListId: z.ZodNumber;
-                    }, "strip", z.ZodTypeAny, {
-                        id: number;
-                        createdAt: Date;
-                        updatedAt: Date;
-                        amount: number;
-                        unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-                        ingredientId: number;
-                        isDone: boolean;
-                        shoppingListId: number;
-                    }, {
-                        id: number;
-                        createdAt: Date;
-                        updatedAt: Date;
-                        amount: number;
-                        unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-                        ingredientId: number;
-                        isDone: boolean;
-                        shoppingListId: number;
-                    }>, "many">;
-                }, "strip", z.ZodTypeAny, {
-                    ingredients: {
-                        id: number;
-                        createdAt: Date;
-                        updatedAt: Date;
-                        amount: number;
-                        unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-                        ingredientId: number;
-                        isDone: boolean;
-                        shoppingListId: number;
-                    }[];
-                    id: number;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    userId: number;
-                }, {
-                    ingredients: {
-                        id: number;
-                        createdAt: Date;
-                        updatedAt: Date;
-                        amount: number;
-                        unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-                        ingredientId: number;
-                        isDone: boolean;
-                        shoppingListId: number;
-                    }[];
-                    id: number;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    userId: number;
-                }>;
-                404: z.ZodObject<{
-                    message: z.ZodString;
-                }, "strip", z.ZodTypeAny, {
-                    message: string;
-                }, {
-                    message: string;
-                }>;
-            };
-        };
         delete: {
             pathParams: z.ZodObject<{
                 id: z.ZodUnion<[z.ZodEffects<z.ZodString, number, string>, z.ZodNumber]>;
@@ -969,7 +809,7 @@ export declare const contract: {
             method: "DELETE";
             path: "/api/shoppingList/:id";
             responses: {
-                200: z.ZodObject<{
+                200: z.ZodObject<Omit<{
                     id: z.ZodNumber;
                     createdAt: z.ZodDate;
                     updatedAt: z.ZodDate;
@@ -1002,32 +842,12 @@ export declare const contract: {
                         isDone: boolean;
                         shoppingListId: number;
                     }>, "many">;
-                }, "strip", z.ZodTypeAny, {
-                    ingredients: {
-                        id: number;
-                        createdAt: Date;
-                        updatedAt: Date;
-                        amount: number;
-                        unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-                        ingredientId: number;
-                        isDone: boolean;
-                        shoppingListId: number;
-                    }[];
+                }, "ingredients">, "strip", z.ZodTypeAny, {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
                     userId: number;
                 }, {
-                    ingredients: {
-                        id: number;
-                        createdAt: Date;
-                        updatedAt: Date;
-                        amount: number;
-                        unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-                        ingredientId: number;
-                        isDone: boolean;
-                        shoppingListId: number;
-                    }[];
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;

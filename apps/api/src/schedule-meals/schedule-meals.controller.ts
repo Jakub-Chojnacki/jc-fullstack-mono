@@ -11,11 +11,11 @@ export class ScheduleMealsController {
   @TsRestHandler(contract.scheduleMeals.create)
   async create() {
     return tsRestHandler(contract.scheduleMeals.create, async ({ body }) => {
-      const createdRecipe = await this.scheduleMealsService.create(body);
+      const createdScheduledMeal = await this.scheduleMealsService.create(body);
 
       return {
         status: 201,
-        body: createdRecipe,
+        body: createdScheduledMeal,
       };
     });
   }

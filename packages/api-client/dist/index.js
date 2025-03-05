@@ -176,22 +176,12 @@ exports.contract = c.router({
                 201: index_1.ShoppingListSchema,
             },
         },
-        update: {
-            method: "PUT",
-            path: "/shoppingList/:id",
-            pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
-            body: index_1.ShoppingListUpdateSchema,
-            responses: {
-                200: index_1.ShoppingListSchema,
-                404: exports.NotFoundSchema,
-            },
-        },
         delete: {
             method: "DELETE",
             path: "/shoppingList/:id",
             pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
             responses: {
-                200: index_1.ShoppingListSchema,
+                200: index_1.ShoppingListSchema.omit({ ingredients: true }),
                 404: exports.NotFoundSchema,
             },
         },

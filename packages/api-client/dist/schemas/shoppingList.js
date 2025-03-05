@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ShoppingListUpdateSchema = exports.ShoppingListCreateSchema = exports.ShoppingListSchema = exports.ShoppingListIngredientUpdateSchema = exports.ShoppingListIngredientCreateSchema = exports.ShoppingListIngredientSchema = void 0;
+exports.ShoppingListCreateSchema = exports.ShoppingListSchema = exports.ShoppingListIngredientUpdateSchema = exports.ShoppingListIngredientCreateSchema = exports.ShoppingListIngredientSchema = void 0;
 var zod_1 = require("zod");
 var ingredients_1 = require("./ingredients");
 exports.ShoppingListIngredientSchema = zod_1.z.object({
@@ -34,10 +34,5 @@ exports.ShoppingListCreateSchema = exports.ShoppingListSchema.omit({
     id: true,
     createdAt: true,
     updatedAt: true,
-});
-exports.ShoppingListUpdateSchema = exports.ShoppingListSchema.omit({
-    id: true,
-    createdAt: true,
-    updatedAt: true,
-    userId: true,
+    ingredients: true,
 });

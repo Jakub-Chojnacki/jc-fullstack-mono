@@ -8,7 +8,6 @@ import {
   RecipeSchema,
   ShoppingListCreateSchema,
   ShoppingListSchema,
-  ShoppingListUpdateSchema,
   StringToNumberSchema,
   TokensSchema,
 } from "./schemas/index";
@@ -179,22 +178,12 @@ export const contract = c.router(
           201: ShoppingListSchema,
         },
       },
-      update: {
-        method: "PUT",
-        path: "/shoppingList/:id",
-        pathParams: z.object({ id: StringToNumberSchema }),
-        body: ShoppingListUpdateSchema,
-        responses: {
-          200: ShoppingListSchema,
-          404: NotFoundSchema,
-        },
-      },
       delete: {
         method: "DELETE",
         path: "/shoppingList/:id",
         pathParams: z.object({ id: StringToNumberSchema }),
         responses: {
-          200: ShoppingListSchema,
+          200: ShoppingListSchema.omit({ ingredients: true }),
           404: NotFoundSchema,
         },
       },

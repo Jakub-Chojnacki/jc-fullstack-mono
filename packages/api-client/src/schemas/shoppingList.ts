@@ -53,15 +53,7 @@ export const ShoppingListCreateSchema = ShoppingListSchema.omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+  ingredients: true,
 });
 
 export type TShoppingListCreate = z.infer<typeof ShoppingListCreateSchema>;
-
-export const ShoppingListUpdateSchema = ShoppingListSchema.omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-  userId: true,
-});
-
-export type TShoppingListUpdate = z.infer<typeof ShoppingListUpdateSchema>;
