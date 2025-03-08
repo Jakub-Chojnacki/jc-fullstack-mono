@@ -3,7 +3,7 @@ import { RecipeIngredientsService } from './recipe-ingredients.service';
 import { contract } from '@jcmono/api-contract';
 import { tsRestHandler, TsRestHandler } from '@ts-rest/nest';
 
-@Controller('recipe-ingredients')
+@Controller()
 export class RecipeIngredientsController {
   constructor(
     private readonly recipeIngredientsService: RecipeIngredientsService,
