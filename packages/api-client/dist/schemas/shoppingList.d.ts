@@ -14,8 +14,8 @@ export declare const ShoppingListIngredientSchema: z.ZodObject<{
     updatedAt: Date;
     amount: number;
     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-    isDone: boolean;
     ingredientId: number;
+    isDone: boolean;
     shoppingListId: number;
 }, {
     id: number;
@@ -23,8 +23,8 @@ export declare const ShoppingListIngredientSchema: z.ZodObject<{
     updatedAt: Date;
     amount: number;
     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-    isDone: boolean;
     ingredientId: number;
+    isDone: boolean;
     shoppingListId: number;
 }>;
 export type TShoppingListIngredient = z.infer<typeof ShoppingListIngredientSchema>;
@@ -40,14 +40,14 @@ export declare const ShoppingListIngredientCreateSchema: z.ZodObject<Omit<{
 }, "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
     amount: number;
     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-    isDone: boolean;
     ingredientId: number;
+    isDone: boolean;
     shoppingListId: number;
 }, {
     amount: number;
     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-    isDone: boolean;
     ingredientId: number;
+    isDone: boolean;
     shoppingListId: number;
 }>;
 export type TShoppingListIngredientCreate = z.infer<typeof ShoppingListIngredientCreateSchema>;
@@ -63,14 +63,14 @@ export declare const ShoppingListIngredientUpdateSchema: z.ZodObject<Omit<{
 }, "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
     amount: number;
     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-    isDone: boolean;
     ingredientId: number;
+    isDone: boolean;
     shoppingListId: number;
 }, {
     amount: number;
     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-    isDone: boolean;
     ingredientId: number;
+    isDone: boolean;
     shoppingListId: number;
 }>;
 export type TShoppingListIngredientUpdate = z.infer<typeof ShoppingListIngredientUpdateSchema>;
@@ -94,8 +94,8 @@ export declare const ShoppingListSchema: z.ZodObject<{
         updatedAt: Date;
         amount: number;
         unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-        isDone: boolean;
         ingredientId: number;
+        isDone: boolean;
         shoppingListId: number;
     }, {
         id: number;
@@ -103,8 +103,8 @@ export declare const ShoppingListSchema: z.ZodObject<{
         updatedAt: Date;
         amount: number;
         unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-        isDone: boolean;
         ingredientId: number;
+        isDone: boolean;
         shoppingListId: number;
     }>, "many">;
 }, "strip", z.ZodTypeAny, {
@@ -118,8 +118,8 @@ export declare const ShoppingListSchema: z.ZodObject<{
         updatedAt: Date;
         amount: number;
         unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-        isDone: boolean;
         ingredientId: number;
+        isDone: boolean;
         shoppingListId: number;
     }[];
 }, {
@@ -133,8 +133,8 @@ export declare const ShoppingListSchema: z.ZodObject<{
         updatedAt: Date;
         amount: number;
         unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-        isDone: boolean;
         ingredientId: number;
+        isDone: boolean;
         shoppingListId: number;
     }[];
 }>;
@@ -159,8 +159,8 @@ export declare const ShoppingListCreateSchema: z.ZodObject<Omit<{
         updatedAt: Date;
         amount: number;
         unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-        isDone: boolean;
         ingredientId: number;
+        isDone: boolean;
         shoppingListId: number;
     }, {
         id: number;
@@ -168,8 +168,8 @@ export declare const ShoppingListCreateSchema: z.ZodObject<Omit<{
         updatedAt: Date;
         amount: number;
         unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-        isDone: boolean;
         ingredientId: number;
+        isDone: boolean;
         shoppingListId: number;
     }>, "many">;
 }, "id" | "createdAt" | "updatedAt" | "ingredients">, "strip", z.ZodTypeAny, {
