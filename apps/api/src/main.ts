@@ -10,8 +10,8 @@ async function bootstrap() {
   app.use(helmet());
 
   const config = new DocumentBuilder()
-    .setTitle('Food Planer API')
-    .setDescription('The Food Planer API description')
+    .setTitle('Food Planner API')
+    .setDescription('The Food Planner API description')
     .setVersion('1.0')
     .build();
 
