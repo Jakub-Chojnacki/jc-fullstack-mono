@@ -20,7 +20,7 @@ describe('IngredientsService', () => {
     name: 'Salt',
     createdAt: new Date(),
     updatedAt: new Date(),
-    isGlobal: false,
+    isGlobal: true,
     userId: 123,
   };
 
@@ -46,9 +46,17 @@ describe('IngredientsService', () => {
     prisma = module.get(PrismaService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
+  it("should return global ingredients", async () => {
+    const mockData = [mockIngredient];
+
+    prisma.ingredient.findMany.mockResolvedValue(mockData);
+
+    const result = await service.getGlobal();
+    expect(result).toEqual(mockData);
+    expect(prisma.ingredient.findMany).toHaveBeenCalledWith({
+      where: { isGlobal: true },
+    });
+  })
 
   it('should return ingredients for a user', async () => {
     const mockData = [mockIngredient];
