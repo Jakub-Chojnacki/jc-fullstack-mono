@@ -16,7 +16,7 @@ export class RecipeIngredientsService {
   }
 
   async update(id: number, body: TRecipeIngredientCreate) {
-    return wrapWithTsRestError(contract.recipeIngredients.delete, () =>
+    return wrapWithTsRestError(contract.recipeIngredients.update, () =>
       this.prisma.recipeIngredient.update({
         where: { id },
         data: body,

@@ -49,7 +49,7 @@ export class IngredientsService {
   }
 
   async update(id: number, body: TIngredientUpdate) {
-    return wrapWithTsRestError(contract.ingredients.delete, () =>
+    return wrapWithTsRestError(contract.ingredients.update, () =>
       this.prisma.ingredient.update({
         where: {
           id,

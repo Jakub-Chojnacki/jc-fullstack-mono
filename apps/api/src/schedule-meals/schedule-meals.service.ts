@@ -20,7 +20,7 @@ export class ScheduleMealsService {
   }
 
   async update(id: number, body: TScheduleMealsUpdate) {
-    return wrapWithTsRestError(contract.scheduleMeals.delete, () =>
+    return wrapWithTsRestError(contract.scheduleMeals.update, () =>
       this.prisma.scheduledMeal.update({
         where: {
           id,
