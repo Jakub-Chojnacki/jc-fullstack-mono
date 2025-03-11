@@ -1,9 +1,11 @@
 import {
+  contract,
   TScheduleMealsCreate,
   TScheduleMealsUpdate,
 } from '@jcmono/api-contract';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import wrapWithTsRestError from 'src/utils/wrapWithTsRestError';
 
 @Injectable()
 export class ScheduleMealsService {
@@ -18,24 +20,24 @@ export class ScheduleMealsService {
   }
 
   async update(id: number, body: TScheduleMealsUpdate) {
-    const updatedScheduledMeal= await this.prisma.scheduledMeal.update({
-      where: {
-        id,
-      },
-      data: body,
-    });
-
-    return updatedScheduledMeal;
+    return wrapWithTsRestError(contract.scheduleMeals.delete, () =>
+      this.prisma.scheduledMeal.update({
+        where: {
+          id,
+        },
+        data: body,
+      }),
+    );
   }
 
   async delete(id: number) {
-    const deletedSchedule = await this.prisma.scheduledMeal.delete({
-      where: {
-        id,
-      },
-    });
-
-    return deletedSchedule;
+    return wrapWithTsRestError(contract.scheduleMeals.delete, () =>
+      this.prisma.scheduledMeal.delete({
+        where: {
+          id,
+        },
+      }),
+    );
   }
 
   async get(userId: number) {

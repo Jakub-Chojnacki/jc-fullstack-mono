@@ -1,8 +1,8 @@
 import { TRecipe } from '@jcmono/api-contract';
 import { Test, TestingModule } from '@nestjs/testing';
+import { TsRestException } from '@ts-rest/nest';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RecipesService } from './recipes.service';
-import { NotFoundException } from '@nestjs/common';
 
 describe('RecipesService', () => {
   let service: RecipesService;
@@ -101,12 +101,12 @@ describe('RecipesService', () => {
     expect(result).toEqual(mockRecipe);
   });
 
-  it('should throw NotFoundException if recipe not found during delete', async () => {
+  it('should throw TsRestException if recipe not found during delete', async () => {
     const error = { code: 'P2025' };
 
     prisma.recipe.delete.mockRejectedValue(error);
 
-    await expect(service.delete(999)).rejects.toThrow(NotFoundException);
+    await expect(service.delete(999)).rejects.toThrow(TsRestException);
   });
 
   it('should update a recipe', async () => {
@@ -129,11 +129,11 @@ describe('RecipesService', () => {
     });
   });
 
-  it('should throw NotFoundException if recipe not found during delete', async () => {
+  it('should throw TsRestException if recipe not found during delete', async () => {
     const error = { code: 'P2025' };
 
     prisma.recipe.delete.mockRejectedValue(error);
 
-    await expect(service.delete(999)).rejects.toThrow(NotFoundException);
+    await expect(service.delete(999)).rejects.toThrow(TsRestException);
   });
 });

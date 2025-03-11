@@ -74,7 +74,7 @@ describe('ScheduleMealsService', () => {
     });
   });
 
-  it('should throw NotFoundException if not found during update', async () => {
+  it('should throw TsRestException if not found during update', async () => {
     const error = { code: 'P2025' };
 
     prisma.scheduledMeal.update.mockRejectedValue(error);
@@ -97,7 +97,7 @@ describe('ScheduleMealsService', () => {
     });
   });
 
-  it('should throw NotFoundException if not found during delete', async () => {
+  it('should throw TsRestException if not found during delete', async () => {
     const error = { code: 'P2025' };
 
     prisma.scheduledMeal.delete.mockRejectedValue(error);

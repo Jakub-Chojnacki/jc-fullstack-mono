@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { IngredientsService } from './ingredients.service';
+import { TsRestException } from '@ts-rest/nest';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { NotFoundException } from '@nestjs/common';
+import { IngredientsService } from './ingredients.service';
 
 describe('IngredientsService', () => {
   let service: IngredientsService;
@@ -90,12 +90,12 @@ describe('IngredientsService', () => {
     expect(prisma.ingredient.delete).toHaveBeenCalledWith({ where: { id: 1 } });
   });
 
-  it('should throw NotFoundException if ingredient not found during delete', async () => {
+  it('should throw TsRestException if ingredient not found during delete', async () => {
     const error = { code: 'P2025' };
 
     prisma.ingredient.delete.mockRejectedValue(error);
 
-    await expect(service.delete(999)).rejects.toThrow(NotFoundException);
+    await expect(service.delete(999)).rejects.toThrow(TsRestException);
   });
 
   it('should update an ingredient', async () => {
@@ -111,13 +111,13 @@ describe('IngredientsService', () => {
     });
   });
 
-  it('should throw NotFoundException if ingredient not found during update', async () => {
+  it('should throw TsRestException if ingredient not found during update', async () => {
     const error = { code: 'P2025' };
 
     prisma.ingredient.update.mockRejectedValue(error);
 
     await expect(
       service.update(999, { name: 'Updated', isGlobal: false }),
-    ).rejects.toThrow(NotFoundException);
+    ).rejects.toThrow(TsRestException);
   });
 });

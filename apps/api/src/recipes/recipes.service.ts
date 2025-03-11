@@ -1,6 +1,7 @@
-import { TRecipeCreate, TRecipeUpdate } from '@jcmono/api-contract';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { contract, TRecipeCreate, TRecipeUpdate } from '@jcmono/api-contract';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import wrapWithTsRestError from 'src/utils/wrapWithTsRestError';
 
 @Injectable()
 export class RecipesService {
@@ -35,24 +36,23 @@ export class RecipesService {
   }
 
   async delete(id: number) {
-    try {
-      return await this.prisma.recipe.delete({ where: { id } });
-    } catch (error) {
-      if (error.code === 'P2025') {
-        throw new NotFoundException('Recipe not found');
-      }
-      throw error;
-    }
+    return wrapWithTsRestError(contract.recipes.delete, () =>
+      this.prisma.recipe.delete({
+        where: {
+          id,
+        },
+      }),
+    );
   }
 
   async update(id: number, body: TRecipeUpdate) {
-    try {
-      return await this.prisma.recipe.update({ where: { id }, data: body });
-    } catch (error) {
-      if (error.code === 'P2025') {
-        throw new NotFoundException('Recipe not found');
-      }
-      throw error;
-    }
+    return wrapWithTsRestError(contract.recipes.update, () =>
+      this.prisma.recipe.update({
+        where: {
+          id,
+        },
+        data: body,
+      }),
+    );
   }
 }

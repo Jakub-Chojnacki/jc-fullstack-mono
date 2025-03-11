@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { RecipeIngredientsService } from './recipe-ingredients.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { TRecipeIngredientCreate } from '@jcmono/api-contract';
-import { NotFoundException } from '@nestjs/common';
 import { TsRestException } from '@ts-rest/nest';
 
 describe('RecipeIngredientsService', () => {
@@ -68,7 +67,7 @@ describe('RecipeIngredientsService', () => {
     });
   });
 
-  it('should throw NotFoundException when updating a non-existing recipe ingredient', async () => {
+  it('should throw TsRestException when updating a non-existing recipe ingredient', async () => {
     const error = { code: 'P2025' };
 
     prisma.recipeIngredient.update.mockRejectedValue(error);
@@ -95,7 +94,7 @@ describe('RecipeIngredientsService', () => {
     });
   });
 
-  it('should throw NotFoundException when deleting a non-existing recipe ingredient', async () => {
+  it('should throw TsRestException when deleting a non-existing recipe ingredient', async () => {
     const error = { code: 'P2025' };
 
     prisma.recipeIngredient.delete.mockRejectedValue(error);
