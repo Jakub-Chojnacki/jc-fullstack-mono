@@ -73,7 +73,7 @@ describe('RecipeIngredientsService', () => {
 
     prisma.recipeIngredient.update.mockRejectedValue(error);
 
-    const result = await expect(
+    await expect(
       service.update(999, {
         amount: 150,
         recipeId: 1,
@@ -82,8 +82,6 @@ describe('RecipeIngredientsService', () => {
         unit: 'GRAMS',
       }),
     ).rejects.toThrow(TsRestException);
-
-
   });
 
   it('should delete a recipe ingredient', async () => {
