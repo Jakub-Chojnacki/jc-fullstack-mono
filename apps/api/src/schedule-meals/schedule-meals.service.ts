@@ -13,7 +13,7 @@ export class ScheduleMealsService {
 
   async create(body: TScheduleMealsCreate) {
     const scheduledMeal = await this.prisma.scheduledMeal.create({
-      data: body,
+      data: { ...body, scheduledAt: new Date(body.scheduledAt) },
     });
 
     return scheduledMeal;
@@ -25,7 +25,7 @@ export class ScheduleMealsService {
         where: {
           id,
         },
-        data: body,
+        data: { ...body, scheduledAt: new Date(body.scheduledAt) },
       }),
     );
   }
