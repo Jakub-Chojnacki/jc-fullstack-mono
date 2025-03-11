@@ -33,7 +33,7 @@ export class RecipesController {
   }
 
   @TsRestHandler(contract.recipes.getGlobal)
-  async getGlobalIngredients() {
+  async getGlobal() {
     return tsRestHandler(contract.recipes.getGlobal, async () => {
       const recipes = await this.recipesService.getGlobal();
 
@@ -45,7 +45,7 @@ export class RecipesController {
   }
 
   @TsRestHandler(contract.recipes.delete)
-  async deleteIngredient() {
+  async delete() {
     return tsRestHandler(
       contract.recipes.delete,
       async ({ params: { id } }) => {
@@ -60,7 +60,7 @@ export class RecipesController {
   }
 
   @TsRestHandler(contract.recipes.update)
-  async updateIngredient() {
+  async update() {
     return tsRestHandler(
       contract.recipes.update,
       async ({ params: { id }, body }) => {
