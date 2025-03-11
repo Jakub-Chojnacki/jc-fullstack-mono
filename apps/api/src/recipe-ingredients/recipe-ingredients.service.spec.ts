@@ -1,18 +1,107 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { RecipeIngredientsService } from './recipe-ingredients.service';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { TRecipeIngredientCreate } from '@jcmono/api-contract';
+import { NotFoundException } from '@nestjs/common';
+import { TsRestException } from '@ts-rest/nest';
 
 describe('RecipeIngredientsService', () => {
   let service: RecipeIngredientsService;
 
+  let prisma: {
+    recipeIngredient: {
+      create: jest.Mock;
+      update: jest.Mock;
+      delete: jest.Mock;
+    };
+  };
+
+  const mockData: TRecipeIngredientCreate = {
+    amount: 200,
+    recipeId: 1,
+    ingredientId: 1,
+    isGlobal: false,
+    unit: 'GRAMS',
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [RecipeIngredientsService],
+      providers: [
+        RecipeIngredientsService,
+        {
+          provide: PrismaService,
+          useValue: {
+            recipeIngredient: {
+              create: jest.fn(),
+              update: jest.fn(),
+              delete: jest.fn(),
+            },
+          },
+        },
+      ],
     }).compile();
 
     service = module.get<RecipeIngredientsService>(RecipeIngredientsService);
+    prisma = module.get(PrismaService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  it('should create a recipe ingredient', async () => {
+    prisma.recipeIngredient.create.mockResolvedValue(mockData);
+
+    const result = await service.create(mockData);
+    expect(result).toEqual(mockData);
+
+    expect(prisma.recipeIngredient.create).toHaveBeenCalledWith({
+      data: mockData,
+    });
+  });
+
+  it('should update a recipe ingredient', async () => {
+    prisma.recipeIngredient.update.mockResolvedValue(mockData);
+
+    const result = await service.update(1, mockData);
+    expect(result).toEqual(mockData);
+
+    expect(prisma.recipeIngredient.update).toHaveBeenCalledWith({
+      where: { id: 1 },
+      data: mockData,
+    });
+  });
+
+  it('should throw NotFoundException when updating a non-existing recipe ingredient', async () => {
+    const error = { code: 'P2025' };
+
+    prisma.recipeIngredient.update.mockRejectedValue(error);
+
+    const result = await expect(
+      service.update(999, {
+        amount: 150,
+        recipeId: 1,
+        ingredientId: 1,
+        isGlobal: false,
+        unit: 'GRAMS',
+      }),
+    ).rejects.toThrow(TsRestException);
+
+
+  });
+
+  it('should delete a recipe ingredient', async () => {
+    prisma.recipeIngredient.delete.mockResolvedValue(mockData);
+
+    const result = await service.delete(1);
+    expect(result).toEqual(mockData);
+
+    expect(prisma.recipeIngredient.delete).toHaveBeenCalledWith({
+      where: { id: 1 },
+    });
+  });
+
+  it('should throw NotFoundException when deleting a non-existing recipe ingredient', async () => {
+    const error = { code: 'P2025' };
+
+    prisma.recipeIngredient.delete.mockRejectedValue(error);
+
+    await expect(service.delete(999)).rejects.toThrow(TsRestException);
   });
 });

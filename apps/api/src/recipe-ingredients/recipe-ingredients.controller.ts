@@ -1,7 +1,7 @@
-import { Controller } from '@nestjs/common';
-import { RecipeIngredientsService } from './recipe-ingredients.service';
 import { contract } from '@jcmono/api-contract';
+import { Controller } from '@nestjs/common';
 import { tsRestHandler, TsRestHandler } from '@ts-rest/nest';
+import { RecipeIngredientsService } from './recipe-ingredients.service';
 
 @Controller()
 export class RecipeIngredientsController {
@@ -50,7 +50,7 @@ export class RecipeIngredientsController {
           await this.recipeIngredientsService.delete(id);
 
         return {
-          status: 201,
+          status: 200,
           body: deletedRecipeIngredient,
         };
       },

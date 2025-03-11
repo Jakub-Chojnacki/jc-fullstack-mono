@@ -1,6 +1,7 @@
-import { TRecipeIngredientCreate } from '@jcmono/api-contract';
+import { contract, TRecipeIngredientCreate } from '@jcmono/api-contract';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import wrapWithTsRestError from 'src/utils/wrapWithTsRestError';
 
 @Injectable()
 export class RecipeIngredientsService {
@@ -15,19 +16,19 @@ export class RecipeIngredientsService {
   }
 
   async update(id: number, body: TRecipeIngredientCreate) {
-    const updatedRecipeIngredient = await this.prisma.recipeIngredient.update({
-      where: { id },
-      data: body,
-    });
-
-    return updatedRecipeIngredient;
+    return wrapWithTsRestError(contract.recipeIngredients.delete, () =>
+      this.prisma.recipeIngredient.update({
+        where: { id },
+        data: body,
+      }),
+    );
   }
 
   async delete(id: number) {
-    const deletedRecipeIngredient = await this.prisma.recipeIngredient.delete({
-      where: { id },
-    });
-
-    return deletedRecipeIngredient;
+    return wrapWithTsRestError(contract.recipeIngredients.delete, () =>
+      this.prisma.recipeIngredient.delete({
+        where: { id },
+      }),
+    );
   }
 }
