@@ -1,9 +1,11 @@
 import {
+  contract,
   TShoppingListIngredientCreate,
   TShoppingListIngredientUpdate,
 } from '@jcmono/api-contract';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import wrapWithTsRestError from 'src/utils/wrapWithTsRestError';
 
 @Injectable()
 export class ShoppingListIngredientsService {
@@ -19,27 +21,23 @@ export class ShoppingListIngredientsService {
   }
 
   async delete(id: number) {
-    const deletedShoppingList = await this.prisma.shoppingListIngredient.delete(
-      {
+    return wrapWithTsRestError(contract.shoppingListIngredient.delete, () =>
+      this.prisma.shoppingListIngredient.delete({
         where: {
           id,
         },
-      },
+      }),
     );
-
-    return deletedShoppingList;
   }
 
   async update(id: number, data: TShoppingListIngredientUpdate) {
-    const updatedShoppingList = await this.prisma.shoppingListIngredient.update(
-      {
+    return wrapWithTsRestError(contract.shoppingListIngredient.update, () =>
+      this.prisma.shoppingListIngredient.update({
         where: {
           id,
         },
         data,
-      },
+      }),
     );
-
-    return updatedShoppingList;
   }
 }
