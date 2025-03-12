@@ -6,20 +6,21 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import NavMain from "@/components/NavMain";
 import NavUser from "@/components/NavUser";
-import ThemeToggle from "@/components/ThemeToggle";
 
+import ThemeToggle from "@/components/ThemeToggle";
 import { mockUserData, navMainItems } from "./const";
 
 const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <SidebarTrigger />
-        <ThemeToggle />
+        <div className="flex items-center justify-between truncate">
+          <span className="text-lg font-semibold">Food Planner</span>
+          <ThemeToggle />
+        </div>
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={navMainItems} />
