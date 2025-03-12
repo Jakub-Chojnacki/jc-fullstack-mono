@@ -5,7 +5,6 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { routeTree } from "./routeTree.gen";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const router = createRouter({ routeTree });
 
 declare module "@tanstack/react-router" {
@@ -19,7 +18,7 @@ const queryClient = new QueryClient();
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-    <RouterProvider router={router} />
-        </QueryClientProvider>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   </StrictMode>
 );
