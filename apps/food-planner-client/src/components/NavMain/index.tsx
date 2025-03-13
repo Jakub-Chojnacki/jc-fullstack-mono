@@ -5,16 +5,19 @@ import {
 } from "@/components/ui/sidebar";
 
 import { TNavMainProps } from "./types";
+import { Link } from "@tanstack/react-router";
 
 const NavMain = ({ items }: TNavMainProps) => {
   return (
     <SidebarGroup>
       <SidebarMenu>
-        {items.map((item) => (
-          <SidebarMenuButton tooltip={item.title}>
-            {item.icon && <item.icon />}
-            <span>{item.title}</span>
-          </SidebarMenuButton>
+        {items.map(({ url, title, ...item }) => (
+          <Link to={url}>
+            <SidebarMenuButton tooltip={title}>
+              {item.icon && <item.icon />}
+              <span>{title}</span>
+            </SidebarMenuButton>
+          </Link>
         ))}
       </SidebarMenu>
     </SidebarGroup>
