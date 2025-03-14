@@ -1,8 +1,9 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "@tanstack/react-router";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import apiClient from "@/api-client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -23,13 +24,23 @@ import {
 import { Input } from "@/components/ui/input";
 
 const LoginForm = () => {
-  const { mutate } = apiClient.auth.signin.useMutation();
+  const navigate = useNavigate({ from: "/signin" });
+
+  const { mutate } = apiClient.auth.signin.useMutation({
+    onError: () => {
+      toast.error("Invalid credentials!");
+    },
+    onSuccess: () => {
+      toast.success("Logged in successfully!");
+      navigate({ to: "/app" });
+    },
+  });
 
   const formSchema = z.object({
     email: z.string().email(),
     password: z
       .string()
-      .min(6, { message: "Password must be at least 6 characters" }),
+      .min(4, { message: "Password must be at least 4 characters long" }),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -38,7 +49,6 @@ const LoginForm = () => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
     mutate({ body: values });
   };
 
@@ -89,6 +99,7 @@ const LoginForm = () => {
                     </FormItem>
                   )}
                 />
+
                 <Button type="submit" className="w-full">
                   Login
                 </Button>
