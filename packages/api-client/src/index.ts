@@ -263,7 +263,7 @@ export const contract = c.router(
         path: "/signup",
         body: LoginSchema,
         responses: {
-          201: TokensSchema,
+          201: z.string(),
         },
       },
       signin: {
@@ -271,7 +271,7 @@ export const contract = c.router(
         path: "/signin",
         body: LoginSchema,
         responses: {
-          200: TokensSchema,
+          200: z.string(),
         },
       },
     },
@@ -288,7 +288,7 @@ export const contract = c.router(
       path: "/refresh",
       body: null,
       responses: {
-        200: TokensSchema,
+        200: z.string(),
       },
     },
   },

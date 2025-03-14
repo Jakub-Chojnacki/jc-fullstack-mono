@@ -1257,16 +1257,7 @@ export declare const contract: {
             }>;
             path: "/api/signup";
             responses: {
-                201: z.ZodObject<{
-                    access_token: z.ZodString;
-                    refresh_token: z.ZodString;
-                }, "strip", z.ZodTypeAny, {
-                    access_token: string;
-                    refresh_token: string;
-                }, {
-                    access_token: string;
-                    refresh_token: string;
-                }>;
+                201: z.ZodString;
             };
         };
         signin: {
@@ -1283,16 +1274,7 @@ export declare const contract: {
             }>;
             path: "/api/signin";
             responses: {
-                200: z.ZodObject<{
-                    access_token: z.ZodString;
-                    refresh_token: z.ZodString;
-                }, "strip", z.ZodTypeAny, {
-                    access_token: string;
-                    refresh_token: string;
-                }, {
-                    access_token: string;
-                    refresh_token: string;
-                }>;
+                200: z.ZodString;
             };
         };
     };
@@ -1309,16 +1291,7 @@ export declare const contract: {
         body: null;
         path: "/api/refresh";
         responses: {
-            200: z.ZodObject<{
-                access_token: z.ZodString;
-                refresh_token: z.ZodString;
-            }, "strip", z.ZodTypeAny, {
-                access_token: string;
-                refresh_token: string;
-            }, {
-                access_token: string;
-                refresh_token: string;
-            }>;
+            200: z.ZodString;
         };
     };
 };
