@@ -23,27 +23,36 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { loginFormSchema } from "./schema";
+import { signupFormSchema } from "./schema";
 
-const LoginForm = () => {
-  const navigate = useNavigate({ from: "/signin" });
+const SignupForm = () => {
+  const navigate = useNavigate({ from: "/signup" });
 
-  const { mutate } = apiClient.auth.signin.useMutation({
+  const { mutate } = apiClient.auth.signup.useMutation({
     onError: () => {
-      toast.error("Invalid credentials!");
+      toast.error("There was an error while signing you up! Try again later.");
     },
     onSuccess: () => {
-      toast.success("Logged in successfully!");
+      toast.success("Account created successfully!");
       navigate({ to: "/app" });
     },
   });
 
-  const form = useForm<z.infer<typeof loginFormSchema>>({
-    resolver: zodResolver(loginFormSchema),
-    defaultValues: { email: "", password: "" },
+  const form = useForm<z.infer<typeof signupFormSchema>>({
+    resolver: zodResolver(signupFormSchema),
+    defaultValues: { email: "", password: "", confirmPassword: "" },
   });
 
-  const onSubmit = (values: z.infer<typeof loginFormSchema>) => {
+  const onSubmit = (values: z.infer<typeof signupFormSchema>) => {
+    if (values.password !== values.confirmPassword) {
+      form.setError("confirmPassword", {
+        type: "manual",
+        message: "Passwords do not match",
+      });
+
+      return;
+    }
+
     mutate({ body: values });
   };
 
@@ -51,9 +60,9 @@ const LoginForm = () => {
     <div className="flex flex-col gap-6">
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardTitle className="text-2xl">Signup</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Create a free account to start planning your meals!
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -73,6 +82,23 @@ const LoginForm = () => {
                     </FormItem>
                   )}
                 />
+
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex content-between">
+                        <FormLabel>Name</FormLabel>
+                      </div>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 <FormField
                   control={form.control}
                   name="password"
@@ -80,12 +106,22 @@ const LoginForm = () => {
                     <FormItem>
                       <div className="flex content-between">
                         <FormLabel>Password</FormLabel>
-                        <a
-                          href="#"
-                          className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                        >
-                          Forgot your password?
-                        </a>
+                      </div>
+                      <FormControl>
+                        <Input {...field} type="password" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex content-between">
+                        <FormLabel>Confirm password</FormLabel>
                       </div>
                       <FormControl>
                         <Input {...field} type="password" />
@@ -96,14 +132,14 @@ const LoginForm = () => {
                 />
 
                 <Button type="submit" className="w-full">
-                  Login
+                  Sign up
                 </Button>
               </div>
 
               <div className="mt-4 text-center text-sm">
-                Don&apos;t have an account?{" "}
-                <Link to="/signup" className="underline underline-offset-4">
-                  Sign up
+                Already have an account?{" "}
+                <Link to="/signin" className="underline underline-offset-4">
+                  Sign in
                 </Link>
               </div>
             </form>
@@ -114,4 +150,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default SignupForm;
