@@ -229,21 +229,21 @@ export declare const contract: {
                     name: z.ZodString;
                     description: z.ZodString;
                 }, "strip", z.ZodTypeAny, {
+                    description: string;
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
                     name: string;
                     userId: number;
                     isGlobal: boolean;
-                    description: string;
                 }, {
+                    description: string;
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
                     name: string;
                     userId: number;
                     isGlobal: boolean;
-                    description: string;
                 }>, "many">;
             };
         };
@@ -260,21 +260,21 @@ export declare const contract: {
                     name: z.ZodString;
                     description: z.ZodString;
                 }, "strip", z.ZodTypeAny, {
+                    description: string;
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
                     name: string;
                     userId: number;
                     isGlobal: boolean;
-                    description: string;
                 }, {
+                    description: string;
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
                     name: string;
                     userId: number;
                     isGlobal: boolean;
-                    description: string;
                 }>, "many">;
             };
         };
@@ -289,15 +289,15 @@ export declare const contract: {
                 name: z.ZodString;
                 description: z.ZodString;
             }, "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
+                description: string;
                 name: string;
                 userId: number;
                 isGlobal: boolean;
-                description: string;
             }, {
+                description: string;
                 name: string;
                 userId: number;
                 isGlobal: boolean;
-                description: string;
             }>;
             path: "/api/recipes";
             responses: {
@@ -310,21 +310,21 @@ export declare const contract: {
                     name: z.ZodString;
                     description: z.ZodString;
                 }, "strip", z.ZodTypeAny, {
+                    description: string;
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
                     name: string;
                     userId: number;
                     isGlobal: boolean;
-                    description: string;
                 }, {
+                    description: string;
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
                     name: string;
                     userId: number;
                     isGlobal: boolean;
-                    description: string;
                 }>;
                 400: z.ZodObject<{
                     message: z.ZodString;
@@ -353,13 +353,13 @@ export declare const contract: {
                 name: z.ZodString;
                 description: z.ZodString;
             }, "id" | "createdAt" | "updatedAt" | "userId">, "strip", z.ZodTypeAny, {
+                description: string;
                 name: string;
                 isGlobal: boolean;
-                description: string;
             }, {
+                description: string;
                 name: string;
                 isGlobal: boolean;
-                description: string;
             }>;
             path: "/api/recipes/:id";
             responses: {
@@ -372,21 +372,21 @@ export declare const contract: {
                     name: z.ZodString;
                     description: z.ZodString;
                 }, "strip", z.ZodTypeAny, {
+                    description: string;
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
                     name: string;
                     userId: number;
                     isGlobal: boolean;
-                    description: string;
                 }, {
+                    description: string;
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
                     name: string;
                     userId: number;
                     isGlobal: boolean;
-                    description: string;
                 }>;
                 404: z.ZodObject<{
                     message: z.ZodString;
@@ -417,21 +417,21 @@ export declare const contract: {
                     name: z.ZodString;
                     description: z.ZodString;
                 }, "strip", z.ZodTypeAny, {
+                    description: string;
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
                     name: string;
                     userId: number;
                     isGlobal: boolean;
-                    description: string;
                 }, {
+                    description: string;
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
                     name: string;
                     userId: number;
                     isGlobal: boolean;
-                    description: string;
                 }>;
                 404: z.ZodObject<{
                     message: z.ZodString;
@@ -658,10 +658,6 @@ export declare const contract: {
                         shoppingListId: number;
                     }>, "many">;
                 }, "strip", z.ZodTypeAny, {
-                    id: number;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    userId: number;
                     ingredients: {
                         id: number;
                         createdAt: Date;
@@ -672,11 +668,11 @@ export declare const contract: {
                         isDone: boolean;
                         shoppingListId: number;
                     }[];
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    userId: number;
                 }, {
-                    id: number;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    userId: number;
                     ingredients: {
                         id: number;
                         createdAt: Date;
@@ -687,6 +683,10 @@ export declare const contract: {
                         isDone: boolean;
                         shoppingListId: number;
                     }[];
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    userId: number;
                 }>, "many">;
             };
         };
@@ -725,7 +725,7 @@ export declare const contract: {
                     isDone: boolean;
                     shoppingListId: number;
                 }>, "many">;
-            }, "id" | "createdAt" | "updatedAt" | "ingredients">, "strip", z.ZodTypeAny, {
+            }, "ingredients" | "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
                 userId: number;
             }, {
                 userId: number;
@@ -766,10 +766,6 @@ export declare const contract: {
                         shoppingListId: number;
                     }>, "many">;
                 }, "strip", z.ZodTypeAny, {
-                    id: number;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    userId: number;
                     ingredients: {
                         id: number;
                         createdAt: Date;
@@ -780,11 +776,11 @@ export declare const contract: {
                         isDone: boolean;
                         shoppingListId: number;
                     }[];
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    userId: number;
                 }, {
-                    id: number;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    userId: number;
                     ingredients: {
                         id: number;
                         createdAt: Date;
@@ -795,6 +791,10 @@ export declare const contract: {
                         isDone: boolean;
                         shoppingListId: number;
                     }[];
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    userId: number;
                 }>;
             };
         };
@@ -1255,7 +1255,7 @@ export declare const contract: {
                 email: string;
                 password: string;
             }>;
-            path: "/api/signup";
+            path: "/api/auth/signup";
             responses: {
                 201: z.ZodString;
             };
@@ -1272,26 +1272,49 @@ export declare const contract: {
                 email: string;
                 password: string;
             }>;
-            path: "/api/signin";
+            path: "/api/auth/signin";
             responses: {
                 200: z.ZodString;
             };
         };
-    };
-    logout: {
-        method: "POST";
-        body: null;
-        path: "/api/logout";
-        responses: {
-            200: null;
+        me: {
+            method: "GET";
+            path: "/api/auth/me";
+            responses: {
+                200: z.ZodObject<{
+                    id: z.ZodNumber;
+                    email: z.ZodString;
+                }, "strip", z.ZodTypeAny, {
+                    id: number;
+                    email: string;
+                }, {
+                    id: number;
+                    email: string;
+                }>;
+                404: z.ZodObject<{
+                    message: z.ZodString;
+                }, "strip", z.ZodTypeAny, {
+                    message: string;
+                }, {
+                    message: string;
+                }>;
+            };
         };
-    };
-    refreshToken: {
-        method: "POST";
-        body: null;
-        path: "/api/refresh";
-        responses: {
-            200: z.ZodString;
+        refreshToken: {
+            method: "POST";
+            body: null;
+            path: "/api/auth/refresh";
+            responses: {
+                200: z.ZodString;
+            };
+        };
+        logout: {
+            method: "POST";
+            body: null;
+            path: "/api/auth/logout";
+            responses: {
+                200: null;
+            };
         };
     };
 };

@@ -255,7 +255,7 @@ exports.contract = c.router({
     auth: {
         signup: {
             method: "POST",
-            path: "/signup",
+            path: "/auth/signup",
             body: index_1.LoginSchema,
             responses: {
                 201: zod_1.z.string(),
@@ -263,27 +263,35 @@ exports.contract = c.router({
         },
         signin: {
             method: "POST",
-            path: "/signin",
+            path: "/auth/signin",
             body: index_1.LoginSchema,
             responses: {
                 200: zod_1.z.string(),
             },
         },
-    },
-    logout: {
-        method: "POST",
-        path: "/logout",
-        body: null,
-        responses: {
-            200: null,
+        me: {
+            method: "GET",
+            path: "/auth/me",
+            responses: {
+                200: index_1.UserSchema,
+                404: exports.NotFoundSchema,
+            },
         },
-    },
-    refreshToken: {
-        method: "POST",
-        path: "/refresh",
-        body: null,
-        responses: {
-            200: zod_1.z.string(),
+        refreshToken: {
+            method: "POST",
+            path: "/auth/refresh",
+            body: null,
+            responses: {
+                200: zod_1.z.string(),
+            },
+        },
+        logout: {
+            method: "POST",
+            path: "/auth/logout",
+            body: null,
+            responses: {
+                200: null,
+            },
         },
     },
 }, {

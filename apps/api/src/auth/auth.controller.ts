@@ -15,16 +15,12 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @TsRestHandler(contract.auth)
+  @TsRestHandler(contract.auth.signup)
   @Public()
-  async signupLocal(
-    @Res({
-      passthrough: true,
-    })
-    res: Response,
-  ) {
-    return tsRestHandler(contract.auth, {
-      signup: async ({ body: { email, password } }) => {
+  async signup(@Res({ passthrough: true }) res: Response) {
+    return tsRestHandler(
+      contract.auth.signup,
+      async ({ body: { email, password } }) => {
         const message = await this.authService.signupLocal(
           { email, password },
           res,
@@ -35,27 +31,43 @@ export class AuthController {
           body: message,
         };
       },
-      signin: async ({ body: { email, password } }) => {
+    );
+  }
+
+  @TsRestHandler(contract.auth.signin)
+  @Public()
+  async signin(@Res({ passthrough: true }) res: Response) {
+    return tsRestHandler(
+      contract.auth.signin,
+      async ({ body: { email, password } }) => {
         const message = await this.authService.signinLocal(
           { email, password },
           res,
         );
-
-        res.send({
-          status: 200,
-          body: message,
-        });
 
         return {
           status: 200,
           body: message,
         };
       },
+    );
+  }
+
+  @UseGuards(AtGuard)
+  @TsRestHandler(contract.auth.me)
+  async me(@GetCurrentUserId() userId: number) {
+    return tsRestHandler(contract.auth.me, async () => {
+      const user = await this.authService.me(userId);
+
+      return {
+        status: 200,
+        body: user,
+      };
     });
   }
 
   @UseGuards(AtGuard)
-  @TsRestHandler(contract.logout)
+  @TsRestHandler(contract.auth.logout)
   async logout(
     @GetCurrentUserId() userId: number,
     @Res({
@@ -63,7 +75,7 @@ export class AuthController {
     })
     res: Response,
   ) {
-    return tsRestHandler(contract.logout, async () => {
+    return tsRestHandler(contract.auth.logout, async () => {
       await this.authService.logout(userId);
 
       res.cookie('access_token', '', { httpOnly: true, maxAge: 0 });
@@ -75,7 +87,8 @@ export class AuthController {
       };
     });
   }
-  @TsRestHandler(contract.refreshToken)
+
+  @TsRestHandler(contract.auth.refreshToken)
   @Public()
   @UseGuards(RtGuard)
   async refreshToken(
@@ -86,7 +99,7 @@ export class AuthController {
     })
     res: Response,
   ) {
-    return tsRestHandler(contract.refreshToken, async () => {
+    return tsRestHandler(contract.auth.refreshToken, async () => {
       const message = await this.authService.refreshTokens(
         userId,
         refreshToken,

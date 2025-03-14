@@ -13,6 +13,7 @@ import {
   ShoppingListSchema,
   StringToNumberSchema,
   TokensSchema,
+  UserSchema,
 } from "./schemas/index";
 import {
   ScheduleMealsCreateSchema,
@@ -260,7 +261,7 @@ export const contract = c.router(
     auth: {
       signup: {
         method: "POST",
-        path: "/signup",
+        path: "/auth/signup",
         body: LoginSchema,
         responses: {
           201: z.string(),
@@ -268,27 +269,35 @@ export const contract = c.router(
       },
       signin: {
         method: "POST",
-        path: "/signin",
+        path: "/auth/signin",
         body: LoginSchema,
         responses: {
           200: z.string(),
         },
       },
-    },
-    logout: {
-      method: "POST",
-      path: "/logout",
-      body: null,
-      responses: {
-        200: null,
+      me: {
+        method: "GET",
+        path: "/auth/me",
+        responses: {
+          200: UserSchema,
+          404: NotFoundSchema,
+        },
       },
-    },
-    refreshToken: {
-      method: "POST",
-      path: "/refresh",
-      body: null,
-      responses: {
-        200: z.string(),
+      refreshToken: {
+        method: "POST",
+        path: "/auth/refresh",
+        body: null,
+        responses: {
+          200: z.string(),
+        },
+      },
+      logout: {
+        method: "POST",
+        path: "/auth/logout",
+        body: null,
+        responses: {
+          200: null,
+        },
       },
     },
   },
