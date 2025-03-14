@@ -15,8 +15,8 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Public()
   @TsRestHandler(contract.auth)
+  @Public()
   async signupLocal(
     @Res({
       passthrough: true,
@@ -40,6 +40,11 @@ export class AuthController {
           { email, password },
           res,
         );
+
+        res.send({
+          status: 200,
+          body: message,
+        });
 
         return {
           status: 200,
@@ -70,10 +75,9 @@ export class AuthController {
       };
     });
   }
-
+  @TsRestHandler(contract.refreshToken)
   @Public()
   @UseGuards(RtGuard)
-  @TsRestHandler(contract.refreshToken)
   async refreshToken(
     @GetCurrentUser('refreshToken') refreshToken: string,
     @GetCurrentUserId() userId: number,
@@ -83,15 +87,20 @@ export class AuthController {
     res: Response,
   ) {
     return tsRestHandler(contract.refreshToken, async () => {
-      const tokens = await this.authService.refreshTokens(
+      const message = await this.authService.refreshTokens(
         userId,
         refreshToken,
         res,
       );
 
+      res.send({
+        status: 200,
+        body: message,
+      });
+
       return {
         status: 200,
-        body: tokens,
+        body: message,
       };
     });
   }
