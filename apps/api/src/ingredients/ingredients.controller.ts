@@ -1,5 +1,5 @@
 import { contract } from '@jcmono/api-contract';
-import { Controller, Req } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
 
 import { IngredientsService } from './ingredients.service';

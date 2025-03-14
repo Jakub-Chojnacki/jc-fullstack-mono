@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import apiClient from "@/api-client";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -22,6 +23,8 @@ import {
 import { Input } from "@/components/ui/input";
 
 const LoginForm = () => {
+  const { mutate } = apiClient.auth.signin.useMutation();
+
   const formSchema = z.object({
     email: z.string().email(),
     password: z
@@ -35,8 +38,8 @@ const LoginForm = () => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    //TODO: Add login logic
     console.log(values);
+    mutate({ body: values });
   };
 
   return (
