@@ -1,6 +1,8 @@
 import { contract } from '@jcmono/api-contract';
-import { Controller, UseGuards } from '@nestjs/common';
+import { Controller, Res, UseGuards } from '@nestjs/common';
 import { tsRestHandler, TsRestHandler } from '@ts-rest/nest';
+import { type Response } from 'express';
+
 import {
   GetCurrentUser,
   GetCurrentUserId,
@@ -15,22 +17,33 @@ export class AuthController {
 
   @Public()
   @TsRestHandler(contract.auth)
-  async signupLocal() {
+  async signupLocal(
+    @Res({
+      passthrough: true,
+    })
+    res: Response,
+  ) {
     return tsRestHandler(contract.auth, {
       signup: async ({ body: { email, password } }) => {
-        const tokens = await this.authService.signupLocal({ email, password });
+        const message = await this.authService.signupLocal(
+          { email, password },
+          res,
+        );
 
         return {
           status: 201,
-          body: tokens,
+          body: message,
         };
       },
       signin: async ({ body: { email, password } }) => {
-        const tokens = await this.authService.signinLocal({ email, password });
+        const message = await this.authService.signinLocal(
+          { email, password },
+          res,
+        );
 
         return {
           status: 200,
-          body: tokens,
+          body: message,
         };
       },
     });
@@ -38,9 +51,18 @@ export class AuthController {
 
   @UseGuards(AtGuard)
   @TsRestHandler(contract.logout)
-  async logout(@GetCurrentUserId() userId: number) {
+  async logout(
+    @GetCurrentUserId() userId: number,
+    @Res({
+      passthrough: true,
+    })
+    res: Response,
+  ) {
     return tsRestHandler(contract.logout, async () => {
       await this.authService.logout(userId);
+
+      res.cookie('access_token', '', { httpOnly: true, maxAge: 0 });
+      res.cookie('refresh_token', '', { httpOnly: true, maxAge: 0 });
 
       return {
         status: 200,
@@ -55,9 +77,17 @@ export class AuthController {
   async refreshToken(
     @GetCurrentUser('refreshToken') refreshToken: string,
     @GetCurrentUserId() userId: number,
+    @Res({
+      passthrough: true,
+    })
+    res: Response,
   ) {
     return tsRestHandler(contract.refreshToken, async () => {
-      const tokens = await this.authService.refreshTokens(userId, refreshToken);
+      const tokens = await this.authService.refreshTokens(
+        userId,
+        refreshToken,
+        res,
+      );
 
       return {
         status: 200,

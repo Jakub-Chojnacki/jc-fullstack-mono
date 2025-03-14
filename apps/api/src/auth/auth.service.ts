@@ -6,6 +6,8 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { type Response } from 'express';
+
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -15,18 +17,37 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  private accessExpirationSeconds = 60 * 15; // 15 minutes in seconds
+  private refreshExpirationSeconds = 60 * 60 * 24 * 7; // 7 days in seconds
+
+  async setTokensInCookies(
+    response: Response,
+    accessToken: string,
+    refreshToken: string,
+  ) {
+    response.cookie('access_token', accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: this.accessExpirationSeconds * 1000, // 15 minutes in milliseconds
+    });
+
+    // Set the Refresh Token in an HTTP-only cookie
+    response.cookie('refresh_token', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: this.refreshExpirationSeconds * 1000, // 7 days in milliseconds
+    });
+  }
+
   hashData(data: string) {
     return bcrypt.hash(data, 10);
   }
 
   async getToken(userId: number, email: string): Promise<Tokens> {
-    const accessExpiration = 60 * 15; // 15 minutes in seconds
-    const refreshExpiration = 60 * 60 * 24 * 7; // 7 days in seconds
-
     const at = await this.jwtService.signAsync(
       { sub: userId, email },
       {
-        expiresIn: accessExpiration,
+        expiresIn: this.accessExpirationSeconds,
         secret: process.env.AT_SECRET,
       },
     );
@@ -34,7 +55,7 @@ export class AuthService {
     const rt = await this.jwtService.signAsync(
       { sub: userId, email },
       {
-        expiresIn: refreshExpiration,
+        expiresIn: this.refreshExpirationSeconds,
         secret: process.env.RT_SECRET,
       },
     );
@@ -45,7 +66,7 @@ export class AuthService {
     };
   }
 
-  async signupLocal(dto: AuthDto) {
+  async signupLocal(dto: AuthDto, response: Response) {
     const hash = await this.hashData(dto.password);
 
     const newUser = await this.prisma.user.create({
@@ -57,14 +78,16 @@ export class AuthService {
 
     const { id, email } = newUser;
 
-    const tokens = await this.getToken(id, email);
+    const { access_token, refresh_token } = await this.getToken(id, email);
 
-    await this.updateRtHash(id, tokens.refresh_token);
+    await this.updateRtHash(id, refresh_token);
 
-    return tokens;
+    await this.setTokensInCookies(response, access_token, refresh_token);
+
+    return 'User has been created';
   }
 
-  async signinLocal(dto: AuthDto): Promise<Tokens> {
+  async signinLocal(dto: AuthDto, response: Response): Promise<string> {
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
@@ -79,11 +102,13 @@ export class AuthService {
 
     if (!passwordMatches) throw new ForbiddenException('Access Denied');
 
-    const tokens = await this.getToken(id, email);
+    const { access_token, refresh_token } = await this.getToken(id, email);
 
-    await this.updateRtHash(id, tokens.refresh_token);
+    await this.updateRtHash(id, refresh_token);
 
-    return tokens;
+    await this.setTokensInCookies(response, access_token, refresh_token);
+
+    return 'User has been signed in';
   }
 
   async logout(userId: number) {
@@ -103,7 +128,7 @@ export class AuthService {
     });
   }
 
-  async refreshTokens(userId: number, rt: string) {
+  async refreshTokens(userId: number, rt: string, response: Response) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });
@@ -118,10 +143,12 @@ export class AuthService {
 
     const { id, email } = user;
 
-    const tokens = await this.getToken(id, email);
+    const { access_token, refresh_token } = await this.getToken(id, email);
 
-    await this.updateRtHash(id, tokens.refresh_token);
+    await this.updateRtHash(id, refresh_token);
 
-    return tokens;
+    await this.setTokensInCookies(response, access_token, refresh_token);
+
+    return 'Tokens have been refreshed';
   }
 }

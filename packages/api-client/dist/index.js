@@ -258,7 +258,7 @@ exports.contract = c.router({
             path: "/signup",
             body: index_1.LoginSchema,
             responses: {
-                201: index_1.TokensSchema,
+                201: zod_1.z.string(),
             },
         },
         signin: {
@@ -266,7 +266,7 @@ exports.contract = c.router({
             path: "/signin",
             body: index_1.LoginSchema,
             responses: {
-                200: index_1.TokensSchema,
+                200: zod_1.z.string(),
             },
         },
     },
@@ -283,7 +283,7 @@ exports.contract = c.router({
         path: "/refresh",
         body: null,
         responses: {
-            200: index_1.TokensSchema,
+            200: zod_1.z.string(),
         },
     },
 }, {
