@@ -1,8 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import LoginForm from "@/forms/LoginForm";
+import redirectLoggedUser from "@/utils/redirectLoggedUser";
 
-export const Route = createFileRoute("/signin")({ component: RouteComponent });
+export const Route = createFileRoute("/signin")({
+  component: RouteComponent,
+  loader: redirectLoggedUser,
+});
 
 function RouteComponent() {
   return (
