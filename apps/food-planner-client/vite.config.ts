@@ -1,12 +1,18 @@
-import commonjs from "@rollup/plugin-commonjs";
-import react from "@vitejs/plugin-react";
 import path from "path";
-import { defineConfig } from "vite";
+
+import commonjs from "@rollup/plugin-commonjs";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [TanStackRouterVite({ autoCodeSplitting: true }), react()],
+  plugins: [
+    TanStackRouterVite({ autoCodeSplitting: true }),
+    react(),
+    tsconfigPaths(),
+  ],
   build: {
     rollupOptions: {
       plugins: [commonjs()],
@@ -18,6 +24,12 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "@components": path.resolve(__dirname, "./src/components/*"),
+      "@hooks": path.resolve(__dirname, "./src/hooks"),
+      "@utils": path.resolve(__dirname, "./src/utils"),
+      "@forms": path.resolve(__dirname, "./src/forms"),
+      "@queries": path.resolve(__dirname, "./src/queries"),
+      "@layouts": path.resolve(__dirname, "./src/layouts"),
     },
   },
   server: {

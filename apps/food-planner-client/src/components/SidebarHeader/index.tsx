@@ -1,4 +1,5 @@
 import { Separator } from "@radix-ui/react-separator";
+
 import { SidebarTrigger, useSidebar } from "../ui/sidebar";
 
 const SidebarHeader = () => {

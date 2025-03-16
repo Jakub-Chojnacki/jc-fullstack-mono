@@ -2,10 +2,10 @@ import {
   SidebarGroup,
   SidebarMenu,
   SidebarMenuButton,
-} from "@/components/ui/sidebar";
+} from "@components/ui/sidebar";
+import { Link } from "@tanstack/react-router";
 
 import { TNavMainProps } from "./types";
-import { Link } from "@tanstack/react-router";
 
 const NavMain = ({ items }: TNavMainProps) => {
   return (

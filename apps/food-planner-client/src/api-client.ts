@@ -1,5 +1,5 @@
-import { initQueryClient } from "@ts-rest/react-query";
 import { contract } from "@jcmono/api-contract";
+import { initQueryClient } from "@ts-rest/react-query";
 
 export const apiClient = initQueryClient(contract, {
   baseHeaders: {},

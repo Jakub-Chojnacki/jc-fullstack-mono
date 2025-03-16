@@ -25,7 +25,13 @@
     /* Aliases*/
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/components/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@forms/*": ["./src/forms/*"],
+      "@queries/*": ["./src/queries/*"],
+      "@layouts/*": ["./src/layouts/*"]
     }
   },
   "include": ["src", "src/**/*.ts", "src/**/*.tsx"]

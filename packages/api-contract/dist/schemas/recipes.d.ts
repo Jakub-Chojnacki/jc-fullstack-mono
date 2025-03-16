@@ -9,17 +9,17 @@ export declare const RecipeSchema: z.ZodObject<{
     description: z.ZodString;
 }, "strip", z.ZodTypeAny, {
     id: number;
+    name: string;
     createdAt: Date;
     updatedAt: Date;
-    name: string;
     userId: number;
     isGlobal: boolean;
     description: string;
 }, {
     id: number;
+    name: string;
     createdAt: Date;
     updatedAt: Date;
-    name: string;
     userId: number;
     isGlobal: boolean;
     description: string;

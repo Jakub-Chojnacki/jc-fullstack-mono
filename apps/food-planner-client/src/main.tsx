@@ -5,9 +5,9 @@ import { createRoot } from "react-dom/client";
 
 import "./index.css";
 
+import App from "./App";
 import { routeTree } from "./routeTree.gen";
 
-import App from "./App";
 
 export const router = createRouter({ routeTree });
 

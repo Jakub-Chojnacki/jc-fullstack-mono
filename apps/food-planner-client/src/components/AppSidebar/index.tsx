@@ -1,16 +1,16 @@
-import * as React from "react";
 
+import NavMain from "@components/NavMain";
+import NavUser from "@components/NavUser";
+import ThemeToggle from "@components/ThemeToggle";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@/components/ui/sidebar";
-import NavMain from "@/components/NavMain";
-import NavUser from "@/components/NavUser";
+} from "@components/ui/sidebar";
+import * as React from "react";
 
-import ThemeToggle from "@/components/ThemeToggle";
 import { navMainItems } from "./const";
 
 const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {

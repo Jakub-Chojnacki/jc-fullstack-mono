@@ -1,6 +1,6 @@
-import AppSidebar from "@/components/AppSidebar";
-import SidebarHeader from "@/components/SidebarHeader";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import AppSidebar from "@components/AppSidebar";
+import SidebarHeader from "@components/SidebarHeader";
+import { SidebarInset, SidebarProvider } from "@components/ui/sidebar";
 
 const MainLayout = ({ children }: { children: React.ReactElement }) => {
   return (
