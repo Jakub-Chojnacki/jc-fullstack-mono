@@ -11,7 +11,7 @@ import NavMain from "@/components/NavMain";
 import NavUser from "@/components/NavUser";
 
 import ThemeToggle from "@/components/ThemeToggle";
-import { mockUserData, navMainItems } from "./const";
+import { navMainItems } from "./const";
 
 const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
   return (
@@ -26,7 +26,7 @@ const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
         <NavMain items={navMainItems} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={mockUserData} />
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

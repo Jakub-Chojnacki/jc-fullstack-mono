@@ -13,4 +13,5 @@ exports.TokensSchema = zod_1.z.object({
 exports.UserSchema = zod_1.z.object({
     id: zod_1.z.number(),
     email: zod_1.z.string(),
+    name: zod_1.z.string(),
 });

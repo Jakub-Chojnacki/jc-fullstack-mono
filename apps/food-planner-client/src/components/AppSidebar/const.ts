@@ -8,12 +8,6 @@ import {
 
 import { SinglePath } from "@/main";
 
-export const mockUserData = {
-  name: "shadcn",
-  email: "m@example.com",
-  avatar: "/avatars/shadcn.jpg",
-};
-
 type TNavMainItem = { title: string; url: SinglePath; icon?: LucideIcon };
 
 export const navMainItems: TNavMainItem[] = [
