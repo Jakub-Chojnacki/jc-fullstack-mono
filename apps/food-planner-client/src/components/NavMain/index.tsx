@@ -12,7 +12,7 @@ const NavMain = ({ items }: TNavMainProps) => {
     <SidebarGroup>
       <SidebarMenu>
         {items.map(({ url, title, ...item }) => (
-          <Link to={url}>
+          <Link to={url} key={title}>
             <SidebarMenuButton tooltip={title}>
               {item.icon && <item.icon />}
               <span>{title}</span>

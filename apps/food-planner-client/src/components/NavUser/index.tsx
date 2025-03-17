@@ -1,5 +1,3 @@
-
-
 import { Avatar, AvatarFallback } from "@components/ui/avatar";
 import {
   DropdownMenu,
@@ -19,11 +17,17 @@ import {
 import { BadgeCheck, Bell, ChevronsUpDown, LogOut } from "lucide-react";
 
 import useAuthMe from "@/queries/useAuthMe";
+import useLogout from "@/queries/useLogout";
 
 const NavUser = () => {
   const { data, isLoading } = useAuthMe();
+  const { mutate } = useLogout();
 
   const { isMobile } = useSidebar();
+
+  const handleLogout = (): void => {
+    mutate({});
+  };
 
   if (isLoading) {
     return <SidebarMenuItem>Loading...</SidebarMenuItem>;
@@ -86,7 +90,7 @@ const NavUser = () => {
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
                   <LogOut />
                   Log out
                 </DropdownMenuItem>
