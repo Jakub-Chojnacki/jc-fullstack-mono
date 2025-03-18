@@ -10,9 +10,12 @@ export class IngredientsController {
   constructor(private readonly ingredientsService: IngredientsService) {}
 
   @TsRestHandler(contract.ingredients.create)
-  async create() {
+  async create(@GetCurrentUserId() userId: number) {
     return tsRestHandler(contract.ingredients.create, async ({ body }) => {
-      const createdIngredient = await this.ingredientsService.create(body);
+      const createdIngredient = await this.ingredientsService.create({
+        ...body,
+        userId,
+      });
 
       return {
         status: 201,

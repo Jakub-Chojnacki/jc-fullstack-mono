@@ -6,7 +6,7 @@ exports.IngredientSchema = zod_1.z.object({
     id: zod_1.z.number(),
     createdAt: zod_1.z.date(),
     updatedAt: zod_1.z.date(),
-    name: zod_1.z.string(),
+    name: zod_1.z.string().nonempty("Name is required"),
     userId: zod_1.z.number(),
     isGlobal: zod_1.z.boolean(),
 });

@@ -4,7 +4,7 @@ export const IngredientSchema = z.object({
   id: z.number(),
   createdAt: z.date(),
   updatedAt: z.date(),
-  name: z.string(),
+  name: z.string().nonempty("Name is required"),
   userId: z.number(),
   isGlobal: z.boolean(),
 });

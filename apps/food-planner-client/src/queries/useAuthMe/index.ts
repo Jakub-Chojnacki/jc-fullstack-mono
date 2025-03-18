@@ -1,6 +1,7 @@
+import apiClient from "@/api-client";
+
 import { AUTH_ME_QUERY_KEY } from "./const";
 
-import apiClient from "@/api-client";
 
 
 const useAuthMe = () => {

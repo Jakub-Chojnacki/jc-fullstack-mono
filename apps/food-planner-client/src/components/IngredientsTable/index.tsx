@@ -1,4 +1,5 @@
 import type { TIngredient } from "@jcmono/api-contract";
+import { Outlet, useNavigate } from "@tanstack/react-router";
 import {
   type ColumnDef,
   ColumnFiltersState,
@@ -23,12 +24,12 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-
 import apiClient from "@/api-client";
 
 const IngredientsTable = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const navigation = useNavigate({ from: "/app/ingredients" });
 
   const { data } = apiClient.ingredients.getForUser.useQuery(["ingredients"]);
 
@@ -71,7 +72,7 @@ const IngredientsTable = () => {
           }
           className="max-w-sm"
         />
-        <Button>
+        <Button onClick={() => navigation({ to: "/app/ingredients/add" })}>
           <Plus className="mr-2 h-4 w-4" />
           Add New Ingredient
         </Button>
@@ -147,6 +148,9 @@ const IngredientsTable = () => {
         >
           Next
         </Button>
+      </div>
+      <div>
+        <Outlet />
       </div>
     </div>
   );

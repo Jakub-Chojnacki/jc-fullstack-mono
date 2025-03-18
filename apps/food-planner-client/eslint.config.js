@@ -70,7 +70,7 @@ export default tseslint.config(
               position: "after",
             },
             {
-              pattern: "@/**",
+              pattern: "./**",
               group: "internal",
               position: "after",
             },

@@ -1,6 +1,7 @@
 import { initContract } from "@ts-rest/core";
 import { z } from "zod";
 import {
+  IngredientCreateSchema,
   IngredientSchema,
   LoginSchema,
   RecipeIngredientCreateSchema,
@@ -49,11 +50,7 @@ export const contract = c.router(
       create: {
         method: "POST",
         path: "/ingredients",
-        body: IngredientSchema.omit({
-          id: true,
-          createdAt: true,
-          updatedAt: true,
-        }),
+        body: IngredientCreateSchema.omit({ userId: true }),
         responses: {
           201: IngredientSchema,
           400: NotFoundSchema,

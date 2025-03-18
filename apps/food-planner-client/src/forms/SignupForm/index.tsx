@@ -22,9 +22,10 @@ import toast from "react-hot-toast";
 import { z } from "zod";
 
 
+import apiClient from "@/api-client";
+
 import { signupFormSchema } from "./schema";
 
-import apiClient from "@/api-client";
 
 const SignupForm = () => {
   const navigate = useNavigate({ from: "/signup" });
