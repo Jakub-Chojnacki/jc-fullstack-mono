@@ -35,6 +35,11 @@ export default tseslint.config(
           ],
           pathGroups: [
             {
+              pattern: "*",
+              group: "external",
+              position: "after",
+            },
+            {
               pattern: "@hooks/**",
               group: "internal",
               position: "after",
