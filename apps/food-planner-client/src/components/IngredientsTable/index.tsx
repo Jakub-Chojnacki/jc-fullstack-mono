@@ -11,8 +11,9 @@ import {
   type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { Plus } from "lucide-react";
+import { Plus, Trash } from "lucide-react";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -25,6 +26,7 @@ import {
   TableRow,
 } from "../ui/table";
 import apiClient from "@/api-client";
+import { queryClient } from "@/main";
 
 const IngredientsTable = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -32,11 +34,36 @@ const IngredientsTable = () => {
   const navigation = useNavigate({ from: "/app/ingredients" });
 
   const { data } = apiClient.ingredients.getForUser.useQuery(["ingredients"]);
+  const { mutate } = apiClient.ingredients.delete.useMutation({
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["ingredients"] });
+      toast.success("Ingredient deleted successfully.");
+    },
+  });
+
+  const handleDelete = (id: number) => {
+    //TODO: Add Confirmation Dialog
+    mutate({ params: { id } });
+  };
 
   const columns: ColumnDef<TIngredient>[] = [
     {
       accessorKey: "name",
       header: "Name",
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => (
+        <div className="text-right">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => handleDelete(row.original.id)}
+          >
+            <Trash className="h-4 w-4" />
+          </Button>
+        </div>
+      ),
     },
   ];
 

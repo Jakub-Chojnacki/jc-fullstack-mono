@@ -179,6 +179,7 @@ export declare const contract: {
                 id: string | number;
             }>;
             method: "DELETE";
+            body: null;
             path: "/api/ingredients/:id";
             responses: {
                 200: z.ZodObject<{
