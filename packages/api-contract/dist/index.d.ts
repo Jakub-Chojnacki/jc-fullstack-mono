@@ -287,15 +287,13 @@ export declare const contract: {
                 isGlobal: z.ZodBoolean;
                 name: z.ZodString;
                 description: z.ZodString;
-            }, "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
+            }, "id" | "createdAt" | "updatedAt" | "userId">, "strip", z.ZodTypeAny, {
                 description: string;
                 name: string;
-                userId: number;
                 isGlobal: boolean;
             }, {
                 description: string;
                 name: string;
-                userId: number;
                 isGlobal: boolean;
             }>;
             path: "/api/recipes";
@@ -405,6 +403,7 @@ export declare const contract: {
                 id: string | number;
             }>;
             method: "DELETE";
+            body: null;
             path: "/api/recipes/:id";
             responses: {
                 200: z.ZodObject<{

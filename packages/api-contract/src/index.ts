@@ -75,7 +75,7 @@ export const contract = c.router(
         method: "DELETE",
         path: "/ingredients/:id",
         pathParams: z.object({ id: StringToNumberSchema }),
-        body:null,
+        body: null,
         responses: {
           200: IngredientSchema || null,
           404: NotFoundSchema,
@@ -104,6 +104,7 @@ export const contract = c.router(
           id: true,
           createdAt: true,
           updatedAt: true,
+          userId: true,
         }),
         responses: {
           201: RecipeSchema,
@@ -129,6 +130,7 @@ export const contract = c.router(
         method: "DELETE",
         path: "/recipes/:id",
         pathParams: z.object({ id: StringToNumberSchema }),
+        body:null,
         responses: {
           200: RecipeSchema || null,
           404: NotFoundSchema,

@@ -21,6 +21,7 @@ import { Route as AppRouteIndexImport } from './routes/app/_route.index'
 import { Route as AppRouteShoppingImport } from './routes/app/_route.shopping'
 import { Route as AppRouteRecipesImport } from './routes/app/_route.recipes'
 import { Route as AppRouteIngredientsImport } from './routes/app/_route.ingredients'
+import { Route as AppRouteRecipesAddImport } from './routes/app/_route.recipes.add'
 import { Route as AppRouteIngredientsAddImport } from './routes/app/_route.ingredients.add'
 
 // Create Virtual Routes
@@ -80,6 +81,12 @@ const AppRouteIngredientsRoute = AppRouteIngredientsImport.update({
   id: '/ingredients',
   path: '/ingredients',
   getParentRoute: () => AppRouteRoute,
+} as any)
+
+const AppRouteRecipesAddRoute = AppRouteRecipesAddImport.update({
+  id: '/add',
+  path: '/add',
+  getParentRoute: () => AppRouteRecipesRoute,
 } as any)
 
 const AppRouteIngredientsAddRoute = AppRouteIngredientsAddImport.update({
@@ -162,6 +169,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRouteIngredientsAddImport
       parentRoute: typeof AppRouteIngredientsImport
     }
+    '/app/_route/recipes/add': {
+      id: '/app/_route/recipes/add'
+      path: '/add'
+      fullPath: '/app/recipes/add'
+      preLoaderRoute: typeof AppRouteRecipesAddImport
+      parentRoute: typeof AppRouteRecipesImport
+    }
   }
 }
 
@@ -178,16 +192,28 @@ const AppRouteIngredientsRouteChildren: AppRouteIngredientsRouteChildren = {
 const AppRouteIngredientsRouteWithChildren =
   AppRouteIngredientsRoute._addFileChildren(AppRouteIngredientsRouteChildren)
 
+interface AppRouteRecipesRouteChildren {
+  AppRouteRecipesAddRoute: typeof AppRouteRecipesAddRoute
+}
+
+const AppRouteRecipesRouteChildren: AppRouteRecipesRouteChildren = {
+  AppRouteRecipesAddRoute: AppRouteRecipesAddRoute,
+}
+
+const AppRouteRecipesRouteWithChildren = AppRouteRecipesRoute._addFileChildren(
+  AppRouteRecipesRouteChildren,
+)
+
 interface AppRouteRouteChildren {
   AppRouteIngredientsRoute: typeof AppRouteIngredientsRouteWithChildren
-  AppRouteRecipesRoute: typeof AppRouteRecipesRoute
+  AppRouteRecipesRoute: typeof AppRouteRecipesRouteWithChildren
   AppRouteShoppingRoute: typeof AppRouteShoppingRoute
   AppRouteIndexRoute: typeof AppRouteIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppRouteIngredientsRoute: AppRouteIngredientsRouteWithChildren,
-  AppRouteRecipesRoute: AppRouteRecipesRoute,
+  AppRouteRecipesRoute: AppRouteRecipesRouteWithChildren,
   AppRouteShoppingRoute: AppRouteShoppingRoute,
   AppRouteIndexRoute: AppRouteIndexRoute,
 }
@@ -212,10 +238,11 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/app': typeof AppRouteRouteWithChildren
   '/app/ingredients': typeof AppRouteIngredientsRouteWithChildren
-  '/app/recipes': typeof AppRouteRecipesRoute
+  '/app/recipes': typeof AppRouteRecipesRouteWithChildren
   '/app/shopping': typeof AppRouteShoppingRoute
   '/app/': typeof AppRouteIndexRoute
   '/app/ingredients/add': typeof AppRouteIngredientsAddRoute
+  '/app/recipes/add': typeof AppRouteRecipesAddRoute
 }
 
 export interface FileRoutesByTo {
@@ -224,9 +251,10 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/app': typeof AppRouteIndexRoute
   '/app/ingredients': typeof AppRouteIngredientsRouteWithChildren
-  '/app/recipes': typeof AppRouteRecipesRoute
+  '/app/recipes': typeof AppRouteRecipesRouteWithChildren
   '/app/shopping': typeof AppRouteShoppingRoute
   '/app/ingredients/add': typeof AppRouteIngredientsAddRoute
+  '/app/recipes/add': typeof AppRouteRecipesAddRoute
 }
 
 export interface FileRoutesById {
@@ -237,10 +265,11 @@ export interface FileRoutesById {
   '/app': typeof AppRouteWithChildren
   '/app/_route': typeof AppRouteRouteWithChildren
   '/app/_route/ingredients': typeof AppRouteIngredientsRouteWithChildren
-  '/app/_route/recipes': typeof AppRouteRecipesRoute
+  '/app/_route/recipes': typeof AppRouteRecipesRouteWithChildren
   '/app/_route/shopping': typeof AppRouteShoppingRoute
   '/app/_route/': typeof AppRouteIndexRoute
   '/app/_route/ingredients/add': typeof AppRouteIngredientsAddRoute
+  '/app/_route/recipes/add': typeof AppRouteRecipesAddRoute
 }
 
 export interface FileRouteTypes {
@@ -255,6 +284,7 @@ export interface FileRouteTypes {
     | '/app/shopping'
     | '/app/'
     | '/app/ingredients/add'
+    | '/app/recipes/add'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -265,6 +295,7 @@ export interface FileRouteTypes {
     | '/app/recipes'
     | '/app/shopping'
     | '/app/ingredients/add'
+    | '/app/recipes/add'
   id:
     | '__root__'
     | '/'
@@ -277,6 +308,7 @@ export interface FileRouteTypes {
     | '/app/_route/shopping'
     | '/app/_route/'
     | '/app/_route/ingredients/add'
+    | '/app/_route/recipes/add'
   fileRoutesById: FileRoutesById
 }
 
@@ -344,7 +376,10 @@ export const routeTree = rootRoute
     },
     "/app/_route/recipes": {
       "filePath": "app/_route.recipes.tsx",
-      "parent": "/app/_route"
+      "parent": "/app/_route",
+      "children": [
+        "/app/_route/recipes/add"
+      ]
     },
     "/app/_route/shopping": {
       "filePath": "app/_route.shopping.tsx",
@@ -357,6 +392,10 @@ export const routeTree = rootRoute
     "/app/_route/ingredients/add": {
       "filePath": "app/_route.ingredients.add.tsx",
       "parent": "/app/_route/ingredients"
+    },
+    "/app/_route/recipes/add": {
+      "filePath": "app/_route.recipes.add.tsx",
+      "parent": "/app/_route/recipes"
     }
   }
 }

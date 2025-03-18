@@ -9,9 +9,12 @@ export class RecipesController {
   constructor(private readonly recipesService: RecipesService) {}
 
   @TsRestHandler(contract.recipes.create)
-  async create() {
+  async create(@GetCurrentUserId() userId: number) {
     return tsRestHandler(contract.recipes.create, async ({ body }) => {
-      const createdRecipe = await this.recipesService.create(body);
+      const createdRecipe = await this.recipesService.create({
+        ...body,
+        userId,
+      });
 
       return {
         status: 201,

@@ -97,6 +97,7 @@ exports.contract = c.router({
                 id: true,
                 createdAt: true,
                 updatedAt: true,
+                userId: true,
             }),
             responses: {
                 201: index_1.RecipeSchema,
@@ -122,6 +123,7 @@ exports.contract = c.router({
             method: "DELETE",
             path: "/recipes/:id",
             pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
+            body: null,
             responses: {
                 200: index_1.RecipeSchema || null,
                 404: exports.NotFoundSchema,
