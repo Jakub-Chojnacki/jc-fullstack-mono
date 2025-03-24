@@ -6,7 +6,7 @@ export const IngredientSchema = z.object({
   updatedAt: z.date(),
   name: z.string().nonempty("Name is required"),
   userId: z.number(),
-  isGlobal: z.boolean(),
+  isGlobal: z.boolean().optional(),
 });
 
 export type TIngredient = z.infer<typeof IngredientSchema>;
@@ -42,7 +42,7 @@ export const RecipeIngredientSchema = z.object({
   updatedAt: z.date(),
   amount: z.number(),
   unit: z.enum(QuantityUnit),
-  isGlobal: z.boolean(),
+  isGlobal: z.boolean().optional(),
   ingredientId: z.number(),
   recipeId: z.number(),
 });

@@ -71,7 +71,7 @@ model RecipeIngredient {
   unit     QuantityUnit
   isGlobal Boolean      @default(false)
 
-  recipe   Recipe @relation(fields: [recipeId], references: [id])
+  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   recipeId Int
 
   ingredientId Int

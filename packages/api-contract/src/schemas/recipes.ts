@@ -1,11 +1,13 @@
 import { z } from "zod";
 
+import { RecipeIngredientCreateSchema } from "./ingredients";
+
 export const RecipeSchema = z.object({
   id: z.number(),
   createdAt: z.date(),
   updatedAt: z.date(),
   userId: z.number(),
-  isGlobal: z.boolean(),
+  isGlobal: z.boolean().optional(),
   name: z.string(),
   description: z.string(),
 });
@@ -16,6 +18,10 @@ export const RecipeCreateSchema = RecipeSchema.omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+}).extend({
+  recipeIngredients: z.array(
+    RecipeIngredientCreateSchema.omit({ recipeId: true })
+  ),
 });
 
 export type TRecipeCreate = z.infer<typeof RecipeCreateSchema>;

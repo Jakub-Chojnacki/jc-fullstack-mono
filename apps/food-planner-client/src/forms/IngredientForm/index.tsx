@@ -20,7 +20,7 @@ import { queryClient } from "@/main";
 import { IngredientFormSchema } from "./schema";
 
 const IngredientForm = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const { mutate } = apiClient.ingredients.create.useMutation({
     onError: () => {
@@ -29,13 +29,13 @@ const IngredientForm = () => {
     onSuccess: () => {
       toast.success("Ingredient added successfully!");
       queryClient.invalidateQueries({ queryKey: ["ingredients"] });
-      navigate({to:'/app/ingredients'})
+      navigate({ to: "/app/ingredients" });
     },
   });
 
   const form = useForm<z.infer<typeof IngredientFormSchema>>({
     resolver: zodResolver(IngredientFormSchema),
-    defaultValues: { name: "", isGlobal: false },
+    defaultValues: { name: "" },
   });
 
   const onSubmit = (values: z.infer<typeof IngredientFormSchema>) => {

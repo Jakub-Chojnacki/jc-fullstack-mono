@@ -27,12 +27,21 @@ export class RecipesService {
     return recipes;
   }
 
-  async create(body: TRecipeCreate) {
-    const recipe = await this.prisma.recipe.create({
-      data: body,
-    });
+  async create({ recipeIngredients, ...body }: TRecipeCreate) {
+    return wrapWithTsRestError(contract.recipes.create, async () => {
+      const recipe = await this.prisma.recipe.create({
+        data: body,
+      });
 
-    return recipe;
+      await this.prisma.recipeIngredient.createMany({
+        data: recipeIngredients.map((recipeIngredient) => ({
+          ...recipeIngredient,
+          recipeId: recipe.id,
+        })),
+      });
+
+      return recipe;
+    });
   }
 
   async delete(id: number) {

@@ -4,6 +4,7 @@ import {
   IngredientCreateSchema,
   IngredientSchema,
   LoginSchema,
+  RecipeCreateSchema,
   RecipeIngredientCreateSchema,
   RecipeIngredientSchema,
   RecipeSchema,
@@ -13,7 +14,6 @@ import {
   ShoppingListIngredientUpdateSchema,
   ShoppingListSchema,
   StringToNumberSchema,
-  TokensSchema,
   UserSchema,
 } from "./schemas/index";
 import {
@@ -100,12 +100,7 @@ export const contract = c.router(
       create: {
         method: "POST",
         path: "/recipes",
-        body: RecipeSchema.omit({
-          id: true,
-          createdAt: true,
-          updatedAt: true,
-          userId: true,
-        }),
+        body: RecipeCreateSchema,
         responses: {
           201: RecipeSchema,
           400: NotFoundSchema,
@@ -130,7 +125,7 @@ export const contract = c.router(
         method: "DELETE",
         path: "/recipes/:id",
         pathParams: z.object({ id: StringToNumberSchema }),
-        body:null,
+        body: null,
         responses: {
           200: RecipeSchema || null,
           404: NotFoundSchema,

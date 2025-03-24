@@ -8,7 +8,7 @@ exports.IngredientSchema = zod_1.z.object({
     updatedAt: zod_1.z.date(),
     name: zod_1.z.string().nonempty("Name is required"),
     userId: zod_1.z.number(),
-    isGlobal: zod_1.z.boolean(),
+    isGlobal: zod_1.z.boolean().optional(),
 });
 exports.IngredientCreateSchema = exports.IngredientSchema.omit({
     id: true,
@@ -34,7 +34,7 @@ exports.RecipeIngredientSchema = zod_1.z.object({
     updatedAt: zod_1.z.date(),
     amount: zod_1.z.number(),
     unit: zod_1.z.enum(exports.QuantityUnit),
-    isGlobal: zod_1.z.boolean(),
+    isGlobal: zod_1.z.boolean().optional(),
     ingredientId: zod_1.z.number(),
     recipeId: zod_1.z.number(),
 });

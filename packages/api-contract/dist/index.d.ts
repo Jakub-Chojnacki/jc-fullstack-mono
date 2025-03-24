@@ -19,21 +19,21 @@ export declare const contract: {
                     updatedAt: z.ZodDate;
                     name: z.ZodString;
                     userId: z.ZodNumber;
-                    isGlobal: z.ZodBoolean;
+                    isGlobal: z.ZodOptional<z.ZodBoolean>;
                 }, "strip", z.ZodTypeAny, {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
                     name: string;
                     userId: number;
-                    isGlobal: boolean;
+                    isGlobal?: boolean | undefined;
                 }, {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
                     name: string;
                     userId: number;
-                    isGlobal: boolean;
+                    isGlobal?: boolean | undefined;
                 }>, "many">;
             };
         };
@@ -47,21 +47,21 @@ export declare const contract: {
                     updatedAt: z.ZodDate;
                     name: z.ZodString;
                     userId: z.ZodNumber;
-                    isGlobal: z.ZodBoolean;
+                    isGlobal: z.ZodOptional<z.ZodBoolean>;
                 }, "strip", z.ZodTypeAny, {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
                     name: string;
                     userId: number;
-                    isGlobal: boolean;
+                    isGlobal?: boolean | undefined;
                 }, {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
                     name: string;
                     userId: number;
-                    isGlobal: boolean;
+                    isGlobal?: boolean | undefined;
                 }>, "many">;
             };
         };
@@ -73,13 +73,13 @@ export declare const contract: {
                 updatedAt: z.ZodDate;
                 name: z.ZodString;
                 userId: z.ZodNumber;
-                isGlobal: z.ZodBoolean;
+                isGlobal: z.ZodOptional<z.ZodBoolean>;
             }, "id" | "createdAt" | "updatedAt">, "userId">, "strip", z.ZodTypeAny, {
                 name: string;
-                isGlobal: boolean;
+                isGlobal?: boolean | undefined;
             }, {
                 name: string;
-                isGlobal: boolean;
+                isGlobal?: boolean | undefined;
             }>;
             path: "/api/ingredients";
             responses: {
@@ -89,21 +89,21 @@ export declare const contract: {
                     updatedAt: z.ZodDate;
                     name: z.ZodString;
                     userId: z.ZodNumber;
-                    isGlobal: z.ZodBoolean;
+                    isGlobal: z.ZodOptional<z.ZodBoolean>;
                 }, "strip", z.ZodTypeAny, {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
                     name: string;
                     userId: number;
-                    isGlobal: boolean;
+                    isGlobal?: boolean | undefined;
                 }, {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
                     name: string;
                     userId: number;
-                    isGlobal: boolean;
+                    isGlobal?: boolean | undefined;
                 }>;
                 400: z.ZodObject<{
                     message: z.ZodString;
@@ -129,13 +129,13 @@ export declare const contract: {
                 updatedAt: z.ZodDate;
                 name: z.ZodString;
                 userId: z.ZodNumber;
-                isGlobal: z.ZodBoolean;
+                isGlobal: z.ZodOptional<z.ZodBoolean>;
             }, "id" | "createdAt" | "updatedAt" | "userId">, "strip", z.ZodTypeAny, {
                 name: string;
-                isGlobal: boolean;
+                isGlobal?: boolean | undefined;
             }, {
                 name: string;
-                isGlobal: boolean;
+                isGlobal?: boolean | undefined;
             }>;
             path: "/api/ingredients/:id";
             responses: {
@@ -145,21 +145,21 @@ export declare const contract: {
                     updatedAt: z.ZodDate;
                     name: z.ZodString;
                     userId: z.ZodNumber;
-                    isGlobal: z.ZodBoolean;
+                    isGlobal: z.ZodOptional<z.ZodBoolean>;
                 }, "strip", z.ZodTypeAny, {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
                     name: string;
                     userId: number;
-                    isGlobal: boolean;
+                    isGlobal?: boolean | undefined;
                 }, {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
                     name: string;
                     userId: number;
-                    isGlobal: boolean;
+                    isGlobal?: boolean | undefined;
                 }>;
                 404: z.ZodObject<{
                     message: z.ZodString;
@@ -188,21 +188,21 @@ export declare const contract: {
                     updatedAt: z.ZodDate;
                     name: z.ZodString;
                     userId: z.ZodNumber;
-                    isGlobal: z.ZodBoolean;
+                    isGlobal: z.ZodOptional<z.ZodBoolean>;
                 }, "strip", z.ZodTypeAny, {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
                     name: string;
                     userId: number;
-                    isGlobal: boolean;
+                    isGlobal?: boolean | undefined;
                 }, {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
                     name: string;
                     userId: number;
-                    isGlobal: boolean;
+                    isGlobal?: boolean | undefined;
                 }>;
                 404: z.ZodObject<{
                     message: z.ZodString;
@@ -224,7 +224,7 @@ export declare const contract: {
                     createdAt: z.ZodDate;
                     updatedAt: z.ZodDate;
                     userId: z.ZodNumber;
-                    isGlobal: z.ZodBoolean;
+                    isGlobal: z.ZodOptional<z.ZodBoolean>;
                     name: z.ZodString;
                     description: z.ZodString;
                 }, "strip", z.ZodTypeAny, {
@@ -234,7 +234,7 @@ export declare const contract: {
                     updatedAt: Date;
                     name: string;
                     userId: number;
-                    isGlobal: boolean;
+                    isGlobal?: boolean | undefined;
                 }, {
                     description: string;
                     id: number;
@@ -242,7 +242,7 @@ export declare const contract: {
                     updatedAt: Date;
                     name: string;
                     userId: number;
-                    isGlobal: boolean;
+                    isGlobal?: boolean | undefined;
                 }>, "many">;
             };
         };
@@ -255,7 +255,7 @@ export declare const contract: {
                     createdAt: z.ZodDate;
                     updatedAt: z.ZodDate;
                     userId: z.ZodNumber;
-                    isGlobal: z.ZodBoolean;
+                    isGlobal: z.ZodOptional<z.ZodBoolean>;
                     name: z.ZodString;
                     description: z.ZodString;
                 }, "strip", z.ZodTypeAny, {
@@ -265,7 +265,7 @@ export declare const contract: {
                     updatedAt: Date;
                     name: string;
                     userId: number;
-                    isGlobal: boolean;
+                    isGlobal?: boolean | undefined;
                 }, {
                     description: string;
                     id: number;
@@ -273,28 +273,63 @@ export declare const contract: {
                     updatedAt: Date;
                     name: string;
                     userId: number;
-                    isGlobal: boolean;
+                    isGlobal?: boolean | undefined;
                 }>, "many">;
             };
         };
         create: {
             method: "POST";
-            body: z.ZodObject<Omit<{
+            body: z.ZodObject<z.objectUtil.extendShape<Omit<{
                 id: z.ZodNumber;
                 createdAt: z.ZodDate;
                 updatedAt: z.ZodDate;
                 userId: z.ZodNumber;
-                isGlobal: z.ZodBoolean;
+                isGlobal: z.ZodOptional<z.ZodBoolean>;
                 name: z.ZodString;
                 description: z.ZodString;
-            }, "id" | "createdAt" | "updatedAt" | "userId">, "strip", z.ZodTypeAny, {
+            }, "id" | "createdAt" | "updatedAt">, {
+                recipeIngredients: z.ZodArray<z.ZodObject<Omit<Omit<{
+                    id: z.ZodNumber;
+                    createdAt: z.ZodDate;
+                    updatedAt: z.ZodDate;
+                    amount: z.ZodNumber;
+                    unit: z.ZodEnum<["GRAMS", "LITERS", "MILLILITERS", "PIECES", "UNITS"]>;
+                    isGlobal: z.ZodOptional<z.ZodBoolean>;
+                    ingredientId: z.ZodNumber;
+                    recipeId: z.ZodNumber;
+                }, "id" | "createdAt" | "updatedAt">, "recipeId">, "strip", z.ZodTypeAny, {
+                    amount: number;
+                    unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
+                    ingredientId: number;
+                    isGlobal?: boolean | undefined;
+                }, {
+                    amount: number;
+                    unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
+                    ingredientId: number;
+                    isGlobal?: boolean | undefined;
+                }>, "many">;
+            }>, "strip", z.ZodTypeAny, {
                 description: string;
                 name: string;
-                isGlobal: boolean;
+                userId: number;
+                recipeIngredients: {
+                    amount: number;
+                    unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
+                    ingredientId: number;
+                    isGlobal?: boolean | undefined;
+                }[];
+                isGlobal?: boolean | undefined;
             }, {
                 description: string;
                 name: string;
-                isGlobal: boolean;
+                userId: number;
+                recipeIngredients: {
+                    amount: number;
+                    unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
+                    ingredientId: number;
+                    isGlobal?: boolean | undefined;
+                }[];
+                isGlobal?: boolean | undefined;
             }>;
             path: "/api/recipes";
             responses: {
@@ -303,7 +338,7 @@ export declare const contract: {
                     createdAt: z.ZodDate;
                     updatedAt: z.ZodDate;
                     userId: z.ZodNumber;
-                    isGlobal: z.ZodBoolean;
+                    isGlobal: z.ZodOptional<z.ZodBoolean>;
                     name: z.ZodString;
                     description: z.ZodString;
                 }, "strip", z.ZodTypeAny, {
@@ -313,7 +348,7 @@ export declare const contract: {
                     updatedAt: Date;
                     name: string;
                     userId: number;
-                    isGlobal: boolean;
+                    isGlobal?: boolean | undefined;
                 }, {
                     description: string;
                     id: number;
@@ -321,7 +356,7 @@ export declare const contract: {
                     updatedAt: Date;
                     name: string;
                     userId: number;
-                    isGlobal: boolean;
+                    isGlobal?: boolean | undefined;
                 }>;
                 400: z.ZodObject<{
                     message: z.ZodString;
@@ -346,17 +381,17 @@ export declare const contract: {
                 createdAt: z.ZodDate;
                 updatedAt: z.ZodDate;
                 userId: z.ZodNumber;
-                isGlobal: z.ZodBoolean;
+                isGlobal: z.ZodOptional<z.ZodBoolean>;
                 name: z.ZodString;
                 description: z.ZodString;
             }, "id" | "createdAt" | "updatedAt" | "userId">, "strip", z.ZodTypeAny, {
                 description: string;
                 name: string;
-                isGlobal: boolean;
+                isGlobal?: boolean | undefined;
             }, {
                 description: string;
                 name: string;
-                isGlobal: boolean;
+                isGlobal?: boolean | undefined;
             }>;
             path: "/api/recipes/:id";
             responses: {
@@ -365,7 +400,7 @@ export declare const contract: {
                     createdAt: z.ZodDate;
                     updatedAt: z.ZodDate;
                     userId: z.ZodNumber;
-                    isGlobal: z.ZodBoolean;
+                    isGlobal: z.ZodOptional<z.ZodBoolean>;
                     name: z.ZodString;
                     description: z.ZodString;
                 }, "strip", z.ZodTypeAny, {
@@ -375,7 +410,7 @@ export declare const contract: {
                     updatedAt: Date;
                     name: string;
                     userId: number;
-                    isGlobal: boolean;
+                    isGlobal?: boolean | undefined;
                 }, {
                     description: string;
                     id: number;
@@ -383,7 +418,7 @@ export declare const contract: {
                     updatedAt: Date;
                     name: string;
                     userId: number;
-                    isGlobal: boolean;
+                    isGlobal?: boolean | undefined;
                 }>;
                 404: z.ZodObject<{
                     message: z.ZodString;
@@ -411,7 +446,7 @@ export declare const contract: {
                     createdAt: z.ZodDate;
                     updatedAt: z.ZodDate;
                     userId: z.ZodNumber;
-                    isGlobal: z.ZodBoolean;
+                    isGlobal: z.ZodOptional<z.ZodBoolean>;
                     name: z.ZodString;
                     description: z.ZodString;
                 }, "strip", z.ZodTypeAny, {
@@ -421,7 +456,7 @@ export declare const contract: {
                     updatedAt: Date;
                     name: string;
                     userId: number;
-                    isGlobal: boolean;
+                    isGlobal?: boolean | undefined;
                 }, {
                     description: string;
                     id: number;
@@ -429,7 +464,7 @@ export declare const contract: {
                     updatedAt: Date;
                     name: string;
                     userId: number;
-                    isGlobal: boolean;
+                    isGlobal?: boolean | undefined;
                 }>;
                 404: z.ZodObject<{
                     message: z.ZodString;
@@ -450,21 +485,21 @@ export declare const contract: {
                 updatedAt: z.ZodDate;
                 amount: z.ZodNumber;
                 unit: z.ZodEnum<["GRAMS", "LITERS", "MILLILITERS", "PIECES", "UNITS"]>;
-                isGlobal: z.ZodBoolean;
+                isGlobal: z.ZodOptional<z.ZodBoolean>;
                 ingredientId: z.ZodNumber;
                 recipeId: z.ZodNumber;
             }, "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
-                isGlobal: boolean;
                 amount: number;
                 unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
                 ingredientId: number;
                 recipeId: number;
+                isGlobal?: boolean | undefined;
             }, {
-                isGlobal: boolean;
                 amount: number;
                 unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
                 ingredientId: number;
                 recipeId: number;
+                isGlobal?: boolean | undefined;
             }>;
             path: "/api/recipeIngredients";
             responses: {
@@ -474,27 +509,27 @@ export declare const contract: {
                     updatedAt: z.ZodDate;
                     amount: z.ZodNumber;
                     unit: z.ZodEnum<["GRAMS", "LITERS", "MILLILITERS", "PIECES", "UNITS"]>;
-                    isGlobal: z.ZodBoolean;
+                    isGlobal: z.ZodOptional<z.ZodBoolean>;
                     ingredientId: z.ZodNumber;
                     recipeId: z.ZodNumber;
                 }, "strip", z.ZodTypeAny, {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    isGlobal: boolean;
                     amount: number;
                     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
                     ingredientId: number;
                     recipeId: number;
+                    isGlobal?: boolean | undefined;
                 }, {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    isGlobal: boolean;
                     amount: number;
                     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
                     ingredientId: number;
                     recipeId: number;
+                    isGlobal?: boolean | undefined;
                 }>;
             };
         };
@@ -513,21 +548,21 @@ export declare const contract: {
                 updatedAt: z.ZodDate;
                 amount: z.ZodNumber;
                 unit: z.ZodEnum<["GRAMS", "LITERS", "MILLILITERS", "PIECES", "UNITS"]>;
-                isGlobal: z.ZodBoolean;
+                isGlobal: z.ZodOptional<z.ZodBoolean>;
                 ingredientId: z.ZodNumber;
                 recipeId: z.ZodNumber;
             }, "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
-                isGlobal: boolean;
                 amount: number;
                 unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
                 ingredientId: number;
                 recipeId: number;
+                isGlobal?: boolean | undefined;
             }, {
-                isGlobal: boolean;
                 amount: number;
                 unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
                 ingredientId: number;
                 recipeId: number;
+                isGlobal?: boolean | undefined;
             }>;
             path: "/api/recipeIngredients/:id";
             responses: {
@@ -537,27 +572,27 @@ export declare const contract: {
                     updatedAt: z.ZodDate;
                     amount: z.ZodNumber;
                     unit: z.ZodEnum<["GRAMS", "LITERS", "MILLILITERS", "PIECES", "UNITS"]>;
-                    isGlobal: z.ZodBoolean;
+                    isGlobal: z.ZodOptional<z.ZodBoolean>;
                     ingredientId: z.ZodNumber;
                     recipeId: z.ZodNumber;
                 }, "strip", z.ZodTypeAny, {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    isGlobal: boolean;
                     amount: number;
                     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
                     ingredientId: number;
                     recipeId: number;
+                    isGlobal?: boolean | undefined;
                 }, {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    isGlobal: boolean;
                     amount: number;
                     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
                     ingredientId: number;
                     recipeId: number;
+                    isGlobal?: boolean | undefined;
                 }>;
                 404: z.ZodObject<{
                     message: z.ZodString;
@@ -585,27 +620,27 @@ export declare const contract: {
                     updatedAt: z.ZodDate;
                     amount: z.ZodNumber;
                     unit: z.ZodEnum<["GRAMS", "LITERS", "MILLILITERS", "PIECES", "UNITS"]>;
-                    isGlobal: z.ZodBoolean;
+                    isGlobal: z.ZodOptional<z.ZodBoolean>;
                     ingredientId: z.ZodNumber;
                     recipeId: z.ZodNumber;
                 }, "strip", z.ZodTypeAny, {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    isGlobal: boolean;
                     amount: number;
                     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
                     ingredientId: number;
                     recipeId: number;
+                    isGlobal?: boolean | undefined;
                 }, {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    isGlobal: boolean;
                     amount: number;
                     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
                     ingredientId: number;
                     recipeId: number;
+                    isGlobal?: boolean | undefined;
                 }>;
                 404: z.ZodObject<{
                     message: z.ZodString;
