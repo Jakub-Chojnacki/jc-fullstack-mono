@@ -45,8 +45,6 @@ const RecipeForm = () => {
     },
   });
 
-  console.log(form.getValues())
-
   const onSubmit = (values: z.infer<typeof RecipeFormSchema>) => {
     mutate({ body: values });
   };
