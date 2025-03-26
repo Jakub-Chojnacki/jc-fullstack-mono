@@ -93,7 +93,7 @@ exports.contract = c.router({
         create: {
             method: "POST",
             path: "/recipes",
-            body: index_1.RecipeCreateSchema,
+            body: index_1.RecipeCreateSchema.omit({ userId: true }),
             responses: {
                 201: index_1.RecipeSchema,
                 400: exports.NotFoundSchema,

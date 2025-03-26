@@ -100,7 +100,7 @@ export const contract = c.router(
       create: {
         method: "POST",
         path: "/recipes",
-        body: RecipeCreateSchema,
+        body: RecipeCreateSchema.omit({ userId: true }),
         responses: {
           201: RecipeSchema,
           400: NotFoundSchema,

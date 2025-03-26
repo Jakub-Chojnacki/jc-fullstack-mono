@@ -8,16 +8,16 @@ export declare const IngredientSchema: z.ZodObject<{
     isGlobal: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
     id: number;
+    name: string;
     createdAt: Date;
     updatedAt: Date;
-    name: string;
     userId: number;
     isGlobal?: boolean | undefined;
 }, {
     id: number;
+    name: string;
     createdAt: Date;
     updatedAt: Date;
-    name: string;
     userId: number;
     isGlobal?: boolean | undefined;
 }>;

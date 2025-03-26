@@ -15,9 +15,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { queryClient } from "@/main";
 
 import { RecipeFormSchema } from "./schema";
+import IngredientSelect from "@/components/IngredientSelect";
 
 const RecipeForm = () => {
   const navigate = useNavigate();
@@ -35,8 +37,15 @@ const RecipeForm = () => {
 
   const form = useForm<z.infer<typeof RecipeFormSchema>>({
     resolver: zodResolver(RecipeFormSchema),
-    defaultValues: { name: "", isGlobal: false, description: "" },
+    defaultValues: {
+      name: "",
+      isGlobal: false,
+      description: "",
+      recipeIngredients: [],
+    },
   });
+
+  console.log(form.getValues())
 
   const onSubmit = (values: z.infer<typeof RecipeFormSchema>) => {
     mutate({ body: values });
@@ -59,9 +68,39 @@ const RecipeForm = () => {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Input {...field} type="text" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="isGlobal"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                <FormLabel>Should the recipe be public?</FormLabel>
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
+          <IngredientSelect />
           <Button type="submit" className="w-full">
-            Add
+            Save recipe
           </Button>
         </div>
       </form>

@@ -9,18 +9,18 @@ export declare const RecipeSchema: z.ZodObject<{
     description: z.ZodString;
 }, "strip", z.ZodTypeAny, {
     id: number;
+    name: string;
     createdAt: Date;
     updatedAt: Date;
     userId: number;
-    name: string;
     description: string;
     isGlobal?: boolean | undefined;
 }, {
     id: number;
+    name: string;
     createdAt: Date;
     updatedAt: Date;
     userId: number;
-    name: string;
     description: string;
     isGlobal?: boolean | undefined;
 }>;
@@ -55,8 +55,8 @@ export declare const RecipeCreateSchema: z.ZodObject<z.objectUtil.extendShape<Om
         isGlobal?: boolean | undefined;
     }>, "many">;
 }>, "strip", z.ZodTypeAny, {
-    userId: number;
     name: string;
+    userId: number;
     description: string;
     recipeIngredients: {
         amount: number;
@@ -66,8 +66,8 @@ export declare const RecipeCreateSchema: z.ZodObject<z.objectUtil.extendShape<Om
     }[];
     isGlobal?: boolean | undefined;
 }, {
-    userId: number;
     name: string;
+    userId: number;
     description: string;
     recipeIngredients: {
         amount: number;
