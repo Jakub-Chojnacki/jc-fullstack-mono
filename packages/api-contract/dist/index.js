@@ -114,6 +114,15 @@ exports.contract = c.router({
                 404: exports.NotFoundSchema,
             },
         },
+        getOne: {
+            method: "GET",
+            path: "/recipes/:id",
+            pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
+            responses: {
+                200: index_1.RecipeSchema,
+                404: exports.NotFoundSchema,
+            },
+        },
         delete: {
             method: "DELETE",
             path: "/recipes/:id",

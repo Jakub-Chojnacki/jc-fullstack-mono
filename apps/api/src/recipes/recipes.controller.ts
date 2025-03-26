@@ -47,6 +47,21 @@ export class RecipesController {
     });
   }
 
+  @TsRestHandler(contract.recipes.getOne)
+  async getOne(@GetCurrentUserId() userId: number) {
+    return tsRestHandler(
+      contract.recipes.getOne,
+      async ({ params: { id } }) => {
+        const recipes = await this.recipesService.getOne(id, userId);
+
+        return {
+          status: 200,
+          body: recipes,
+        };
+      },
+    );
+  }
+
   @TsRestHandler(contract.recipes.delete)
   async delete() {
     return tsRestHandler(

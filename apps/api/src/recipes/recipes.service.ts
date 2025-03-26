@@ -27,6 +27,19 @@ export class RecipesService {
     return recipes;
   }
 
+  async getOne(id: number, userId: number) {
+    return wrapWithTsRestError(contract.recipes.getOne, async () => {
+      const recipe = await this.prisma.recipe.findFirst({
+        where: {
+          id,
+          userId,
+        },
+      });
+
+      return recipe;
+    });
+  }
+
   async create({ recipeIngredients, ...body }: TRecipeCreate) {
     return wrapWithTsRestError(contract.recipes.create, async () => {
       const recipe = await this.prisma.recipe.create({

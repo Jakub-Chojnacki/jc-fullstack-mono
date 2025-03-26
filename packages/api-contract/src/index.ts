@@ -121,6 +121,15 @@ export const contract = c.router(
           404: NotFoundSchema,
         },
       },
+      getOne: {
+        method: "GET",
+        path: "/recipes/:id",
+        pathParams: z.object({ id: StringToNumberSchema }),
+        responses: {
+          200: RecipeSchema,
+          404: NotFoundSchema,
+        },
+      },
       delete: {
         method: "DELETE",
         path: "/recipes/:id",
