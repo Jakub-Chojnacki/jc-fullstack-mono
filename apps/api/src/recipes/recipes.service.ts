@@ -76,26 +76,39 @@ export class RecipesService {
     return wrapWithTsRestError(contract.recipes.update, async () => {
       const existingIngredients = await this.prisma.recipeIngredient.findMany({
         where: { recipeId: id },
+        select: { id: true },
       });
 
-      const existingIngredientIds = existingIngredients.map((i) => i.id);
-
-      const incomingIngredientIds = recipeIngredients
-        .map((i) => i.id)
-        .filter(Boolean);
-
-      const ingredientsToDelete = existingIngredientIds.filter(
-        (id) => !incomingIngredientIds.includes(id),
+      const existingIngredientIds = new Set(
+        existingIngredients.map((i) => i.id),
       );
 
-      const ingredientsToAdd = recipeIngredients.filter(
-        (i) => typeof i?.id !== 'number',
+      const incomingIngredientIds = new Set(
+        recipeIngredients.map((i) => i.id).filter((id): id is number => !!id),
       );
 
-      const ingredientsToUpdate = recipeIngredients.filter(
-        (i) => typeof i?.id === 'number',
-      );
+      type TIngredientToAddWithRecipeId =
+        TRecipeUpdate['recipeIngredients'][0] & {
+          recipeId: number;
+        };
 
+      type TIngredientToAdd = Omit<TIngredientToAddWithRecipeId, 'id'>;
+
+      const ingredientsToAdd: TIngredientToAdd[] = [];
+      const ingredientsToUpdate: TRecipeUpdate['recipeIngredients'] = [];
+
+      for (const ingredient of recipeIngredients) {
+        if (!ingredient.id) {
+          ingredientsToAdd.push({ ...ingredient, recipeId: id });
+        } else {
+          ingredientsToUpdate.push(ingredient);
+        }
+      }
+
+      const ingredientsToDelete = [...existingIngredientIds].filter(
+        (id) => !incomingIngredientIds.has(id),
+      );
+      
       const transaction = await this.prisma.$transaction(async (prisma) => {
         const updateRecipePromise = prisma.recipe.update({
           where: {
