@@ -99,7 +99,7 @@ const RecipesTable = () => {
   return (
     <div>
       <h2 className="bold text-2xl">Recipes</h2>
-      <div className="flex items-center justify-between py-4">
+      <div className="flex items-center justify-between py-4 gap-4">
         <Input
           placeholder="Search recipes..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
