@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RecipeUpdateSchema = exports.RecipeCreateSchema = exports.RecipeSchema = void 0;
+exports.RecipeGetOneSchema = exports.RecipeUpdateSchema = exports.RecipeCreateSchema = exports.RecipeSchema = void 0;
 var zod_1 = require("zod");
 var ingredients_1 = require("./ingredients");
 exports.RecipeSchema = zod_1.z.object({
@@ -25,5 +25,8 @@ exports.RecipeUpdateSchema = exports.RecipeSchema.omit({
     updatedAt: true,
     userId: true,
 }).extend({
+    recipeIngredients: zod_1.z.array(ingredients_1.RecipeIngredientUpdateSchema),
+});
+exports.RecipeGetOneSchema = exports.RecipeSchema.extend({
     recipeIngredients: zod_1.z.array(ingredients_1.RecipeIngredientUpdateSchema),
 });

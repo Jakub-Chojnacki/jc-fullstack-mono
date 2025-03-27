@@ -24,6 +24,7 @@ import { Route as AppRouteIngredientsImport } from './routes/app/_route.ingredie
 import { Route as AppRouteRecipesAddImport } from './routes/app/_route.recipes.add'
 import { Route as AppRouteIngredientsAddImport } from './routes/app/_route.ingredients.add'
 import { Route as AppRouteRecipesPreviewIdImport } from './routes/app/_route.recipes.preview.$id'
+import { Route as AppRouteRecipesEditIdImport } from './routes/app/_route.recipes.edit.$id'
 
 // Create Virtual Routes
 
@@ -99,6 +100,12 @@ const AppRouteIngredientsAddRoute = AppRouteIngredientsAddImport.update({
 const AppRouteRecipesPreviewIdRoute = AppRouteRecipesPreviewIdImport.update({
   id: '/preview/$id',
   path: '/preview/$id',
+  getParentRoute: () => AppRouteRecipesRoute,
+} as any)
+
+const AppRouteRecipesEditIdRoute = AppRouteRecipesEditIdImport.update({
+  id: '/edit/$id',
+  path: '/edit/$id',
   getParentRoute: () => AppRouteRecipesRoute,
 } as any)
 
@@ -183,6 +190,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRouteRecipesAddImport
       parentRoute: typeof AppRouteRecipesImport
     }
+    '/app/_route/recipes/edit/$id': {
+      id: '/app/_route/recipes/edit/$id'
+      path: '/edit/$id'
+      fullPath: '/app/recipes/edit/$id'
+      preLoaderRoute: typeof AppRouteRecipesEditIdImport
+      parentRoute: typeof AppRouteRecipesImport
+    }
     '/app/_route/recipes/preview/$id': {
       id: '/app/_route/recipes/preview/$id'
       path: '/preview/$id'
@@ -208,11 +222,13 @@ const AppRouteIngredientsRouteWithChildren =
 
 interface AppRouteRecipesRouteChildren {
   AppRouteRecipesAddRoute: typeof AppRouteRecipesAddRoute
+  AppRouteRecipesEditIdRoute: typeof AppRouteRecipesEditIdRoute
   AppRouteRecipesPreviewIdRoute: typeof AppRouteRecipesPreviewIdRoute
 }
 
 const AppRouteRecipesRouteChildren: AppRouteRecipesRouteChildren = {
   AppRouteRecipesAddRoute: AppRouteRecipesAddRoute,
+  AppRouteRecipesEditIdRoute: AppRouteRecipesEditIdRoute,
   AppRouteRecipesPreviewIdRoute: AppRouteRecipesPreviewIdRoute,
 }
 
@@ -259,6 +275,7 @@ export interface FileRoutesByFullPath {
   '/app/': typeof AppRouteIndexRoute
   '/app/ingredients/add': typeof AppRouteIngredientsAddRoute
   '/app/recipes/add': typeof AppRouteRecipesAddRoute
+  '/app/recipes/edit/$id': typeof AppRouteRecipesEditIdRoute
   '/app/recipes/preview/$id': typeof AppRouteRecipesPreviewIdRoute
 }
 
@@ -272,6 +289,7 @@ export interface FileRoutesByTo {
   '/app/shopping': typeof AppRouteShoppingRoute
   '/app/ingredients/add': typeof AppRouteIngredientsAddRoute
   '/app/recipes/add': typeof AppRouteRecipesAddRoute
+  '/app/recipes/edit/$id': typeof AppRouteRecipesEditIdRoute
   '/app/recipes/preview/$id': typeof AppRouteRecipesPreviewIdRoute
 }
 
@@ -288,6 +306,7 @@ export interface FileRoutesById {
   '/app/_route/': typeof AppRouteIndexRoute
   '/app/_route/ingredients/add': typeof AppRouteIngredientsAddRoute
   '/app/_route/recipes/add': typeof AppRouteRecipesAddRoute
+  '/app/_route/recipes/edit/$id': typeof AppRouteRecipesEditIdRoute
   '/app/_route/recipes/preview/$id': typeof AppRouteRecipesPreviewIdRoute
 }
 
@@ -304,6 +323,7 @@ export interface FileRouteTypes {
     | '/app/'
     | '/app/ingredients/add'
     | '/app/recipes/add'
+    | '/app/recipes/edit/$id'
     | '/app/recipes/preview/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -316,6 +336,7 @@ export interface FileRouteTypes {
     | '/app/shopping'
     | '/app/ingredients/add'
     | '/app/recipes/add'
+    | '/app/recipes/edit/$id'
     | '/app/recipes/preview/$id'
   id:
     | '__root__'
@@ -330,6 +351,7 @@ export interface FileRouteTypes {
     | '/app/_route/'
     | '/app/_route/ingredients/add'
     | '/app/_route/recipes/add'
+    | '/app/_route/recipes/edit/$id'
     | '/app/_route/recipes/preview/$id'
   fileRoutesById: FileRoutesById
 }
@@ -401,6 +423,7 @@ export const routeTree = rootRoute
       "parent": "/app/_route",
       "children": [
         "/app/_route/recipes/add",
+        "/app/_route/recipes/edit/$id",
         "/app/_route/recipes/preview/$id"
       ]
     },
@@ -418,6 +441,10 @@ export const routeTree = rootRoute
     },
     "/app/_route/recipes/add": {
       "filePath": "app/_route.recipes.add.tsx",
+      "parent": "/app/_route/recipes"
+    },
+    "/app/_route/recipes/edit/$id": {
+      "filePath": "app/_route.recipes.edit.$id.tsx",
       "parent": "/app/_route/recipes"
     },
     "/app/_route/recipes/preview/$id": {

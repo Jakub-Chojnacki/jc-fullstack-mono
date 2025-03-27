@@ -47,4 +47,6 @@ exports.RecipeIngredientUpdateSchema = exports.RecipeIngredientSchema.omit({
     createdAt: true,
     updatedAt: true,
     recipeId: true,
+}).extend({
+    id: zod_1.z.number().optional(),
 });

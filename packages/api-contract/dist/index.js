@@ -107,6 +107,7 @@ exports.contract = c.router({
                 createdAt: true,
                 updatedAt: true,
                 id: true,
+                userId: true,
             }).extend({
                 recipeIngredients: zod_1.z.array(index_1.RecipeIngredientUpdateSchema),
             }),
@@ -120,7 +121,7 @@ exports.contract = c.router({
             path: "/recipes/:id",
             pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
             responses: {
-                200: index_1.RecipeSchema,
+                200: index_1.RecipeGetOneSchema,
                 404: exports.NotFoundSchema,
             },
         },

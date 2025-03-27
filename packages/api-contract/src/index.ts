@@ -5,6 +5,7 @@ import {
   IngredientSchema,
   LoginSchema,
   RecipeCreateSchema,
+  RecipeGetOneSchema,
   RecipeIngredientCreateSchema,
   RecipeIngredientSchema,
   RecipeIngredientUpdateSchema,
@@ -115,6 +116,7 @@ export const contract = c.router(
           createdAt: true,
           updatedAt: true,
           id:true,
+          userId: true,
         }).extend({
           recipeIngredients: z.array(RecipeIngredientUpdateSchema),
         }),
@@ -128,7 +130,7 @@ export const contract = c.router(
         path: "/recipes/:id",
         pathParams: z.object({ id: StringToNumberSchema }),
         responses: {
-          200: RecipeSchema,
+          200: RecipeGetOneSchema,
           404: NotFoundSchema,
         },
       },

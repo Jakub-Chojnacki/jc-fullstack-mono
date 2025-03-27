@@ -20,8 +20,9 @@ import { queryClient } from "@/main";
 
 import { RecipeFormSchema } from "./schema";
 import IngredientSelect from "@/components/IngredientSelect";
+import { TRecipeFormProps } from "./types";
 
-const RecipeForm = () => {
+const RecipeForm = ({ initialData }: TRecipeFormProps) => {
   const navigate = useNavigate();
 
   const { mutate } = apiClient.recipes.create.useMutation({
@@ -29,7 +30,18 @@ const RecipeForm = () => {
       toast.error("There was an error while trying to save the recipe!");
     },
     onSuccess: () => {
-      toast.success("Ingredient added successfully!");
+      toast.success("Recipe added successfully!");
+      queryClient.invalidateQueries({ queryKey: ["recipes"] });
+      navigate({ to: "/app/recipes" });
+    },
+  });
+
+  const { mutate: updateRecipe } = apiClient.recipes.update.useMutation({
+    onError: () => {
+      toast.error("There was an error while trying to save the recipe!");
+    },
+    onSuccess: () => {
+      toast.success("Recipe updated successfully!");
       queryClient.invalidateQueries({ queryKey: ["recipes"] });
       navigate({ to: "/app/recipes" });
     },
@@ -37,7 +49,7 @@ const RecipeForm = () => {
 
   const form = useForm<z.infer<typeof RecipeFormSchema>>({
     resolver: zodResolver(RecipeFormSchema),
-    defaultValues: {
+    defaultValues: initialData || {
       name: "",
       isGlobal: false,
       description: "",
@@ -46,7 +58,27 @@ const RecipeForm = () => {
   });
 
   const onSubmit = (values: z.infer<typeof RecipeFormSchema>) => {
-    mutate({ body: values });
+    if (initialData) {
+      const mappedIngredients = values.recipeIngredients.map((ingredient) => {
+        return {
+          ...ingredient,
+          id: typeof ingredient.id === "number" ? ingredient.id : undefined,
+          ingredientId: ingredient.ingredientId,
+          amount: ingredient.amount,
+          unit: ingredient.unit,
+        };
+      });
+
+      updateRecipe({
+        body: {
+          ...values,
+          recipeIngredients: mappedIngredients,
+        },
+        params: { id: initialData.id },
+      });
+    } else {
+      mutate({ body: values });
+    }
   };
 
   return (

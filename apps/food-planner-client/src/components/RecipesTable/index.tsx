@@ -11,7 +11,7 @@ import {
   type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { Plus, Search, Trash } from "lucide-react";
+import { Edit, Plus, Search, Trash } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -63,6 +63,15 @@ const RecipesTable = () => {
             }
           >
             <Search className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() =>
+              navigation({ to: `/app/recipes/edit/${row.original.id}` })
+            }
+          >
+            <Edit className="h-4 w-4" />
           </Button>
           <Button
             variant="ghost"

@@ -34,6 +34,9 @@ export class RecipesService {
           id,
           userId,
         },
+        include: {
+          recipeIngredients: true,
+        },
       });
 
       return recipe;
@@ -85,6 +88,14 @@ export class RecipesService {
         (id) => !incomingIngredientIds.includes(id),
       );
 
+      const ingredientsToAdd = recipeIngredients.filter(
+        (i) => typeof i?.id !== 'number',
+      );
+
+      const ingredientsToUpdate = recipeIngredients.filter(
+        (i) => typeof i?.id === 'number',
+      );
+
       const transaction = await this.prisma.$transaction(async (prisma) => {
         const updateRecipePromise = prisma.recipe.update({
           where: {
@@ -93,32 +104,38 @@ export class RecipesService {
           data: body,
         });
 
-        const deleteIngredientsPromise = prisma.recipeIngredient.deleteMany({
-          where: {
-            id: {
-              in: ingredientsToDelete,
-            },
-          },
-        });
-
-        const recipeIngredientPromises = recipeIngredients.map(
-          (recipeIngredient) =>
-            prisma.recipeIngredient.upsert({
+        const deleteIngredientsPromise = ingredientsToDelete.length
+          ? prisma.recipeIngredient.deleteMany({
               where: {
-                id: recipeIngredient.id,
+                id: {
+                  in: ingredientsToDelete,
+                },
               },
-              create: {
+            })
+          : Promise.resolve();
+
+        const createIngredientsPromise = ingredientsToAdd.length
+          ? prisma.recipeIngredient.createMany({
+              data: ingredientsToAdd.map((recipeIngredient) => ({
                 ...recipeIngredient,
                 recipeId: id,
-              },
-              update: recipeIngredient,
+              })),
+            })
+          : Promise.resolve();
+
+        const updateIngredientsPromise = ingredientsToUpdate.map(
+          (recipeIngredient) =>
+            prisma.recipeIngredient.update({
+              where: { id: recipeIngredient.id },
+              data: recipeIngredient,
             }),
         );
 
         return await Promise.all([
           updateRecipePromise,
           deleteIngredientsPromise,
-          ...recipeIngredientPromises,
+          createIngredientsPromise,
+          ...updateIngredientsPromise,
         ]);
       });
 

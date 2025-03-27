@@ -7,6 +7,7 @@ export const RecipeFormSchema = z.object({
   description: z.string(),
   recipeIngredients: z.array(
     z.object({
+      id: z.number().or(z.string()).optional(),
       amount: z.number().positive("Amount must be greater than 0"),
       unit: z.enum(QuantityUnit),
       ingredientId: z.number(),

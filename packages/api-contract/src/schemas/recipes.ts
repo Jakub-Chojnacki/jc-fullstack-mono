@@ -1,6 +1,9 @@
 import { z } from "zod";
 
-import { RecipeIngredientCreateSchema, RecipeIngredientUpdateSchema } from "./ingredients";
+import {
+  RecipeIngredientCreateSchema,
+  RecipeIngredientUpdateSchema,
+} from "./ingredients";
 
 export const RecipeSchema = z.object({
   id: z.number(),
@@ -36,3 +39,9 @@ export const RecipeUpdateSchema = RecipeSchema.omit({
 });
 
 export type TRecipeUpdate = z.infer<typeof RecipeUpdateSchema>;
+
+export const RecipeGetOneSchema = RecipeSchema.extend({
+  recipeIngredients: z.array(RecipeIngredientUpdateSchema),
+});
+
+export type TRecipeGetOne = z.infer<typeof RecipeGetOneSchema>;

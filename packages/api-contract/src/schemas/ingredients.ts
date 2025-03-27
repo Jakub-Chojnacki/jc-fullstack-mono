@@ -57,6 +57,8 @@ export const RecipeIngredientUpdateSchema = RecipeIngredientSchema.omit({
   createdAt: true,
   updatedAt: true,
   recipeId: true,
+}).extend({
+  id: z.number().optional(),
 });
 
 export type TRecipeIngredientCreate = z.infer<

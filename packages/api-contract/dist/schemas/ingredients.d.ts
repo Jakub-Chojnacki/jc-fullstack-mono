@@ -8,16 +8,16 @@ export declare const IngredientSchema: z.ZodObject<{
     isGlobal: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
     id: number;
+    name: string;
     createdAt: Date;
     updatedAt: Date;
-    name: string;
     userId: number;
     isGlobal?: boolean | undefined;
 }, {
     id: number;
+    name: string;
     createdAt: Date;
     updatedAt: Date;
-    name: string;
     userId: number;
     isGlobal?: boolean | undefined;
 }>;
@@ -105,7 +105,7 @@ export declare const RecipeIngredientCreateSchema: z.ZodObject<Omit<{
     recipeId: number;
     isGlobal?: boolean | undefined;
 }>;
-export declare const RecipeIngredientUpdateSchema: z.ZodObject<Omit<{
+export declare const RecipeIngredientUpdateSchema: z.ZodObject<z.objectUtil.extendShape<Omit<{
     id: z.ZodNumber;
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
@@ -114,17 +114,19 @@ export declare const RecipeIngredientUpdateSchema: z.ZodObject<Omit<{
     isGlobal: z.ZodOptional<z.ZodBoolean>;
     ingredientId: z.ZodNumber;
     recipeId: z.ZodNumber;
-}, "createdAt" | "updatedAt" | "recipeId">, "strip", z.ZodTypeAny, {
-    id: number;
+}, "createdAt" | "updatedAt" | "recipeId">, {
+    id: z.ZodOptional<z.ZodNumber>;
+}>, "strip", z.ZodTypeAny, {
     amount: number;
     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
     ingredientId: number;
+    id?: number | undefined;
     isGlobal?: boolean | undefined;
 }, {
-    id: number;
     amount: number;
     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
     ingredientId: number;
+    id?: number | undefined;
     isGlobal?: boolean | undefined;
 }>;
 export type TRecipeIngredientCreate = z.infer<typeof RecipeIngredientCreateSchema>;
