@@ -11,7 +11,7 @@ import {
   type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { Plus, Trash } from "lucide-react";
+import { Plus, Search, Trash } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -55,6 +55,15 @@ const RecipesTable = () => {
       id: "actions",
       cell: ({ row }) => (
         <div className="text-right">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() =>
+              navigation({ to: `/app/recipes/preview/${row.original.id}` })
+            }
+          >
+            <Search className="h-4 w-4" />
+          </Button>
           <Button
             variant="ghost"
             size="icon"
