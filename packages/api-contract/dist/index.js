@@ -104,10 +104,11 @@ exports.contract = c.router({
             path: "/recipes/:id",
             pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
             body: index_1.RecipeSchema.omit({
-                id: true,
                 createdAt: true,
                 updatedAt: true,
-                userId: true,
+                id: true,
+            }).extend({
+                recipeIngredients: zod_1.z.array(index_1.RecipeIngredientUpdateSchema),
             }),
             responses: {
                 200: index_1.RecipeSchema,

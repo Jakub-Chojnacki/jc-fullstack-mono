@@ -53,6 +53,12 @@ export const RecipeIngredientCreateSchema = RecipeIngredientSchema.omit({
   updatedAt: true,
 });
 
+export const RecipeIngredientUpdateSchema = RecipeIngredientSchema.omit({
+  createdAt: true,
+  updatedAt: true,
+  recipeId: true,
+});
+
 export type TRecipeIngredientCreate = z.infer<
   typeof RecipeIngredientCreateSchema
 >;

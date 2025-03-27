@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RecipeIngredientCreateSchema = exports.RecipeIngredientSchema = exports.QuantityUnit = exports.IngredientUpdateSchema = exports.IngredientCreateSchema = exports.IngredientSchema = void 0;
+exports.RecipeIngredientUpdateSchema = exports.RecipeIngredientCreateSchema = exports.RecipeIngredientSchema = exports.QuantityUnit = exports.IngredientUpdateSchema = exports.IngredientCreateSchema = exports.IngredientSchema = void 0;
 var zod_1 = require("zod");
 exports.IngredientSchema = zod_1.z.object({
     id: zod_1.z.number(),
@@ -42,4 +42,9 @@ exports.RecipeIngredientCreateSchema = exports.RecipeIngredientSchema.omit({
     id: true,
     createdAt: true,
     updatedAt: true,
+});
+exports.RecipeIngredientUpdateSchema = exports.RecipeIngredientSchema.omit({
+    createdAt: true,
+    updatedAt: true,
+    recipeId: true,
 });

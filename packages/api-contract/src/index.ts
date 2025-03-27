@@ -7,6 +7,7 @@ import {
   RecipeCreateSchema,
   RecipeIngredientCreateSchema,
   RecipeIngredientSchema,
+  RecipeIngredientUpdateSchema,
   RecipeSchema,
   ShoppingListCreateSchema,
   ShoppingListIngredientCreateSchema,
@@ -111,10 +112,11 @@ export const contract = c.router(
         path: "/recipes/:id",
         pathParams: z.object({ id: StringToNumberSchema }),
         body: RecipeSchema.omit({
-          id: true,
           createdAt: true,
           updatedAt: true,
-          userId: true,
+          id:true,
+        }).extend({
+          recipeIngredients: z.array(RecipeIngredientUpdateSchema),
         }),
         responses: {
           200: RecipeSchema,

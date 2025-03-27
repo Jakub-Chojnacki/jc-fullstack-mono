@@ -24,4 +24,6 @@ exports.RecipeUpdateSchema = exports.RecipeSchema.omit({
     createdAt: true,
     updatedAt: true,
     userId: true,
+}).extend({
+    recipeIngredients: zod_1.z.array(ingredients_1.RecipeIngredientUpdateSchema),
 });
