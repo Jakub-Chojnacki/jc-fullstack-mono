@@ -1,7 +1,8 @@
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+
 import apiClient from "@/api-client";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import RecipeForm from "@/forms/RecipeForm";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/app/_route/recipes/edit/$id")({
   component: RouteComponent,

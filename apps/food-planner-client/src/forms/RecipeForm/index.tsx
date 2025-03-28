@@ -5,7 +5,9 @@ import toast from "react-hot-toast";
 import { z } from "zod";
 
 import apiClient from "@/api-client";
+import IngredientSelect from "@/components/IngredientSelect";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -15,11 +17,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import { queryClient } from "@/main";
 
 import { RecipeFormSchema } from "./schema";
-import IngredientSelect from "@/components/IngredientSelect";
 import { TRecipeFormProps } from "./types";
 
 const RecipeForm = ({ initialData }: TRecipeFormProps) => {

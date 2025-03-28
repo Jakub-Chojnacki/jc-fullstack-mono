@@ -15,6 +15,9 @@ import { Plus, Trash } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
+import apiClient from "@/api-client";
+import { queryClient } from "@/main";
+
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import {
@@ -25,8 +28,6 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import apiClient from "@/api-client";
-import { queryClient } from "@/main";
 
 const IngredientsTable = () => {
   const [sorting, setSorting] = useState<SortingState>([]);

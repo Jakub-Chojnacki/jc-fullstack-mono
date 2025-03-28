@@ -1,6 +1,8 @@
 import { Globe, Lock } from "lucide-react";
 
 import apiClient from "@/api-client";
+
+import IngredientCard from "../IngredientCard";
 import { Badge } from "../ui/badge";
 import {
   Card,
@@ -10,7 +12,6 @@ import {
   CardTitle,
 } from "../ui/card";
 
-import IngredientCard from "../IngredientCard";
 import { TRecipePreviewProps } from "./types";
 
 const RecipePreview = ({ id }: TRecipePreviewProps) => {
