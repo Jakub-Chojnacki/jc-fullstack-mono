@@ -27,7 +27,7 @@ export class RecipesService {
     return recipes;
   }
 
-  async getOne(id: number, userId: number) {
+  async getOne(id: number, userId: number, withIngredients?: string) {
     return wrapWithTsRestError(contract.recipes.getOne, async () => {
       const recipe = await this.prisma.recipe.findFirst({
         where: {
@@ -38,6 +38,30 @@ export class RecipesService {
           recipeIngredients: true,
         },
       });
+
+      const sendIngredients = withIngredients === 'true';
+
+      if (sendIngredients) {
+        const ingredients = await this.prisma.ingredient.findMany({
+          where: {
+            id: {
+              in: recipe?.recipeIngredients.map((i) => i.ingredientId) || [],
+            },
+          },
+        });
+
+        return {
+          ...recipe,
+          recipeIngredients: recipe?.recipeIngredients.map(
+            (recipeIngredient) => ({
+              ...recipeIngredient,
+              name: ingredients.find(
+                (ingredient) => ingredient.id === recipeIngredient.ingredientId,
+              )?.name,
+            }),
+          ),
+        };
+      }
 
       return recipe;
     });
@@ -108,7 +132,7 @@ export class RecipesService {
       const ingredientsToDelete = [...existingIngredientIds].filter(
         (id) => !incomingIngredientIds.has(id),
       );
-      
+
       const transaction = await this.prisma.$transaction(async (prisma) => {
         const updateRecipePromise = prisma.recipe.update({
           where: {

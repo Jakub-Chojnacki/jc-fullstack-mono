@@ -51,8 +51,12 @@ export class RecipesController {
   async getOne(@GetCurrentUserId() userId: number) {
     return tsRestHandler(
       contract.recipes.getOne,
-      async ({ params: { id } }) => {
-        const recipes = await this.recipesService.getOne(id, userId);
+      async ({ params: { id }, query: { withIngredients } }) => {
+        const recipes = await this.recipesService.getOne(
+          id,
+          userId,
+          withIngredients,
+        );
 
         return {
           status: 200,

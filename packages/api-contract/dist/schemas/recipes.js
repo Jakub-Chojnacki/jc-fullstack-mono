@@ -28,5 +28,5 @@ exports.RecipeUpdateSchema = exports.RecipeSchema.omit({
     recipeIngredients: zod_1.z.array(ingredients_1.RecipeIngredientUpdateSchema),
 });
 exports.RecipeGetOneSchema = exports.RecipeSchema.extend({
-    recipeIngredients: zod_1.z.array(ingredients_1.RecipeIngredientUpdateSchema),
+    recipeIngredients: zod_1.z.array(ingredients_1.RecipeIngredientUpdateSchema.extend({ name: zod_1.z.string().optional() })),
 });

@@ -144,7 +144,7 @@ export declare const RecipeGetOneSchema: z.ZodObject<z.objectUtil.extendShape<{
     name: z.ZodString;
     description: z.ZodString;
 }, {
-    recipeIngredients: z.ZodArray<z.ZodObject<z.objectUtil.extendShape<Omit<{
+    recipeIngredients: z.ZodArray<z.ZodObject<z.objectUtil.extendShape<z.objectUtil.extendShape<Omit<{
         id: z.ZodNumber;
         createdAt: z.ZodDate;
         updatedAt: z.ZodDate;
@@ -155,17 +155,21 @@ export declare const RecipeGetOneSchema: z.ZodObject<z.objectUtil.extendShape<{
         recipeId: z.ZodNumber;
     }, "createdAt" | "updatedAt" | "recipeId">, {
         id: z.ZodOptional<z.ZodNumber>;
+    }>, {
+        name: z.ZodOptional<z.ZodString>;
     }>, "strip", z.ZodTypeAny, {
         amount: number;
         unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
         ingredientId: number;
         id?: number | undefined;
+        name?: string | undefined;
         isGlobal?: boolean | undefined;
     }, {
         amount: number;
         unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
         ingredientId: number;
         id?: number | undefined;
+        name?: string | undefined;
         isGlobal?: boolean | undefined;
     }>, "many">;
 }>, "strip", z.ZodTypeAny, {
@@ -180,6 +184,7 @@ export declare const RecipeGetOneSchema: z.ZodObject<z.objectUtil.extendShape<{
         unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
         ingredientId: number;
         id?: number | undefined;
+        name?: string | undefined;
         isGlobal?: boolean | undefined;
     }[];
     isGlobal?: boolean | undefined;
@@ -195,6 +200,7 @@ export declare const RecipeGetOneSchema: z.ZodObject<z.objectUtil.extendShape<{
         unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
         ingredientId: number;
         id?: number | undefined;
+        name?: string | undefined;
         isGlobal?: boolean | undefined;
     }[];
     isGlobal?: boolean | undefined;

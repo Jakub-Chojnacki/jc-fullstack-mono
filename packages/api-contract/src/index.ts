@@ -95,6 +95,7 @@ export const contract = c.router(
       getForUser: {
         method: "GET",
         path: "/recipes",
+
         responses: {
           200: z.array(RecipeSchema),
         },
@@ -115,7 +116,7 @@ export const contract = c.router(
         body: RecipeSchema.omit({
           createdAt: true,
           updatedAt: true,
-          id:true,
+          id: true,
           userId: true,
         }).extend({
           recipeIngredients: z.array(RecipeIngredientUpdateSchema),
@@ -129,6 +130,9 @@ export const contract = c.router(
         method: "GET",
         path: "/recipes/:id",
         pathParams: z.object({ id: StringToNumberSchema }),
+        query: z.object({
+          withIngredients: z.string().optional(),
+        }),
         responses: {
           200: RecipeGetOneSchema,
           404: NotFoundSchema,

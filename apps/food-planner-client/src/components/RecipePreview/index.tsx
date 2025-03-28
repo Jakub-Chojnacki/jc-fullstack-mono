@@ -1,5 +1,6 @@
 import { Globe, Lock } from "lucide-react";
 
+import apiClient from "@/api-client";
 import { Badge } from "../ui/badge";
 import {
   Card,
@@ -8,13 +9,14 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import apiClient from "@/api-client";
 
+import IngredientCard from "../IngredientCard";
 import { TRecipePreviewProps } from "./types";
 
 const RecipePreview = ({ id }: TRecipePreviewProps) => {
   const { data, isError } = apiClient.recipes.getOne.useQuery([{ id }], {
     params: { id },
+    query: { withIngredients: "true" },
   });
 
   if (!data && isError) {
@@ -22,8 +24,8 @@ const RecipePreview = ({ id }: TRecipePreviewProps) => {
   }
 
   if (data) {
-    const {  name, description, isGlobal } = data.body;
-    
+    const { name, description, isGlobal, recipeIngredients } = data.body;
+
     return (
       <Card className="w-full  overflow-hidden transition-all hover:shadow-md border-0">
         <CardHeader className="pb-2">
@@ -58,6 +60,12 @@ const RecipePreview = ({ id }: TRecipePreviewProps) => {
               alt={`${name} recipe`}
               className="h-full w-full object-cover transition-all hover:scale-105"
             />
+          </div>
+          <div className="my-4">
+            <h3 className="font-bold">Ingredients:</h3>
+            {recipeIngredients.map((ingredient) => (
+              <IngredientCard key={ingredient.id} ingredient={ingredient} />
+            ))}
           </div>
         </CardContent>
       </Card>
