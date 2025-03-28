@@ -10,9 +10,22 @@ export const RecipeFormSchema = z.object({
       id: z.number().or(z.string()).optional(),
       amount: z.number().positive("Amount must be greater than 0"),
       unit: z.enum(QuantityUnit),
-      ingredientId: z.number(),
+      ingredientId: z
+        .number()
+        .nullable()
+        .transform((value, ctx): number => {
+          if (value === null) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: "Ingredient is required",
+            });
+            return z.NEVER;
+          }
+          return value;
+        }),
     })
   ),
 });
 
 export type TRecipeFormValues = z.infer<typeof RecipeFormSchema>;
+export type TRecipeFormInput = z.input<typeof RecipeFormSchema>;

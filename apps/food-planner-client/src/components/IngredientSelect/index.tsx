@@ -26,7 +26,7 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 
-import { TRecipeFormValues } from "@/forms/RecipeForm/schema";
+import { TRecipeFormInput } from "@/forms/RecipeForm/schema";
 import { QuantityUnit } from "@jcmono/api-contract";
 import {
   Select,
@@ -41,7 +41,7 @@ const IngredientSelect = () => {
     "ingredientsUser",
   ]);
 
-  const { control, formState } = useFormContext<TRecipeFormValues>();
+  const { control, formState } = useFormContext<TRecipeFormInput>();
 
   const { append, fields, update, remove } = useFieldArray({
     control: control,
@@ -56,9 +56,11 @@ const IngredientSelect = () => {
 
   const showErrorMessageForField = (
     index: number,
-    field: keyof TRecipeFormValues["recipeIngredients"][0]
-  ) => {
-    return formState?.errors?.recipeIngredients?.[index]?.[field]?.message;
+    field: keyof TRecipeFormInput["recipeIngredients"][0]
+  ): string | null => {
+    return (
+      formState?.errors?.recipeIngredients?.[index]?.[field]?.message || null
+    );
   };
 
   return (
@@ -200,7 +202,7 @@ const IngredientSelect = () => {
           append({
             unit: QuantityUnit[0],
             amount: 0,
-            ingredientId: ingredients[0]?.value,
+            ingredientId: null,
           })
         }
       >
