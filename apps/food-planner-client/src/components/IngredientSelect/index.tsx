@@ -72,7 +72,7 @@ const IngredientSelect = () => {
               <FormField
                 control={control}
                 name={`recipeIngredients.${index}.amount`}
-                render={({}) => (
+                render={() => (
                   <FormItem>
                     <FormLabel>Ingredient</FormLabel>
                     <PopoverTrigger asChild>
