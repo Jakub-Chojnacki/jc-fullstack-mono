@@ -106,7 +106,7 @@ const RecipesTable = () => {
   });
 
   return (
-    <div>
+    <div className="h-[calc(100dvh-theme(space.4))] flex flex-col">
       <h2 className="bold text-2xl">Recipes</h2>
       <div className="flex items-center justify-between py-4 gap-4">
         <Input
@@ -122,9 +122,9 @@ const RecipesTable = () => {
           Add New Recipe
         </Button>
       </div>
-      <div className="rounded-md border">
+      <div className="rounded-md border relative overflow-auto flex-1">
         <Table>
-          <TableHeader>
+          <TableHeader className="sticky top-0 bg-background">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {

@@ -8,7 +8,7 @@ const MainLayout = ({ children }: { children: React.ReactElement }) => {
       <AppSidebar />
       <SidebarInset>
         <SidebarHeader />
-        <div className="flex flex-1 flex-col gap-4 pt-0 p-4 lg:pt-4 ">
+        <div className="flex flex-1 flex-col gap-4 pt-0 p-4 lg:pt-4 max-h-dvh">
           {children}
         </div>
       </SidebarInset>

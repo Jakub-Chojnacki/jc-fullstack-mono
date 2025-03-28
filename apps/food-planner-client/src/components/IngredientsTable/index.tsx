@@ -88,9 +88,9 @@ const IngredientsTable = () => {
   });
 
   return (
-    <div>
-      <h2 className="bold text-2xl">Ingredients</h2>
-      <div className="flex items-center justify-between gap-4 py-4">
+    <div className="h-[calc(100dvh-theme(space.4))] flex flex-col">
+      <h2 className="bold text-2xl ">Ingredients</h2>
+      <div className="flex items-center justify-between  gap-4 py-4">
         <Input
           placeholder="Search ingredients..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -104,9 +104,9 @@ const IngredientsTable = () => {
           Add New Ingredient
         </Button>
       </div>
-      <div className="rounded-md border">
+      <div className="rounded-md border relative overflow-auto flex-1">
         <Table>
-          <TableHeader>
+          <TableHeader className="sticky top-0 bg-background">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
