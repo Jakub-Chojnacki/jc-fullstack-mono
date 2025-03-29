@@ -237,8 +237,22 @@ export const contract = c.router(
       get: {
         method: "GET",
         path: "/scheduleMeals",
+        query: z.object({
+          startDate: z.string(),
+          endDate: z.string(),
+        }),
         responses: {
           200: z.array(ScheduleMealsSchema),
+          404: NotFoundSchema,
+        },
+      },
+      getById: {
+        method: "GET",
+        path: "/scheduleMeals/:id",
+        pathParams: z.object({ id: StringToNumberSchema }),
+        responses: {
+          200: ScheduleMealsSchema,
+          404: NotFoundSchema,
         },
       },
       create: {

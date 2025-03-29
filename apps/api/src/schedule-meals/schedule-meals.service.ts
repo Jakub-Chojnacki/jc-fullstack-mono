@@ -40,13 +40,38 @@ export class ScheduleMealsService {
     );
   }
 
-  async get(userId: number) {
-    const scheduledMeals = await this.prisma.scheduledMeal.findMany({
-      where: {
-        userId,
-      },
-    });
+  async get({
+    userId,
+    startDate,
+    endDate,
+  }: {
+    userId: number;
+    startDate: string;
+    endDate: string;
+  }) {
+    return wrapWithTsRestError(contract.scheduleMeals.get, async () => {
+      const scheduledMeals = await this.prisma.scheduledMeal.findMany({
+        where: {
+          userId,
+          scheduledAt: {
+            gte: new Date(startDate),
+            lte: new Date(endDate),
+          },
+        },
+      });
 
-    return scheduledMeals;
+      return scheduledMeals;
+    });
+  }
+
+  async getById(userId: number, id: number) {
+    return wrapWithTsRestError(contract.scheduleMeals.getById, () =>
+      this.prisma.scheduledMeal.findFirst({
+        where: {
+          userId,
+          id,
+        },
+      }),
+    );
   }
 }

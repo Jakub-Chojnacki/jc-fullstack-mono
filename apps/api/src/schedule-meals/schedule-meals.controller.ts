@@ -52,13 +52,41 @@ export class ScheduleMealsController {
 
   @TsRestHandler(contract.scheduleMeals.get)
   async get(@GetCurrentUserId() userId: number) {
-    return tsRestHandler(contract.scheduleMeals.get, async () => {
-      const scheduledMeals = await this.scheduleMealsService.get(userId);
+    return tsRestHandler(contract.scheduleMeals.get, async ({ query }) => {
+      const scheduledMeals = await this.scheduleMealsService.get({
+        userId,
+        ...query,
+      });
 
       return {
         status: 200,
         body: scheduledMeals,
       };
     });
+  }
+
+  @TsRestHandler(contract.scheduleMeals.getById)
+  async getById(@GetCurrentUserId() userId: number) {
+    return tsRestHandler(
+      contract.scheduleMeals.getById,
+      async ({ params: { id } }) => {
+        const scheduledMeal = await this.scheduleMealsService.getById(
+          userId,
+          id,
+        );
+
+        if (!scheduledMeal) {
+          return {
+            status: 404,
+            body: { message: 'Scheduled meal not found' },
+          };
+        }
+
+        return {
+          status: 200,
+          body: scheduledMeal,
+        };
+      },
+    );
   }
 }

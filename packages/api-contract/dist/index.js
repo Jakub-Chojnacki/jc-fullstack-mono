@@ -227,8 +227,22 @@ exports.contract = c.router({
         get: {
             method: "GET",
             path: "/scheduleMeals",
+            query: zod_1.z.object({
+                startDate: zod_1.z.string(),
+                endDate: zod_1.z.string(),
+            }),
             responses: {
                 200: zod_1.z.array(scheduleMeals_1.ScheduleMealsSchema),
+                404: exports.NotFoundSchema,
+            },
+        },
+        getById: {
+            method: "GET",
+            path: "/scheduleMeals/:id",
+            pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
+            responses: {
+                200: scheduleMeals_1.ScheduleMealsSchema,
+                404: exports.NotFoundSchema,
             },
         },
         create: {
