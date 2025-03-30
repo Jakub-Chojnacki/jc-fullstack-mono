@@ -20,6 +20,7 @@ import {
 } from "./schemas/index";
 import {
   ScheduleMealsCreateSchema,
+  ScheduleMealsGetSchema,
   ScheduleMealsSchema,
   ScheduleMealsUpdateSchema,
 } from "./schemas/scheduleMeals";
@@ -242,7 +243,7 @@ export const contract = c.router(
           endDate: z.string(),
         }),
         responses: {
-          200: z.array(ScheduleMealsSchema),
+          200: z.array(ScheduleMealsGetSchema),
           404: NotFoundSchema,
         },
       },
@@ -251,7 +252,7 @@ export const contract = c.router(
         path: "/scheduleMeals/:id",
         pathParams: z.object({ id: StringToNumberSchema }),
         responses: {
-          200: ScheduleMealsSchema,
+          200: ScheduleMealsGetSchema,
           404: NotFoundSchema,
         },
       },
@@ -278,6 +279,7 @@ export const contract = c.router(
         method: "DELETE",
         path: "/scheduleMeals/:id",
         pathParams: z.object({ id: StringToNumberSchema }),
+        body: null,
         responses: {
           200: ScheduleMealsSchema,
           404: NotFoundSchema,

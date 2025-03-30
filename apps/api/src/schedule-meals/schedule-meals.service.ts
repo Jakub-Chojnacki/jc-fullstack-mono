@@ -11,9 +11,9 @@ import wrapWithTsRestError from 'src/utils/wrapWithTsRestError';
 export class ScheduleMealsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(body: TScheduleMealsCreate) {
+  async create(userId: number, body: TScheduleMealsCreate) {
     const scheduledMeal = await this.prisma.scheduledMeal.create({
-      data: { ...body, scheduledAt: new Date(body.scheduledAt) },
+      data: { userId, ...body },
     });
 
     return scheduledMeal;
@@ -58,6 +58,9 @@ export class ScheduleMealsService {
             lte: new Date(endDate),
           },
         },
+        include: {
+          recipe: true,
+        },
       });
 
       return scheduledMeals;
@@ -70,6 +73,9 @@ export class ScheduleMealsService {
         where: {
           userId,
           id,
+        },
+        include: {
+          recipe: true,
         },
       }),
     );
