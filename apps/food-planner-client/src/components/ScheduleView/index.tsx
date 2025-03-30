@@ -1,3 +1,4 @@
+import { EMealTypes } from "@jcmono/api-contract";
 import {
   addWeeks,
   eachDayOfInterval,
@@ -6,15 +7,9 @@ import {
   startOfWeek,
   subWeeks,
 } from "date-fns";
-import { useSetAtom } from "jotai";
 import { ChevronLeft, ChevronRight, Plus, X } from "lucide-react";
 import { useState } from "react";
 
-import {
-  selectedDayAtom,
-  selectedMealTypeAtom,
-  selectedRecipeAtom,
-} from "@/atoms/schedule";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,15 +18,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
-import RecipeSelect from "../RecipeSelect";
+import ScheduleMealForm from "@/forms/ScheduleMealForm";
 
 import { mealTypes } from "./const";
 
 const ScheduleView = () => {
-  const setSelectedDay = useSetAtom(selectedDayAtom);
-  const setSelectedMealType = useSetAtom(selectedMealTypeAtom);
-  const setSelectedRecipe = useSetAtom(selectedRecipeAtom);
+  const [selectedDay, setSelectedDay] = useState<Date | null>(null);
+  const [selectedMealType, setSelectedMealType] = useState<EMealTypes>(
+    EMealTypes.BREAKFAST
+  );
 
   const [addMealDialogOpen, setAddMealDialogOpen] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -48,11 +43,16 @@ const ScheduleView = () => {
     setCurrentDate(addWeeks(currentDate, 1));
   };
 
-  const openAddMealDialog = (day: Date): void => {
+  const openAddMealDialog = (day: Date, mealType: EMealTypes): void => {
     setSelectedDay(day);
-    setSelectedMealType("Breakfast");
-    setSelectedRecipe(null);
+    setSelectedMealType(mealType);
     setAddMealDialogOpen(true);
+  };
+
+  const handleCloseDialog = (): void => {
+    setSelectedDay(null);
+    setSelectedMealType(EMealTypes.BREAKFAST);
+    setAddMealDialogOpen(false);
   };
 
   return (
@@ -115,7 +115,9 @@ const ScheduleView = () => {
                       <Button
                         variant="outline"
                         className="w-full h-10 border-dashed text-xs justify-start"
-                        onClick={() => openAddMealDialog(day)}
+                        onClick={() =>
+                          openAddMealDialog(day, mealType as EMealTypes)
+                        }
                       >
                         <Plus className="h-3 w-3 mr-1" />
                         Add {mealType}
@@ -128,10 +130,15 @@ const ScheduleView = () => {
           </Card>
         ))}
 
-        <RecipeSelect
-          addMealDialogOpen={addMealDialogOpen}
-          setAddMealDialogOpen={setAddMealDialogOpen}
-        />
+        {/* Condition is there to force a re-render */}
+        {addMealDialogOpen && (
+          <ScheduleMealForm
+            addMealDialogOpen={addMealDialogOpen}
+            initialSelectedDay={selectedDay}
+            initialMealType={selectedMealType}
+            handleCloseDialog={handleCloseDialog}
+          />
+        )}
       </div>
     </div>
   );
