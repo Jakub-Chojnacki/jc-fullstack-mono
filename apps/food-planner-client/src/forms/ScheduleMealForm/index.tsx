@@ -24,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { queryClient } from "@/main";
 
 import {
   ScheduleMealFormSchema,
@@ -31,7 +32,6 @@ import {
   TScheduleMealFormValues,
 } from "./schema";
 import { TScheduleMealFormProps } from "./types";
-import { queryClient } from "@/main";
 
 const ScheduleMealForm = ({
   addMealDialogOpen,

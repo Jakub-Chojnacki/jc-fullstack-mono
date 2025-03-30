@@ -2,7 +2,9 @@ import { EMealTypes } from "@jcmono/api-contract";
 import { format } from "date-fns";
 import { ChevronLeft, ChevronRight, Plus, X } from "lucide-react";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
+import apiClient from "@/api-client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,11 +14,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import ScheduleMealForm from "@/forms/ScheduleMealForm";
-
-import apiClient from "@/api-client";
 import useDaysOfWeek from "@/hooks/useDaysOfWeek";
 import { queryClient } from "@/main";
-import toast from "react-hot-toast";
+
 import { mealTypes } from "./const";
 
 const ScheduleView = () => {
