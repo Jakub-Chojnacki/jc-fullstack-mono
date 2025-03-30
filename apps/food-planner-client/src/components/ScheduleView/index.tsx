@@ -1,12 +1,5 @@
 import { EMealTypes } from "@jcmono/api-contract";
-import {
-  addWeeks,
-  eachDayOfInterval,
-  endOfWeek,
-  format,
-  startOfWeek,
-  subWeeks,
-} from "date-fns";
+import { format } from "date-fns";
 import { ChevronLeft, ChevronRight, Plus, X } from "lucide-react";
 import { useState } from "react";
 
@@ -20,10 +13,11 @@ import {
 } from "@/components/ui/card";
 import ScheduleMealForm from "@/forms/ScheduleMealForm";
 
-import { mealTypes } from "./const";
 import apiClient from "@/api-client";
-import toast from "react-hot-toast";
+import useDaysOfWeek from "@/hooks/useDaysOfWeek";
 import { queryClient } from "@/main";
+import toast from "react-hot-toast";
+import { mealTypes } from "./const";
 
 const ScheduleView = () => {
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
@@ -32,11 +26,9 @@ const ScheduleView = () => {
   );
 
   const [addMealDialogOpen, setAddMealDialogOpen] = useState(false);
-  const [currentDate, setCurrentDate] = useState(new Date());
 
-  const startDate = startOfWeek(currentDate, { weekStartsOn: 1 }); // Start on Monday
-  const endDate = endOfWeek(currentDate, { weekStartsOn: 1 });
-  const daysOfWeek = eachDayOfInterval({ start: startDate, end: endDate });
+  const { daysOfWeek, startDate, endDate, previousWeek, nextWeek } =
+    useDaysOfWeek();
 
   const { data } = apiClient.scheduleMeals.get.useQuery(["scheduleMeals"], {
     query: {
@@ -54,14 +46,6 @@ const ScheduleView = () => {
       toast.error("Error deleting meal.");
     },
   });
-
-  const previousWeek = (): void => {
-    setCurrentDate(subWeeks(currentDate, 1));
-  };
-
-  const nextWeek = (): void => {
-    setCurrentDate(addWeeks(currentDate, 1));
-  };
 
   const openAddMealDialog = (day: Date, mealType: EMealTypes): void => {
     setSelectedDay(day);
