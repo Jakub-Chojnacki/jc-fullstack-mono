@@ -63,6 +63,73 @@ export declare const ScheduleMealsUpdateSchema: z.ZodObject<Omit<z.objectUtil.ex
     scheduledAt: string | Date;
     mealType?: "BREAKFAST" | "LUNCH" | "DINNER" | "SNACK" | null | undefined;
 }>;
+export declare const ScheduleMealsGetSchema: z.ZodObject<z.objectUtil.extendShape<z.objectUtil.extendShape<{
+    id: z.ZodNumber;
+    createdAt: z.ZodDate;
+    updatedAt: z.ZodDate;
+}, {
+    recipeId: z.ZodNumber;
+    mealType: z.ZodOptional<z.ZodNullable<z.ZodEnum<["BREAKFAST", "LUNCH", "DINNER", "SNACK"]>>>;
+    scheduledAt: z.ZodUnion<[z.ZodString, z.ZodDate]>;
+}>, {
+    recipe: z.ZodObject<{
+        id: z.ZodNumber;
+        createdAt: z.ZodDate;
+        updatedAt: z.ZodDate;
+        userId: z.ZodNumber;
+        isGlobal: z.ZodOptional<z.ZodBoolean>;
+        name: z.ZodString;
+        description: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        userId: number;
+        name: string;
+        description: string;
+        isGlobal?: boolean | undefined;
+    }, {
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        userId: number;
+        name: string;
+        description: string;
+        isGlobal?: boolean | undefined;
+    }>;
+}>, "strip", z.ZodTypeAny, {
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    recipeId: number;
+    scheduledAt: string | Date;
+    recipe: {
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        userId: number;
+        name: string;
+        description: string;
+        isGlobal?: boolean | undefined;
+    };
+    mealType?: "BREAKFAST" | "LUNCH" | "DINNER" | "SNACK" | null | undefined;
+}, {
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    recipeId: number;
+    scheduledAt: string | Date;
+    recipe: {
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        userId: number;
+        name: string;
+        description: string;
+        isGlobal?: boolean | undefined;
+    };
+    mealType?: "BREAKFAST" | "LUNCH" | "DINNER" | "SNACK" | null | undefined;
+}>;
 export type TScheduleMeals = z.infer<typeof ScheduleMealsSchema>;
 export type TScheduleMealsCreate = z.infer<typeof ScheduleMealsCreateSchema>;
 export type TScheduleMealsUpdate = z.infer<typeof ScheduleMealsUpdateSchema>;

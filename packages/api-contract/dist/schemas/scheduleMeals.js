@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ScheduleMealsUpdateSchema = exports.ScheduleMealsCreateSchema = exports.ScheduleMealsSchema = exports.EMealTypes = exports.MealTypes = void 0;
+exports.ScheduleMealsGetSchema = exports.ScheduleMealsUpdateSchema = exports.ScheduleMealsCreateSchema = exports.ScheduleMealsSchema = exports.EMealTypes = exports.MealTypes = void 0;
 var zod_1 = require("zod");
 var utils_1 = require("./utils");
+var recipes_1 = require("./recipes");
 exports.MealTypes = ["BREAKFAST", "LUNCH", "DINNER", "SNACK"];
 var EMealTypes;
 (function (EMealTypes) {
@@ -25,4 +26,7 @@ exports.ScheduleMealsUpdateSchema = exports.ScheduleMealsSchema.omit({
     id: true,
     createdAt: true,
     updatedAt: true,
+});
+exports.ScheduleMealsGetSchema = exports.ScheduleMealsSchema.extend({
+    recipe: recipes_1.RecipeSchema,
 });

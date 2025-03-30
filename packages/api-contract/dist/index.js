@@ -232,7 +232,7 @@ exports.contract = c.router({
                 endDate: zod_1.z.string(),
             }),
             responses: {
-                200: zod_1.z.array(scheduleMeals_1.ScheduleMealsSchema),
+                200: zod_1.z.array(scheduleMeals_1.ScheduleMealsGetSchema),
                 404: exports.NotFoundSchema,
             },
         },
@@ -241,7 +241,7 @@ exports.contract = c.router({
             path: "/scheduleMeals/:id",
             pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
             responses: {
-                200: scheduleMeals_1.ScheduleMealsSchema,
+                200: scheduleMeals_1.ScheduleMealsGetSchema,
                 404: exports.NotFoundSchema,
             },
         },
@@ -268,6 +268,7 @@ exports.contract = c.router({
             method: "DELETE",
             path: "/scheduleMeals/:id",
             pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
+            body: null,
             responses: {
                 200: scheduleMeals_1.ScheduleMealsSchema,
                 404: exports.NotFoundSchema,

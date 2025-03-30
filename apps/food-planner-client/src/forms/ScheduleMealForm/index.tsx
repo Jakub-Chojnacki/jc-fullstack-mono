@@ -31,6 +31,7 @@ import {
   TScheduleMealFormValues,
 } from "./schema";
 import { TScheduleMealFormProps } from "./types";
+import { queryClient } from "@/main";
 
 const ScheduleMealForm = ({
   addMealDialogOpen,
@@ -47,7 +48,7 @@ const ScheduleMealForm = ({
     },
   });
 
-  const handleCloseDialog = () => {
+  const handleCloseDialog = (): void => {
     form.reset();
     closeDialog();
   };
@@ -55,6 +56,7 @@ const ScheduleMealForm = ({
   const { mutate } = apiClient.scheduleMeals.create.useMutation({
     onSuccess: () => {
       toast.success("Meal scheduled successfully!");
+      queryClient.invalidateQueries({ queryKey: ["scheduleMeals"] });
       handleCloseDialog();
     },
     onError: () => {
@@ -62,7 +64,7 @@ const ScheduleMealForm = ({
     },
   });
 
-  const onSubmit = (values: TScheduleMealFormValues) => {
+  const onSubmit = (values: TScheduleMealFormValues): void => {
     if (!values.recipeId) {
       form.setError("recipeId", {
         type: "manual",
@@ -92,8 +94,7 @@ const ScheduleMealForm = ({
         <DialogHeader>
           <DialogTitle>Add Meal</DialogTitle>
           <DialogDescription>
-            {form.getValues("scheduledAt") &&
-              `Schedule a meal for ${format(form.getValues("scheduledAt"), "EEEE, MMMM d")}`}
+            {`Schedule a meal for ${format(form.watch("scheduledAt"), "EEEE, MMMM d")}`}
           </DialogDescription>
         </DialogHeader>
 

@@ -21,6 +21,9 @@ import {
 import ScheduleMealForm from "@/forms/ScheduleMealForm";
 
 import { mealTypes } from "./const";
+import apiClient from "@/api-client";
+import toast from "react-hot-toast";
+import { queryClient } from "@/main";
 
 const ScheduleView = () => {
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
@@ -34,6 +37,23 @@ const ScheduleView = () => {
   const startDate = startOfWeek(currentDate, { weekStartsOn: 1 }); // Start on Monday
   const endDate = endOfWeek(currentDate, { weekStartsOn: 1 });
   const daysOfWeek = eachDayOfInterval({ start: startDate, end: endDate });
+
+  const { data } = apiClient.scheduleMeals.get.useQuery(["scheduleMeals"], {
+    query: {
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
+    },
+  });
+
+  const { mutate } = apiClient.scheduleMeals.delete.useMutation({
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["scheduleMeals"] });
+      toast.success("Meal deleted successfully!");
+    },
+    onError: () => {
+      toast.error("Error deleting meal.");
+    },
+  });
 
   const previousWeek = (): void => {
     setCurrentDate(subWeeks(currentDate, 1));
@@ -85,27 +105,32 @@ const ScheduleView = () => {
             </CardHeader>
             <CardContent className="p-3 space-y-3">
               {mealTypes.map((mealType) => {
-                const meal = null; //TODO: Replace with actual meal data
+                const foundMeal = data?.body.find(
+                  (meal) =>
+                    meal.mealType === mealType &&
+                    meal.scheduledAt === day.toISOString()
+                );
 
                 return (
                   <div key={mealType} className="space-y-1">
                     <div className="text-xs font-medium text-muted-foreground">
                       {mealType}
                     </div>
-                    {meal ? (
+                    {foundMeal ? (
                       <div className="p-2 border rounded-md bg-card relative group">
                         <div className="flex items-center gap-2">
                           <div className="flex-1 min-w-0">
                             <div className="font-medium text-sm truncate">
-                              {"name"}
+                              {foundMeal.recipe.name}
                             </div>
                           </div>
-                          {/* Add handling for removing scheduled meal*/}
                           <Button
                             variant="ghost"
                             size="icon"
                             className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity absolute top-1 right-1"
-                            onClick={() => null}
+                            onClick={() =>
+                              mutate({ params: { id: foundMeal.id } })
+                            }
                           >
                             <X className="h-3 w-3" />
                           </Button>

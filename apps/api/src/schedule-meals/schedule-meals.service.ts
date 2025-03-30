@@ -58,6 +58,9 @@ export class ScheduleMealsService {
             lte: new Date(endDate),
           },
         },
+        include: {
+          recipe: true,
+        },
       });
 
       return scheduledMeals;
@@ -70,6 +73,9 @@ export class ScheduleMealsService {
         where: {
           userId,
           id,
+        },
+        include: {
+          recipe: true,
         },
       }),
     );
