@@ -37,11 +37,14 @@ export class IngredientsController {
   }
 
   @TsRestHandler(contract.ingredients.delete)
-  async deleteIngredient() {
+  async delete(@GetCurrentUserId() userId: number) {
     return tsRestHandler(
       contract.ingredients.delete,
       async ({ params: { id } }) => {
-        const ingredients = await this.ingredientsService.delete(id);
+        const ingredients = await this.ingredientsService.delete({
+          id,
+          userId,
+        });
 
         return {
           status: 200,

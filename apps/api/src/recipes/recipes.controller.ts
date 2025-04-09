@@ -55,11 +55,11 @@ export class RecipesController {
   }
 
   @TsRestHandler(contract.recipes.delete)
-  async delete() {
+  async delete(@GetCurrentUserId() userId: number) {
     return tsRestHandler(
       contract.recipes.delete,
       async ({ params: { id } }) => {
-        const recipes = await this.recipesService.delete(id);
+        const recipes = await this.recipesService.delete({ id, userId });
 
         return {
           status: 200,

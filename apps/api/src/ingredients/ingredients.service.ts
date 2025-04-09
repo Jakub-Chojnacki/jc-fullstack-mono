@@ -6,6 +6,7 @@ import {
 } from '@jcmono/api-contract';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { TBaseDeleteParams } from 'src/common/types';
 import { PrismaService } from 'src/prisma/prisma.service';
 import wrapWithTsRestError from 'src/utils/wrapWithTsRestError';
 
@@ -51,32 +52,42 @@ export class IngredientsService {
     };
   }
 
-  async create(body: TIngredientCreate) {
-    const ingredient = await this.prisma.ingredient.create({
-      data: body,
-    });
+  create(body: TIngredientCreate) {
+    return wrapWithTsRestError(contract.ingredients.create, async () => {
+      const ingredient = await this.prisma.ingredient.create({
+        data: body,
+      });
 
-    return ingredient;
+      return ingredient;
+    });
   }
 
-  async delete(id: number) {
-    return wrapWithTsRestError(contract.ingredients.delete, () =>
-      this.prisma.ingredient.delete({
-        where: {
-          id,
-        },
-      }),
+  delete({ id, userId }: TBaseDeleteParams) {
+    return wrapWithTsRestError(
+      contract.ingredients.delete,
+      async () =>
+        await this.prisma.ingredient.update({
+          where: {
+            id,
+            userId,
+          },
+          data: {
+            isDeleted: true,
+          },
+        }),
     );
   }
 
-  async update(id: number, body: TIngredientUpdate) {
-    return wrapWithTsRestError(contract.ingredients.update, () =>
-      this.prisma.ingredient.update({
-        where: {
-          id,
-        },
-        data: body,
-      }),
+  update(id: number, body: TIngredientUpdate) {
+    return wrapWithTsRestError(
+      contract.ingredients.update,
+      async () =>
+        await this.prisma.ingredient.update({
+          where: {
+            id,
+          },
+          data: body,
+        }),
     );
   }
 }

@@ -6,6 +6,7 @@ import {
 } from '@jcmono/api-contract';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { TBaseDeleteParams } from 'src/common/types';
 import { PrismaService } from 'src/prisma/prisma.service';
 import wrapWithTsRestError from 'src/utils/wrapWithTsRestError';
 
@@ -49,26 +50,6 @@ export class RecipesService {
       ...baseFilter,
       userId,
     };
-  }
-
-  async getGlobal() {
-    const recipes = await this.prisma.recipe.findMany({
-      where: {
-        isGlobal: true,
-      },
-    });
-
-    return recipes;
-  }
-
-  async getForUser(userId: number) {
-    const recipes = await this.prisma.recipe.findMany({
-      where: {
-        userId,
-      },
-    });
-
-    return recipes;
   }
 
   async getOne(id: number, userId: number, withIngredients?: string) {
@@ -128,13 +109,17 @@ export class RecipesService {
     });
   }
 
-  async delete(id: number) {
+  delete({ id, userId }: TBaseDeleteParams) {
     return wrapWithTsRestError(
       contract.recipes.delete,
       async () =>
-        await this.prisma.recipe.delete({
+        await this.prisma.recipe.update({
           where: {
             id,
+            userId,
+          },
+          data: {
+            isDeleted: true,
           },
         }),
     );

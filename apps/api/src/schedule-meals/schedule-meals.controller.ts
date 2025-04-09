@@ -39,11 +39,14 @@ export class ScheduleMealsController {
   }
 
   @TsRestHandler(contract.scheduleMeals.delete)
-  async delete() {
+  async delete(@GetCurrentUserId() userId: number) {
     return tsRestHandler(
       contract.scheduleMeals.delete,
       async ({ params: { id } }) => {
-        const deletedSchedule = await this.scheduleMealsService.delete(id);
+        const deletedSchedule = await this.scheduleMealsService.delete({
+          id,
+          userId,
+        });
 
         return {
           status: 200,
