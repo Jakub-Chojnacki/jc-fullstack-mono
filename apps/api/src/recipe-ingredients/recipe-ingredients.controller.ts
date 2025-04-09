@@ -31,7 +31,7 @@ export class RecipeIngredientsController {
       contract.recipeIngredients.update,
       async ({ body, params: { id } }) => {
         const updatedRecipeIngredient =
-          await this.recipeIngredientsService.update(id, body);
+          await this.recipeIngredientsService.update({ id, body });
 
         return {
           status: 201,
@@ -47,7 +47,7 @@ export class RecipeIngredientsController {
       contract.recipeIngredients.delete,
       async ({ params: { id } }) => {
         const deletedRecipeIngredient =
-          await this.recipeIngredientsService.delete(id);
+          await this.recipeIngredientsService.delete({ id });
 
         return {
           status: 200,

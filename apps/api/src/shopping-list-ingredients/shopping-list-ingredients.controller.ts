@@ -63,7 +63,11 @@ export class ShoppingListIngredientsController {
       contract.shoppingListIngredient.update,
       async ({ params: { id }, body }) => {
         const updatedShoppingListIngredient =
-          await this.shoppingListIngredientsService.update(id, body, userId);
+          await this.shoppingListIngredientsService.update({
+            id,
+            data: body,
+            userId,
+          });
 
         return {
           status: 200,

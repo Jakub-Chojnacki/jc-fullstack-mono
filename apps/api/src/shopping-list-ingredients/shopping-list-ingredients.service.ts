@@ -60,7 +60,15 @@ export class ShoppingListIngredientsService {
     );
   }
 
-  update(id: number, data: TShoppingListIngredientUpdate, userId: number) {
+  update({
+    data,
+    id,
+    userId,
+  }: {
+    id: number;
+    data: TShoppingListIngredientUpdate;
+    userId: number;
+  }) {
     return wrapWithTsRestError(
       contract.shoppingListIngredient.update,
       async () =>

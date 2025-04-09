@@ -155,17 +155,19 @@ export class AuthService {
   }
 
   async me(userId: number) {
-    return wrapWithTsRestError(contract.auth.me, () =>
-      this.prisma.user.findUnique({
-        where: {
-          id: userId,
-        },
-        select: {
-          id: true,
-          email: true,
-          name: true,
-        },
-      }),
+    wrapWithTsRestError(
+      contract.auth.me,
+      async () =>
+        await this.prisma.user.findUnique({
+          where: {
+            id: userId,
+          },
+          select: {
+            id: true,
+            email: true,
+            name: true,
+          },
+        }),
     );
   }
 }
