@@ -169,6 +169,17 @@ exports.contract = c.router({
         },
     },
     shoppingListIngredient: {
+        get: {
+            method: "GET",
+            path: "/shoppingListIngredient",
+            query: zod_1.z.object({
+                isDone: zod_1.z.preprocess(function (val) { return val === "true"; }, zod_1.z.boolean()).optional(),
+            }),
+            responses: {
+                200: zod_1.z.array(index_1.ShoppingListIngredientSchema),
+                404: exports.NotFoundSchema,
+            },
+        },
         create: {
             method: "POST",
             path: "/shoppingListIngredient",
@@ -192,7 +203,7 @@ exports.contract = c.router({
             path: "/shoppingListIngredient/:id",
             pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
             responses: {
-                200: index_1.ShoppingListIngredientSchema,
+                200: null,
                 404: exports.NotFoundSchema,
             },
         },

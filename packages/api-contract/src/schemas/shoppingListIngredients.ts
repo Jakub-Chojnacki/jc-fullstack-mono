@@ -10,7 +10,7 @@ export const ShoppingListIngredientSchema = z.object({
   unit: z.enum(QuantityUnit),
   isDone: z.boolean(),
   ingredientId: z.number(),
-  shoppingListId: z.number(),
+  userId: z.number(),
 });
 
 export type TShoppingListIngredient = z.infer<
@@ -22,6 +22,7 @@ export const ShoppingListIngredientCreateSchema =
     id: true,
     createdAt: true,
     updatedAt: true,
+    userId: true,
   });
 
 export type TShoppingListIngredientCreate = z.infer<
@@ -33,6 +34,7 @@ export const ShoppingListIngredientUpdateSchema =
     id: true,
     createdAt: true,
     updatedAt: true,
+    userId: true,
   });
 
 export type TShoppingListIngredientUpdate = z.infer<

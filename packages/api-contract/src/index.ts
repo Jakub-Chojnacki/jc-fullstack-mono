@@ -178,6 +178,17 @@ export const contract = c.router(
       },
     },
     shoppingListIngredient: {
+      get: {
+        method: "GET",
+        path: "/shoppingListIngredient",
+        query: z.object({
+          isDone: z.preprocess((val) => val === "true", z.boolean()).optional(),
+        }),
+        responses: {
+          200: z.array(ShoppingListIngredientSchema),
+          404: NotFoundSchema,
+        },
+      },
       create: {
         method: "POST",
         path: "/shoppingListIngredient",
@@ -201,7 +212,7 @@ export const contract = c.router(
         path: "/shoppingListIngredient/:id",
         pathParams: z.object({ id: StringToNumberSchema }),
         responses: {
-          200: ShoppingListIngredientSchema,
+          200: null,
           404: NotFoundSchema,
         },
       },

@@ -1,7 +1,8 @@
-import { Controller } from '@nestjs/common';
-import { ShoppingListIngredientsService } from './shopping-list-ingredients.service';
-import { tsRestHandler, TsRestHandler } from '@ts-rest/nest';
 import { contract } from '@jcmono/api-contract';
+import { Controller } from '@nestjs/common';
+import { tsRestHandler, TsRestHandler } from '@ts-rest/nest';
+import { GetCurrentUserId } from 'src/common/decorators';
+import { ShoppingListIngredientsService } from './shopping-list-ingredients.service';
 
 @Controller()
 export class ShoppingListIngredientsController {
@@ -9,13 +10,29 @@ export class ShoppingListIngredientsController {
     private readonly shoppingListIngredientsService: ShoppingListIngredientsService,
   ) {}
 
+  @TsRestHandler(contract.shoppingListIngredient.get)
+  async get(@GetCurrentUserId() userId: number) {
+    return tsRestHandler(
+      contract.shoppingListIngredient.get,
+      async ({ query: { isDone } }) => {
+        const shoppingListIngredients =
+          await this.shoppingListIngredientsService.get({ isDone, userId });
+
+        return {
+          status: 200,
+          body: shoppingListIngredients,
+        };
+      },
+    );
+  }
+
   @TsRestHandler(contract.shoppingListIngredient.create)
-  async create() {
+  async create(@GetCurrentUserId() userId: number) {
     return tsRestHandler(
       contract.shoppingListIngredient.create,
       async ({ body }) => {
         const createdShoppingListIngredient =
-          await this.shoppingListIngredientsService.create(body);
+          await this.shoppingListIngredientsService.create(body, userId);
 
         return {
           status: 201,
@@ -26,27 +43,27 @@ export class ShoppingListIngredientsController {
   }
 
   @TsRestHandler(contract.shoppingListIngredient.delete)
-  async delete() {
+  async delete(@GetCurrentUserId() userId: number) {
     return tsRestHandler(
       contract.shoppingListIngredient.delete,
       async ({ params: { id } }) => {
-        const deletedShoppingListIngredient =
-          await this.shoppingListIngredientsService.delete(id);
+        await this.shoppingListIngredientsService.delete(id, userId);
 
         return {
           status: 200,
-          body: deletedShoppingListIngredient,
+          body: null,
         };
       },
     );
   }
+
   @TsRestHandler(contract.shoppingListIngredient.update)
-  async update() {
+  async update(@GetCurrentUserId() userId: number) {
     return tsRestHandler(
       contract.shoppingListIngredient.update,
       async ({ params: { id }, body }) => {
         const updatedShoppingListIngredient =
-          await this.shoppingListIngredientsService.update(id, body);
+          await this.shoppingListIngredientsService.update(id, body, userId);
 
         return {
           status: 200,

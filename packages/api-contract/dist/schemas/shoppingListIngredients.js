@@ -11,15 +11,17 @@ exports.ShoppingListIngredientSchema = zod_1.z.object({
     unit: zod_1.z.enum(ingredients_1.QuantityUnit),
     isDone: zod_1.z.boolean(),
     ingredientId: zod_1.z.number(),
-    shoppingListId: zod_1.z.number(),
+    userId: zod_1.z.number(),
 });
 exports.ShoppingListIngredientCreateSchema = exports.ShoppingListIngredientSchema.omit({
     id: true,
     createdAt: true,
     updatedAt: true,
+    userId: true,
 });
 exports.ShoppingListIngredientUpdateSchema = exports.ShoppingListIngredientSchema.omit({
     id: true,
     createdAt: true,
     updatedAt: true,
+    userId: true,
 });
