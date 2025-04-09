@@ -55,11 +55,15 @@ export class IngredientsController {
   }
 
   @TsRestHandler(contract.ingredients.update)
-  async updateIngredient() {
+  async updateIngredient(@GetCurrentUserId() userId: number) {
     return tsRestHandler(
       contract.ingredients.update,
       async ({ params: { id }, body }) => {
-        const ingredients = await this.ingredientsService.update(id, body);
+        const ingredients = await this.ingredientsService.update({
+          id,
+          body,
+          userId,
+        });
 
         return {
           status: 200,

@@ -78,13 +78,22 @@ export class IngredientsService {
     );
   }
 
-  update(id: number, body: TIngredientUpdate) {
+  update({
+    id,
+    body,
+    userId,
+  }: {
+    id: number;
+    body: TIngredientUpdate;
+    userId: number;
+  }) {
     return wrapWithTsRestError(
       contract.ingredients.update,
       async () =>
         await this.prisma.ingredient.update({
           where: {
             id,
+            userId,
           },
           data: body,
         }),
