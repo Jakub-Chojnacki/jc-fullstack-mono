@@ -15,20 +15,24 @@ export class RecipeIngredientsService {
     return createdRecipeIngredient;
   }
 
-  async update(id: number, body: TRecipeIngredientCreate) {
-    return wrapWithTsRestError(contract.recipeIngredients.update, () =>
-      this.prisma.recipeIngredient.update({
-        where: { id },
-        data: body,
-      }),
+  update(id: number, body: TRecipeIngredientCreate) {
+    return wrapWithTsRestError(
+      contract.recipeIngredients.update,
+      async () =>
+        await this.prisma.recipeIngredient.update({
+          where: { id },
+          data: body,
+        }),
     );
   }
 
-  async delete(id: number) {
-    return wrapWithTsRestError(contract.recipeIngredients.delete, () =>
-      this.prisma.recipeIngredient.delete({
-        where: { id },
-      }),
+  delete(id: number) {
+    return wrapWithTsRestError(
+      contract.recipeIngredients.delete,
+      async () =>
+        await this.prisma.recipeIngredient.delete({
+          where: { id },
+        }),
     );
   }
 }

@@ -18,7 +18,7 @@ export class RecipesService {
     return wrapWithTsRestError(contract.recipes.get, async () => {
       const where = this.buildRecipeFilter(userId, query);
 
-      return this.prisma.recipe.findMany({
+      return await this.prisma.recipe.findMany({
         where,
       });
     });

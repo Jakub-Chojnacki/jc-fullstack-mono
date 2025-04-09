@@ -13,32 +13,38 @@ export class ScheduleMealsService {
   constructor(private prisma: PrismaService) {}
 
   async create(userId: number, body: TScheduleMealsCreate) {
-    const scheduledMeal = await this.prisma.scheduledMeal.create({
-      data: { userId, ...body },
-    });
+    return wrapWithTsRestError(contract.scheduleMeals.create, async () => {
+      const scheduledMeal = await this.prisma.scheduledMeal.create({
+        data: { userId, ...body },
+      });
 
-    return scheduledMeal;
+      return scheduledMeal;
+    });
   }
 
-  async update(id: number, body: TScheduleMealsUpdate) {
-    return wrapWithTsRestError(contract.scheduleMeals.update, () =>
-      this.prisma.scheduledMeal.update({
-        where: {
-          id,
-        },
-        data: { ...body, scheduledAt: new Date(body.scheduledAt) },
-      }),
+  update(id: number, body: TScheduleMealsUpdate) {
+    return wrapWithTsRestError(
+      contract.scheduleMeals.update,
+      async () =>
+        await this.prisma.scheduledMeal.update({
+          where: {
+            id,
+          },
+          data: { ...body, scheduledAt: new Date(body.scheduledAt) },
+        }),
     );
   }
 
-  async delete({ id, userId }: TBaseDeleteParams) {
-    return wrapWithTsRestError(contract.scheduleMeals.delete, () =>
-      this.prisma.scheduledMeal.delete({
-        where: {
-          id,
-          userId,
-        },
-      }),
+  delete({ id, userId }: TBaseDeleteParams) {
+    return wrapWithTsRestError(
+      contract.scheduleMeals.delete,
+      async () =>
+        await this.prisma.scheduledMeal.delete({
+          where: {
+            id,
+            userId,
+          },
+        }),
     );
   }
 
@@ -69,17 +75,19 @@ export class ScheduleMealsService {
     });
   }
 
-  async getById(userId: number, id: number) {
-    return wrapWithTsRestError(contract.scheduleMeals.getById, () =>
-      this.prisma.scheduledMeal.findFirst({
-        where: {
-          userId,
-          id,
-        },
-        include: {
-          recipe: true,
-        },
-      }),
+  getById(userId: number, id: number) {
+    return wrapWithTsRestError(
+      contract.scheduleMeals.getById,
+      async () =>
+        await this.prisma.scheduledMeal.findFirst({
+          where: {
+            userId,
+            id,
+          },
+          include: {
+            recipe: true,
+          },
+        }),
     );
   }
 }
