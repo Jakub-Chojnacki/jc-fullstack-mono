@@ -23,22 +23,10 @@ export class RecipesController {
     });
   }
 
-  @TsRestHandler(contract.recipes.getForUser)
-  async getForUser(@GetCurrentUserId() userId: number) {
-    return tsRestHandler(contract.recipes.getForUser, async () => {
-      const recipes = await this.recipesService.getForUser(userId);
-
-      return {
-        status: 200,
-        body: recipes,
-      };
-    });
-  }
-
-  @TsRestHandler(contract.recipes.getGlobal)
-  async getGlobal() {
-    return tsRestHandler(contract.recipes.getGlobal, async () => {
-      const recipes = await this.recipesService.getGlobal();
+  @TsRestHandler(contract.recipes.get)
+  async get(@GetCurrentUserId() userId: number) {
+    return tsRestHandler(contract.recipes.get, async ({ query }) => {
+      const recipes = await this.recipesService.get({ query, userId });
 
       return {
         status: 200,

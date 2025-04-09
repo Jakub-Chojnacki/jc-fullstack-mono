@@ -1,11 +1,55 @@
-import { contract, TRecipeCreate, TRecipeUpdate } from '@jcmono/api-contract';
+import {
+  contract,
+  TRecipeCreate,
+  TRecipeGetQuery,
+  TRecipeUpdate,
+} from '@jcmono/api-contract';
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import wrapWithTsRestError from 'src/utils/wrapWithTsRestError';
 
 @Injectable()
 export class RecipesService {
   constructor(private prisma: PrismaService) {}
+
+  get({ userId, query }: { userId: number; query: TRecipeGetQuery }) {
+    return wrapWithTsRestError(contract.recipes.get, async () => {
+      const where = this.buildRecipeFilter(userId, query);
+
+      return this.prisma.recipe.findMany({
+        where,
+      });
+    });
+  }
+
+  private buildRecipeFilter(
+    userId: number,
+    query: TRecipeGetQuery,
+  ): Prisma.RecipeWhereInput {
+    const { queryFilter, isDeleted } = query;
+
+    const baseFilter = { isDeleted };
+
+    if (queryFilter === 'ALL') {
+      return {
+        ...baseFilter,
+        OR: [{ userId }, { isGlobal: true }],
+      };
+    }
+
+    if (queryFilter === 'GLOBAL') {
+      return {
+        ...baseFilter,
+        isGlobal: true,
+      };
+    }
+
+    return {
+      ...baseFilter,
+      userId,
+    };
+  }
 
   async getGlobal() {
     const recipes = await this.prisma.recipe.findMany({

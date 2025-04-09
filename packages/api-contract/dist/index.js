@@ -76,16 +76,10 @@ exports.contract = c.router({
         },
     },
     recipes: {
-        getGlobal: {
-            method: "GET",
-            path: "/recipes/global",
-            responses: {
-                200: zod_1.z.array(index_1.RecipeSchema),
-            },
-        },
-        getForUser: {
+        get: {
             method: "GET",
             path: "/recipes",
+            query: index_1.RecipeGetQuerySchema,
             responses: {
                 200: zod_1.z.array(index_1.RecipeSchema),
             },
@@ -173,7 +167,7 @@ exports.contract = c.router({
             method: "GET",
             path: "/shoppingListIngredient",
             query: zod_1.z.object({
-                isDone: zod_1.z.preprocess(function (val) { return val === "true"; }, zod_1.z.boolean()).optional(),
+                isDone: index_1.BooleanQuerySchema.optional(),
             }),
             responses: {
                 200: zod_1.z.array(index_1.ShoppingListIngredientSchema),

@@ -13,3 +13,6 @@ export declare const BasePrismaSchema: z.ZodObject<{
     updatedAt: Date;
 }>;
 export declare const StringToNumberSchema: z.ZodUnion<[z.ZodEffects<z.ZodString, number, string>, z.ZodNumber]>;
+export declare const BooleanQuerySchema: z.ZodEffects<z.ZodBoolean, boolean, unknown>;
+export declare const GetQueryFilter: z.ZodEnum<["USER", "GLOBAL", "ALL"]>;
+export type TGetQueryFilter = z.infer<typeof GetQueryFilter>;

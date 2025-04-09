@@ -1,11 +1,13 @@
 import { initContract } from "@ts-rest/core";
 import { z } from "zod";
 import {
+  BooleanQuerySchema,
   IngredientCreateSchema,
   IngredientSchema,
   LoginSchema,
   RecipeCreateSchema,
   RecipeGetOneSchema,
+  RecipeGetQuerySchema,
   RecipeIngredientCreateSchema,
   RecipeIngredientSchema,
   RecipeIngredientUpdateSchema,
@@ -84,17 +86,10 @@ export const contract = c.router(
       },
     },
     recipes: {
-      getGlobal: {
-        method: "GET",
-        path: "/recipes/global",
-        responses: {
-          200: z.array(RecipeSchema),
-        },
-      },
-      getForUser: {
+      get: {
         method: "GET",
         path: "/recipes",
-
+        query: RecipeGetQuerySchema,
         responses: {
           200: z.array(RecipeSchema),
         },
@@ -182,7 +177,7 @@ export const contract = c.router(
         method: "GET",
         path: "/shoppingListIngredient",
         query: z.object({
-          isDone: z.preprocess((val) => val === "true", z.boolean()).optional(),
+          isDone: BooleanQuerySchema.optional(),
         }),
         responses: {
           200: z.array(ShoppingListIngredientSchema),

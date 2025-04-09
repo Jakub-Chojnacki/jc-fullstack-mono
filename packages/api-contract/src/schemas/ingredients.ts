@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { BooleanQuerySchema, GetQueryFilter } from "./utils";
 
 export const IngredientSchema = z.object({
   id: z.number(),
@@ -7,6 +8,7 @@ export const IngredientSchema = z.object({
   name: z.string().nonempty("Name is required"),
   userId: z.number(),
   isGlobal: z.boolean().optional(),
+  isDeleted: z.boolean().optional(),
 });
 
 export type TIngredient = z.infer<typeof IngredientSchema>;
@@ -64,3 +66,8 @@ export const RecipeIngredientUpdateSchema = RecipeIngredientSchema.omit({
 export type TRecipeIngredientCreate = z.infer<
   typeof RecipeIngredientCreateSchema
 >;
+
+export const IngredientGetQuerySchema = z.object({
+  queryFilter: GetQueryFilter.optional(),
+  isDeleted: BooleanQuerySchema.optional(),
+});

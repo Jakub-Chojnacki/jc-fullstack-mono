@@ -12,20 +12,20 @@ export declare const ShoppingListIngredientSchema: z.ZodObject<{
     id: number;
     createdAt: Date;
     updatedAt: Date;
+    userId: number;
     amount: number;
     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-    isDone: boolean;
     ingredientId: number;
-    userId: number;
+    isDone: boolean;
 }, {
     id: number;
     createdAt: Date;
     updatedAt: Date;
+    userId: number;
     amount: number;
     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-    isDone: boolean;
     ingredientId: number;
-    userId: number;
+    isDone: boolean;
 }>;
 export type TShoppingListIngredient = z.infer<typeof ShoppingListIngredientSchema>;
 export declare const ShoppingListIngredientCreateSchema: z.ZodObject<Omit<{
@@ -40,13 +40,13 @@ export declare const ShoppingListIngredientCreateSchema: z.ZodObject<Omit<{
 }, "id" | "createdAt" | "updatedAt" | "userId">, "strip", z.ZodTypeAny, {
     amount: number;
     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-    isDone: boolean;
     ingredientId: number;
+    isDone: boolean;
 }, {
     amount: number;
     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-    isDone: boolean;
     ingredientId: number;
+    isDone: boolean;
 }>;
 export type TShoppingListIngredientCreate = z.infer<typeof ShoppingListIngredientCreateSchema>;
 export declare const ShoppingListIngredientUpdateSchema: z.ZodObject<Omit<{
@@ -61,12 +61,12 @@ export declare const ShoppingListIngredientUpdateSchema: z.ZodObject<Omit<{
 }, "id" | "createdAt" | "updatedAt" | "userId">, "strip", z.ZodTypeAny, {
     amount: number;
     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-    isDone: boolean;
     ingredientId: number;
+    isDone: boolean;
 }, {
     amount: number;
     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-    isDone: boolean;
     ingredientId: number;
+    isDone: boolean;
 }>;
 export type TShoppingListIngredientUpdate = z.infer<typeof ShoppingListIngredientUpdateSchema>;

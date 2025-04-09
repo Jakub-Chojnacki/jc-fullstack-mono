@@ -80,22 +80,25 @@ export declare const ScheduleMealsGetSchema: z.ZodObject<z.objectUtil.extendShap
         isGlobal: z.ZodOptional<z.ZodBoolean>;
         name: z.ZodString;
         description: z.ZodString;
+        isDeleted: z.ZodOptional<z.ZodBoolean>;
     }, "strip", z.ZodTypeAny, {
         id: number;
-        name: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number;
+        name: string;
         description: string;
         isGlobal?: boolean | undefined;
+        isDeleted?: boolean | undefined;
     }, {
         id: number;
-        name: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number;
+        name: string;
         description: string;
         isGlobal?: boolean | undefined;
+        isDeleted?: boolean | undefined;
     }>;
 }>, "strip", z.ZodTypeAny, {
     id: number;
@@ -105,12 +108,13 @@ export declare const ScheduleMealsGetSchema: z.ZodObject<z.objectUtil.extendShap
     scheduledAt: string | Date;
     recipe: {
         id: number;
-        name: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number;
+        name: string;
         description: string;
         isGlobal?: boolean | undefined;
+        isDeleted?: boolean | undefined;
     };
     mealType?: "BREAKFAST" | "LUNCH" | "DINNER" | "SNACK" | null | undefined;
 }, {
@@ -121,12 +125,13 @@ export declare const ScheduleMealsGetSchema: z.ZodObject<z.objectUtil.extendShap
     scheduledAt: string | Date;
     recipe: {
         id: number;
-        name: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number;
+        name: string;
         description: string;
         isGlobal?: boolean | undefined;
+        isDeleted?: boolean | undefined;
     };
     mealType?: "BREAKFAST" | "LUNCH" | "DINNER" | "SNACK" | null | undefined;
 }>;

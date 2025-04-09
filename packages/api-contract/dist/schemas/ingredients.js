@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RecipeIngredientUpdateSchema = exports.RecipeIngredientCreateSchema = exports.RecipeIngredientSchema = exports.QuantityUnit = exports.IngredientUpdateSchema = exports.IngredientCreateSchema = exports.IngredientSchema = void 0;
+exports.IngredientGetQuerySchema = exports.RecipeIngredientUpdateSchema = exports.RecipeIngredientCreateSchema = exports.RecipeIngredientSchema = exports.QuantityUnit = exports.IngredientUpdateSchema = exports.IngredientCreateSchema = exports.IngredientSchema = void 0;
 var zod_1 = require("zod");
+var utils_1 = require("./utils");
 exports.IngredientSchema = zod_1.z.object({
     id: zod_1.z.number(),
     createdAt: zod_1.z.date(),
@@ -9,6 +10,7 @@ exports.IngredientSchema = zod_1.z.object({
     name: zod_1.z.string().nonempty("Name is required"),
     userId: zod_1.z.number(),
     isGlobal: zod_1.z.boolean().optional(),
+    isDeleted: zod_1.z.boolean().optional(),
 });
 exports.IngredientCreateSchema = exports.IngredientSchema.omit({
     id: true,
@@ -49,4 +51,8 @@ exports.RecipeIngredientUpdateSchema = exports.RecipeIngredientSchema.omit({
     recipeId: true,
 }).extend({
     id: zod_1.z.number().optional(),
+});
+exports.IngredientGetQuerySchema = zod_1.z.object({
+    queryFilter: utils_1.GetQueryFilter.optional(),
+    isDeleted: utils_1.BooleanQuerySchema.optional(),
 });
