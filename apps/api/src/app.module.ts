@@ -8,7 +8,6 @@ import { PrismaModule } from './prisma/prisma.module';
 import { RecipesModule } from './recipes/recipes.module';
 import { RecipeIngredientsModule } from './recipe-ingredients/recipe-ingredients.module';
 import { ScheduleMealsModule } from './schedule-meals/schedule-meals.module';
-import { ShoppingListModule } from './shopping-list/shopping-list.module';
 import { ShoppingListIngredientsModule } from './shopping-list-ingredients/shopping-list-ingredients.module';
 
 @Module({
@@ -20,7 +19,6 @@ import { ShoppingListIngredientsModule } from './shopping-list-ingredients/shopp
     RecipesModule,
     RecipeIngredientsModule,
     ScheduleMealsModule,
-    ShoppingListModule,
     ShoppingListIngredientsModule,
   ],
   providers: [

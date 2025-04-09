@@ -24,22 +24,10 @@ export class IngredientsController {
     });
   }
 
-  @TsRestHandler(contract.ingredients.getForUser)
-  async getForUser(@GetCurrentUserId() userId: number) {
-    return tsRestHandler(contract.ingredients.getForUser, async () => {
-      const ingredients = await this.ingredientsService.getForUser(userId);
-
-      return {
-        status: 200,
-        body: ingredients,
-      };
-    });
-  }
-
-  @TsRestHandler(contract.ingredients.getGlobal)
-  async getGlobalIngredients() {
-    return tsRestHandler(contract.ingredients.getGlobal, async () => {
-      const ingredients = await this.ingredientsService.getGlobal();
+  @TsRestHandler(contract.ingredients.get)
+  async get(@GetCurrentUserId() userId: number) {
+    return tsRestHandler(contract.ingredients.get, async ({ query }) => {
+      const ingredients = await this.ingredientsService.get({ userId, query });
 
       return {
         status: 200,
@@ -49,11 +37,14 @@ export class IngredientsController {
   }
 
   @TsRestHandler(contract.ingredients.delete)
-  async deleteIngredient() {
+  async delete(@GetCurrentUserId() userId: number) {
     return tsRestHandler(
       contract.ingredients.delete,
       async ({ params: { id } }) => {
-        const ingredients = await this.ingredientsService.delete(id);
+        const ingredients = await this.ingredientsService.delete({
+          id,
+          userId,
+        });
 
         return {
           status: 200,

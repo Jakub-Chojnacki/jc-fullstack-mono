@@ -5,6 +5,8 @@ import {
   RecipeIngredientUpdateSchema,
 } from "./ingredients";
 
+import { BooleanQuerySchema, GetQueryFilter } from "./utils";
+
 export const RecipeSchema = z.object({
   id: z.number(),
   createdAt: z.date(),
@@ -13,6 +15,7 @@ export const RecipeSchema = z.object({
   isGlobal: z.boolean().optional(),
   name: z.string(),
   description: z.string(),
+  isDeleted: z.boolean().optional(),
 });
 
 export type TRecipe = z.infer<typeof RecipeSchema>;
@@ -47,3 +50,10 @@ export const RecipeGetOneSchema = RecipeSchema.extend({
 });
 
 export type TRecipeGetOne = z.infer<typeof RecipeGetOneSchema>;
+
+export const RecipeGetQuerySchema = z.object({
+  queryFilter: GetQueryFilter.optional(),
+  isDeleted: BooleanQuerySchema.optional(),
+});
+
+export type TRecipeGetQuery = z.infer<typeof RecipeGetQuerySchema>;

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.StringToNumberSchema = exports.BasePrismaSchema = void 0;
+exports.GetQueryFilter = exports.BooleanQuerySchema = exports.StringToNumberSchema = exports.BasePrismaSchema = void 0;
 var zod_1 = require("zod");
 exports.BasePrismaSchema = zod_1.z.object({
     id: zod_1.z.number(),
@@ -17,3 +17,5 @@ exports.StringToNumberSchema = zod_1.z.union([
     }),
     zod_1.z.number(),
 ]);
+exports.BooleanQuerySchema = zod_1.z.preprocess(function (val) { return val === "true"; }, zod_1.z.boolean());
+exports.GetQueryFilter = zod_1.z.enum(["USER", "GLOBAL", "ALL"]);

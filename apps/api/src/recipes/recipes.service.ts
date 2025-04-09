@@ -1,5 +1,12 @@
-import { contract, TRecipeCreate, TRecipeUpdate } from '@jcmono/api-contract';
+import {
+  contract,
+  TRecipeCreate,
+  TRecipeGetQuery,
+  TRecipeUpdate,
+} from '@jcmono/api-contract';
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
+import { TBaseDeleteParams } from 'src/common/types';
 import { PrismaService } from 'src/prisma/prisma.service';
 import wrapWithTsRestError from 'src/utils/wrapWithTsRestError';
 
@@ -7,24 +14,42 @@ import wrapWithTsRestError from 'src/utils/wrapWithTsRestError';
 export class RecipesService {
   constructor(private prisma: PrismaService) {}
 
-  async getGlobal() {
-    const recipes = await this.prisma.recipe.findMany({
-      where: {
-        isGlobal: true,
-      },
-    });
+  get({ userId, query }: { userId: number; query: TRecipeGetQuery }) {
+    return wrapWithTsRestError(contract.recipes.get, async () => {
+      const where = this.buildRecipeFilter(userId, query);
 
-    return recipes;
+      return this.prisma.recipe.findMany({
+        where,
+      });
+    });
   }
 
-  async getForUser(userId: number) {
-    const recipes = await this.prisma.recipe.findMany({
-      where: {
-        userId,
-      },
-    });
+  private buildRecipeFilter(
+    userId: number,
+    query: TRecipeGetQuery,
+  ): Prisma.RecipeWhereInput {
+    const { queryFilter, isDeleted } = query;
 
-    return recipes;
+    const baseFilter = { isDeleted };
+
+    if (queryFilter === 'ALL') {
+      return {
+        ...baseFilter,
+        OR: [{ userId }, { isGlobal: true }],
+      };
+    }
+
+    if (queryFilter === 'GLOBAL') {
+      return {
+        ...baseFilter,
+        isGlobal: true,
+      };
+    }
+
+    return {
+      ...baseFilter,
+      userId,
+    };
   }
 
   async getOne(id: number, userId: number, withIngredients?: string) {
@@ -84,13 +109,17 @@ export class RecipesService {
     });
   }
 
-  async delete(id: number) {
+  delete({ id, userId }: TBaseDeleteParams) {
     return wrapWithTsRestError(
       contract.recipes.delete,
       async () =>
-        await this.prisma.recipe.delete({
+        await this.prisma.recipe.update({
           where: {
             id,
+            userId,
+          },
+          data: {
+            isDeleted: true,
           },
         }),
     );

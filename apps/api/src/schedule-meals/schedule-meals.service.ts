@@ -4,6 +4,7 @@ import {
   TScheduleMealsUpdate,
 } from '@jcmono/api-contract';
 import { Injectable } from '@nestjs/common';
+import { TBaseDeleteParams } from 'src/common/types';
 import { PrismaService } from 'src/prisma/prisma.service';
 import wrapWithTsRestError from 'src/utils/wrapWithTsRestError';
 
@@ -30,11 +31,12 @@ export class ScheduleMealsService {
     );
   }
 
-  async delete(id: number) {
+  async delete({ id, userId }: TBaseDeleteParams) {
     return wrapWithTsRestError(contract.scheduleMeals.delete, () =>
       this.prisma.scheduledMeal.delete({
         where: {
           id,
+          userId,
         },
       }),
     );

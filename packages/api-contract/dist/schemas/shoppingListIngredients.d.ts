@@ -7,25 +7,25 @@ export declare const ShoppingListIngredientSchema: z.ZodObject<{
     unit: z.ZodEnum<["GRAMS", "LITERS", "MILLILITERS", "PIECES", "UNITS"]>;
     isDone: z.ZodBoolean;
     ingredientId: z.ZodNumber;
-    shoppingListId: z.ZodNumber;
+    userId: z.ZodNumber;
 }, "strip", z.ZodTypeAny, {
     id: number;
     createdAt: Date;
     updatedAt: Date;
+    userId: number;
     amount: number;
     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-    isDone: boolean;
     ingredientId: number;
-    shoppingListId: number;
+    isDone: boolean;
 }, {
     id: number;
     createdAt: Date;
     updatedAt: Date;
+    userId: number;
     amount: number;
     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-    isDone: boolean;
     ingredientId: number;
-    shoppingListId: number;
+    isDone: boolean;
 }>;
 export type TShoppingListIngredient = z.infer<typeof ShoppingListIngredientSchema>;
 export declare const ShoppingListIngredientCreateSchema: z.ZodObject<Omit<{
@@ -36,19 +36,17 @@ export declare const ShoppingListIngredientCreateSchema: z.ZodObject<Omit<{
     unit: z.ZodEnum<["GRAMS", "LITERS", "MILLILITERS", "PIECES", "UNITS"]>;
     isDone: z.ZodBoolean;
     ingredientId: z.ZodNumber;
-    shoppingListId: z.ZodNumber;
-}, "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
+    userId: z.ZodNumber;
+}, "id" | "createdAt" | "updatedAt" | "userId">, "strip", z.ZodTypeAny, {
     amount: number;
     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-    isDone: boolean;
     ingredientId: number;
-    shoppingListId: number;
+    isDone: boolean;
 }, {
     amount: number;
     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-    isDone: boolean;
     ingredientId: number;
-    shoppingListId: number;
+    isDone: boolean;
 }>;
 export type TShoppingListIngredientCreate = z.infer<typeof ShoppingListIngredientCreateSchema>;
 export declare const ShoppingListIngredientUpdateSchema: z.ZodObject<Omit<{
@@ -59,18 +57,16 @@ export declare const ShoppingListIngredientUpdateSchema: z.ZodObject<Omit<{
     unit: z.ZodEnum<["GRAMS", "LITERS", "MILLILITERS", "PIECES", "UNITS"]>;
     isDone: z.ZodBoolean;
     ingredientId: z.ZodNumber;
-    shoppingListId: z.ZodNumber;
-}, "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
+    userId: z.ZodNumber;
+}, "id" | "createdAt" | "updatedAt" | "userId">, "strip", z.ZodTypeAny, {
     amount: number;
     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-    isDone: boolean;
     ingredientId: number;
-    shoppingListId: number;
+    isDone: boolean;
 }, {
     amount: number;
     unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
-    isDone: boolean;
     ingredientId: number;
-    shoppingListId: number;
+    isDone: boolean;
 }>;
 export type TShoppingListIngredientUpdate = z.infer<typeof ShoppingListIngredientUpdateSchema>;

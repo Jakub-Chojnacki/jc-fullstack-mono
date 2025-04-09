@@ -7,12 +7,13 @@ import { ShoppingListIngredientsService } from './shopping-list-ingredients.serv
 describe('ShoppingListIngredientsService', () => {
   let service: ShoppingListIngredientsService;
 
-  const mockData: TShoppingListIngredientCreate = {
+  const userId = 1;
+  const mockData: TShoppingListIngredientCreate & { userId: number } = {
     ingredientId: 1,
     amount: 100,
     isDone: false,
-    shoppingListId: 1,
     unit: 'GRAMS',
+    userId: 1,
   };
 
   let prisma: {
@@ -55,7 +56,7 @@ describe('ShoppingListIngredientsService', () => {
   it('should create a shopping list ingredient', async () => {
     prisma.shoppingListIngredient.create.mockResolvedValue(mockData);
 
-    const result = await service.create(mockData);
+    const result = await service.create(mockData, userId);
     expect(result).toEqual(mockData);
 
     expect(prisma.shoppingListIngredient.create).toHaveBeenCalledWith({
@@ -66,12 +67,15 @@ describe('ShoppingListIngredientsService', () => {
   it('should delete a shopping list ingredient', async () => {
     prisma.shoppingListIngredient.delete.mockResolvedValue({ id: 1 });
 
-    const result = await service.delete(1);
-    expect(result).toEqual({ id: 1 });
+    await service.delete(1, userId);
 
-    expect(prisma.shoppingListIngredient.delete).toHaveBeenCalledWith({
+    expect(prisma.shoppingListIngredient.update).toHaveBeenCalledWith({
       where: {
         id: 1,
+        userId,
+      },
+      data: {
+        isDeleted: true,
       },
     });
   });
@@ -79,9 +83,9 @@ describe('ShoppingListIngredientsService', () => {
   it('should throw TsRestException if not found during delete', async () => {
     const error = { code: 'P2025' };
 
-    prisma.shoppingListIngredient.delete.mockRejectedValue(error);
+    prisma.shoppingListIngredient.update.mockRejectedValue(error);
 
-    await expect(service.delete(999)).rejects.toThrow(TsRestException);
+    await expect(service.delete(999, userId)).rejects.toThrow(TsRestException);
   });
 
   it('should update a shopping list ingredient', async () => {
@@ -89,17 +93,18 @@ describe('ShoppingListIngredientsService', () => {
       ...mockData,
       isDone: true,
     };
-    
+
     prisma.shoppingListIngredient.update.mockResolvedValue(
       mockIngredientIsDone,
     );
 
-    const result = await service.update(1, mockIngredientIsDone);
+    const result = await service.update(1, mockIngredientIsDone, userId);
     expect(result).toEqual(mockIngredientIsDone);
 
     expect(prisma.shoppingListIngredient.update).toHaveBeenCalledWith({
       where: {
         id: 1,
+        userId,
       },
       data: mockIngredientIsDone,
     });
@@ -111,10 +116,14 @@ describe('ShoppingListIngredientsService', () => {
     prisma.shoppingListIngredient.update.mockRejectedValue(error);
 
     await expect(
-      service.update(999, {
-        ...mockData,
-        isDone: true,
-      }),
+      service.update(
+        999,
+        {
+          ...mockData,
+          isDone: true,
+        },
+        userId,
+      ),
     ).rejects.toThrow(TsRestException);
   });
 });

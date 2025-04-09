@@ -6,20 +6,23 @@ export declare const IngredientSchema: z.ZodObject<{
     name: z.ZodString;
     userId: z.ZodNumber;
     isGlobal: z.ZodOptional<z.ZodBoolean>;
+    isDeleted: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
     id: number;
-    name: string;
     createdAt: Date;
     updatedAt: Date;
+    name: string;
     userId: number;
     isGlobal?: boolean | undefined;
+    isDeleted?: boolean | undefined;
 }, {
     id: number;
-    name: string;
     createdAt: Date;
     updatedAt: Date;
+    name: string;
     userId: number;
     isGlobal?: boolean | undefined;
+    isDeleted?: boolean | undefined;
 }>;
 export type TIngredient = z.infer<typeof IngredientSchema>;
 export declare const IngredientCreateSchema: z.ZodObject<Omit<{
@@ -29,14 +32,17 @@ export declare const IngredientCreateSchema: z.ZodObject<Omit<{
     name: z.ZodString;
     userId: z.ZodNumber;
     isGlobal: z.ZodOptional<z.ZodBoolean>;
+    isDeleted: z.ZodOptional<z.ZodBoolean>;
 }, "id" | "createdAt" | "updatedAt">, "strip", z.ZodTypeAny, {
     name: string;
     userId: number;
     isGlobal?: boolean | undefined;
+    isDeleted?: boolean | undefined;
 }, {
     name: string;
     userId: number;
     isGlobal?: boolean | undefined;
+    isDeleted?: boolean | undefined;
 }>;
 export type TIngredientCreate = z.infer<typeof IngredientCreateSchema>;
 export declare const IngredientUpdateSchema: z.ZodObject<Omit<{
@@ -46,12 +52,15 @@ export declare const IngredientUpdateSchema: z.ZodObject<Omit<{
     name: z.ZodString;
     userId: z.ZodNumber;
     isGlobal: z.ZodOptional<z.ZodBoolean>;
+    isDeleted: z.ZodOptional<z.ZodBoolean>;
 }, "id" | "createdAt" | "updatedAt" | "userId">, "strip", z.ZodTypeAny, {
     name: string;
     isGlobal?: boolean | undefined;
+    isDeleted?: boolean | undefined;
 }, {
     name: string;
     isGlobal?: boolean | undefined;
+    isDeleted?: boolean | undefined;
 }>;
 export type TIngredientUpdate = z.infer<typeof IngredientUpdateSchema>;
 export declare const QuantityUnit: readonly ["GRAMS", "LITERS", "MILLILITERS", "PIECES", "UNITS"];
@@ -130,3 +139,14 @@ export declare const RecipeIngredientUpdateSchema: z.ZodObject<z.objectUtil.exte
     isGlobal?: boolean | undefined;
 }>;
 export type TRecipeIngredientCreate = z.infer<typeof RecipeIngredientCreateSchema>;
+export declare const IngredientGetQuerySchema: z.ZodObject<{
+    queryFilter: z.ZodOptional<z.ZodEnum<["USER", "GLOBAL", "ALL"]>>;
+    isDeleted: z.ZodOptional<z.ZodEffects<z.ZodBoolean, boolean, unknown>>;
+}, "strip", z.ZodTypeAny, {
+    isDeleted?: boolean | undefined;
+    queryFilter?: "USER" | "GLOBAL" | "ALL" | undefined;
+}, {
+    isDeleted?: unknown;
+    queryFilter?: "USER" | "GLOBAL" | "ALL" | undefined;
+}>;
+export type TIngredientGetQuery = z.infer<typeof IngredientGetQuerySchema>;

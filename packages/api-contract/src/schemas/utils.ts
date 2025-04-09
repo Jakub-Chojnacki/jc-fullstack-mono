@@ -16,3 +16,11 @@ export const StringToNumberSchema = z.union([
   }),
   z.number(),
 ]);
+
+export const BooleanQuerySchema = z.preprocess(
+  (val) => val === "true",
+  z.boolean()
+);
+
+export const GetQueryFilter = z.enum(["USER", "GLOBAL", "ALL"]);
+export type TGetQueryFilter = z.infer<typeof GetQueryFilter>;

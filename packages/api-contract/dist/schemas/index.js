@@ -19,4 +19,4 @@ __exportStar(require("./ingredients"), exports);
 __exportStar(require("./recipes"), exports);
 __exportStar(require("./utils"), exports);
 __exportStar(require("./scheduleMeals"), exports);
-__exportStar(require("./shoppingList"), exports);
+__exportStar(require("./shoppingListIngredients"), exports);

@@ -1,20 +1,21 @@
 import { initContract } from "@ts-rest/core";
 import { z } from "zod";
 import {
+  BooleanQuerySchema,
   IngredientCreateSchema,
+  IngredientGetQuerySchema,
   IngredientSchema,
   LoginSchema,
   RecipeCreateSchema,
   RecipeGetOneSchema,
+  RecipeGetQuerySchema,
   RecipeIngredientCreateSchema,
   RecipeIngredientSchema,
   RecipeIngredientUpdateSchema,
   RecipeSchema,
-  ShoppingListCreateSchema,
   ShoppingListIngredientCreateSchema,
   ShoppingListIngredientSchema,
   ShoppingListIngredientUpdateSchema,
-  ShoppingListSchema,
   StringToNumberSchema,
   UserSchema,
 } from "./schemas/index";
@@ -36,16 +37,10 @@ export const NotFoundSchema = z.object({
 export const contract = c.router(
   {
     ingredients: {
-      getGlobal: {
-        method: "GET",
-        path: "/ingredients/global",
-        responses: {
-          200: z.array(IngredientSchema),
-        },
-      },
-      getForUser: {
+      get: {
         method: "GET",
         path: "/ingredients",
+        query: IngredientGetQuerySchema,
         responses: {
           200: z.array(IngredientSchema),
         },
@@ -86,17 +81,10 @@ export const contract = c.router(
       },
     },
     recipes: {
-      getGlobal: {
-        method: "GET",
-        path: "/recipes/global",
-        responses: {
-          200: z.array(RecipeSchema),
-        },
-      },
-      getForUser: {
+      get: {
         method: "GET",
         path: "/recipes",
-
+        query: RecipeGetQuerySchema,
         responses: {
           200: z.array(RecipeSchema),
         },
@@ -179,33 +167,18 @@ export const contract = c.router(
         },
       },
     },
-    shoppingList: {
+    shoppingListIngredient: {
       get: {
         method: "GET",
-        path: "/shoppingList",
+        path: "/shoppingListIngredient",
+        query: z.object({
+          isDone: BooleanQuerySchema.optional(),
+        }),
         responses: {
-          200: z.array(ShoppingListSchema),
-        },
-      },
-      create: {
-        method: "POST",
-        path: "/shoppingList",
-        body: ShoppingListCreateSchema,
-        responses: {
-          201: ShoppingListSchema,
-        },
-      },
-      delete: {
-        method: "DELETE",
-        path: "/shoppingList/:id",
-        pathParams: z.object({ id: StringToNumberSchema }),
-        responses: {
-          200: ShoppingListSchema.omit({ ingredients: true }),
+          200: z.array(ShoppingListIngredientSchema),
           404: NotFoundSchema,
         },
       },
-    },
-    shoppingListIngredient: {
       create: {
         method: "POST",
         path: "/shoppingListIngredient",
@@ -229,7 +202,7 @@ export const contract = c.router(
         path: "/shoppingListIngredient/:id",
         pathParams: z.object({ id: StringToNumberSchema }),
         responses: {
-          200: ShoppingListIngredientSchema,
+          200: null,
           404: NotFoundSchema,
         },
       },

@@ -26,16 +26,10 @@ exports.NotFoundSchema = zod_1.z.object({
 });
 exports.contract = c.router({
     ingredients: {
-        getGlobal: {
-            method: "GET",
-            path: "/ingredients/global",
-            responses: {
-                200: zod_1.z.array(index_1.IngredientSchema),
-            },
-        },
-        getForUser: {
+        get: {
             method: "GET",
             path: "/ingredients",
+            query: index_1.IngredientGetQuerySchema,
             responses: {
                 200: zod_1.z.array(index_1.IngredientSchema),
             },
@@ -76,16 +70,10 @@ exports.contract = c.router({
         },
     },
     recipes: {
-        getGlobal: {
-            method: "GET",
-            path: "/recipes/global",
-            responses: {
-                200: zod_1.z.array(index_1.RecipeSchema),
-            },
-        },
-        getForUser: {
+        get: {
             method: "GET",
             path: "/recipes",
+            query: index_1.RecipeGetQuerySchema,
             responses: {
                 200: zod_1.z.array(index_1.RecipeSchema),
             },
@@ -168,33 +156,18 @@ exports.contract = c.router({
             },
         },
     },
-    shoppingList: {
+    shoppingListIngredient: {
         get: {
             method: "GET",
-            path: "/shoppingList",
+            path: "/shoppingListIngredient",
+            query: zod_1.z.object({
+                isDone: index_1.BooleanQuerySchema.optional(),
+            }),
             responses: {
-                200: zod_1.z.array(index_1.ShoppingListSchema),
-            },
-        },
-        create: {
-            method: "POST",
-            path: "/shoppingList",
-            body: index_1.ShoppingListCreateSchema,
-            responses: {
-                201: index_1.ShoppingListSchema,
-            },
-        },
-        delete: {
-            method: "DELETE",
-            path: "/shoppingList/:id",
-            pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
-            responses: {
-                200: index_1.ShoppingListSchema.omit({ ingredients: true }),
+                200: zod_1.z.array(index_1.ShoppingListIngredientSchema),
                 404: exports.NotFoundSchema,
             },
         },
-    },
-    shoppingListIngredient: {
         create: {
             method: "POST",
             path: "/shoppingListIngredient",
@@ -218,7 +191,7 @@ exports.contract = c.router({
             path: "/shoppingListIngredient/:id",
             pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
             responses: {
-                200: index_1.ShoppingListIngredientSchema,
+                200: null,
                 404: exports.NotFoundSchema,
             },
         },
