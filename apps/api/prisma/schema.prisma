@@ -38,10 +38,10 @@ model User {
   hashedRt String?
   name     String?
 
-  ingredients    Ingredient[]
-  recipes        Recipe[]
-  scheduledMeals ScheduledMeal[]
-  ShoppingList   ShoppingList[]
+  ingredients             Ingredient[]
+  recipes                 Recipe[]
+  scheduledMeals          ScheduledMeal[]
+  shoppingListIngredients ShoppingListIngredient[]
 
   @@map("users")
 }
@@ -51,10 +51,11 @@ model Ingredient {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name     String
-  userId   Int
-  user     User    @relation(fields: [userId], references: [id])
-  isGlobal Boolean @default(false)
+  name      String
+  userId    Int
+  user      User    @relation(fields: [userId], references: [id])
+  isGlobal  Boolean @default(false)
+  isDeleted Boolean @default(false)
 
   recipeIngredients      RecipeIngredient[]
   shoppingListIngredient ShoppingListIngredient[]
@@ -86,10 +87,10 @@ model Recipe {
   name        String
   description String
   isGlobal    Boolean @default(false)
+  isDeleted   Boolean @default(false)
 
-  userId Int
-  user   User @relation(fields: [userId], references: [id])
-
+  userId            Int
+  user              User               @relation(fields: [userId], references: [id])
   scheduledMeals    ScheduledMeal[]
   recipeIngredients RecipeIngredient[]
 
@@ -101,9 +102,9 @@ model ScheduledMeal {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  userId   Int
-  user     User     @relation(fields: [userId], references: [id])
-  mealType MealType? @default(DINNER)
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id])
+  mealType    MealType? @default(DINNER)
   scheduledAt DateTime
 
   recipeId Int
@@ -117,24 +118,14 @@ model ShoppingListIngredient {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  amount Float
-  unit   QuantityUnit
-  isDone Boolean      @default(false)
+  amount    Float
+  unit      QuantityUnit
+  isDone    Boolean      @default(false)
+  isDeleted Boolean      @default(false)
 
   ingredientId Int
   ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
 
-  shoppingListId Int
-  shoppingList   ShoppingList @relation(fields: [shoppingListId], references: [id])
-}
-
-model ShoppingList {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
   userId Int
   user   User @relation(fields: [userId], references: [id])
-
-  ingredients ShoppingListIngredient[]
 }
