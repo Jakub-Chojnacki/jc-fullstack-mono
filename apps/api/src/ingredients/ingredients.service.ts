@@ -1,33 +1,54 @@
 import {
   contract,
   TIngredientCreate,
+  TIngredientGetQuery,
   TIngredientUpdate,
 } from '@jcmono/api-contract';
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import wrapWithTsRestError from 'src/utils/wrapWithTsRestError';
 
 @Injectable()
 export class IngredientsService {
   constructor(private prisma: PrismaService) {}
-  async getForUser(userId: number) {
-    const ingredients = await this.prisma.ingredient.findMany({
-      where: {
-        userId,
-      },
-    });
 
-    return ingredients;
+  get({ userId, query }: { userId: number; query: TIngredientGetQuery }) {
+    return wrapWithTsRestError(contract.recipes.get, async () => {
+      const where = this.buildIngredientFilter(userId, query);
+
+      return this.prisma.ingredient.findMany({
+        where,
+      });
+    });
   }
 
-  async getGlobal() {
-    const ingredients = await this.prisma.ingredient.findMany({
-      where: {
-        isGlobal: true,
-      },
-    });
+  private buildIngredientFilter(
+    userId: number,
+    query: TIngredientGetQuery,
+  ): Prisma.IngredientWhereInput {
+    const { queryFilter, isDeleted } = query;
 
-    return ingredients;
+    const baseFilter = { isDeleted };
+
+    if (queryFilter === 'ALL') {
+      return {
+        ...baseFilter,
+        OR: [{ userId }, { isGlobal: true }],
+      };
+    }
+
+    if (queryFilter === 'GLOBAL') {
+      return {
+        ...baseFilter,
+        isGlobal: true,
+      };
+    }
+
+    return {
+      ...baseFilter,
+      userId,
+    };
   }
 
   async create(body: TIngredientCreate) {

@@ -12,8 +12,8 @@ export declare const RecipeSchema: z.ZodObject<{
     id: number;
     createdAt: Date;
     updatedAt: Date;
-    userId: number;
     name: string;
+    userId: number;
     description: string;
     isGlobal?: boolean | undefined;
     isDeleted?: boolean | undefined;
@@ -21,8 +21,8 @@ export declare const RecipeSchema: z.ZodObject<{
     id: number;
     createdAt: Date;
     updatedAt: Date;
-    userId: number;
     name: string;
+    userId: number;
     description: string;
     isGlobal?: boolean | undefined;
     isDeleted?: boolean | undefined;
@@ -59,8 +59,8 @@ export declare const RecipeCreateSchema: z.ZodObject<z.objectUtil.extendShape<Om
         isGlobal?: boolean | undefined;
     }>, "many">;
 }>, "strip", z.ZodTypeAny, {
-    userId: number;
     name: string;
+    userId: number;
     description: string;
     recipeIngredients: {
         amount: number;
@@ -71,8 +71,8 @@ export declare const RecipeCreateSchema: z.ZodObject<z.objectUtil.extendShape<Om
     isGlobal?: boolean | undefined;
     isDeleted?: boolean | undefined;
 }, {
-    userId: number;
     name: string;
+    userId: number;
     description: string;
     recipeIngredients: {
         amount: number;
@@ -172,30 +172,30 @@ export declare const RecipeGetOneSchema: z.ZodObject<z.objectUtil.extendShape<{
         unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
         ingredientId: number;
         id?: number | undefined;
-        isGlobal?: boolean | undefined;
         name?: string | undefined;
+        isGlobal?: boolean | undefined;
     }, {
         amount: number;
         unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
         ingredientId: number;
         id?: number | undefined;
-        isGlobal?: boolean | undefined;
         name?: string | undefined;
+        isGlobal?: boolean | undefined;
     }>, "many">;
 }>, "strip", z.ZodTypeAny, {
     id: number;
     createdAt: Date;
     updatedAt: Date;
-    userId: number;
     name: string;
+    userId: number;
     description: string;
     recipeIngredients: {
         amount: number;
         unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
         ingredientId: number;
         id?: number | undefined;
-        isGlobal?: boolean | undefined;
         name?: string | undefined;
+        isGlobal?: boolean | undefined;
     }[];
     isGlobal?: boolean | undefined;
     isDeleted?: boolean | undefined;
@@ -203,16 +203,16 @@ export declare const RecipeGetOneSchema: z.ZodObject<z.objectUtil.extendShape<{
     id: number;
     createdAt: Date;
     updatedAt: Date;
-    userId: number;
     name: string;
+    userId: number;
     description: string;
     recipeIngredients: {
         amount: number;
         unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
         ingredientId: number;
         id?: number | undefined;
-        isGlobal?: boolean | undefined;
         name?: string | undefined;
+        isGlobal?: boolean | undefined;
     }[];
     isGlobal?: boolean | undefined;
     isDeleted?: boolean | undefined;

@@ -85,8 +85,8 @@ export declare const ScheduleMealsGetSchema: z.ZodObject<z.objectUtil.extendShap
         id: number;
         createdAt: Date;
         updatedAt: Date;
-        userId: number;
         name: string;
+        userId: number;
         description: string;
         isGlobal?: boolean | undefined;
         isDeleted?: boolean | undefined;
@@ -94,8 +94,8 @@ export declare const ScheduleMealsGetSchema: z.ZodObject<z.objectUtil.extendShap
         id: number;
         createdAt: Date;
         updatedAt: Date;
-        userId: number;
         name: string;
+        userId: number;
         description: string;
         isGlobal?: boolean | undefined;
         isDeleted?: boolean | undefined;
@@ -110,8 +110,8 @@ export declare const ScheduleMealsGetSchema: z.ZodObject<z.objectUtil.extendShap
         id: number;
         createdAt: Date;
         updatedAt: Date;
-        userId: number;
         name: string;
+        userId: number;
         description: string;
         isGlobal?: boolean | undefined;
         isDeleted?: boolean | undefined;
@@ -127,8 +127,8 @@ export declare const ScheduleMealsGetSchema: z.ZodObject<z.objectUtil.extendShap
         id: number;
         createdAt: Date;
         updatedAt: Date;
-        userId: number;
         name: string;
+        userId: number;
         description: string;
         isGlobal?: boolean | undefined;
         isDeleted?: boolean | undefined;

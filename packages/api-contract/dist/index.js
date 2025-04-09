@@ -26,16 +26,10 @@ exports.NotFoundSchema = zod_1.z.object({
 });
 exports.contract = c.router({
     ingredients: {
-        getGlobal: {
-            method: "GET",
-            path: "/ingredients/global",
-            responses: {
-                200: zod_1.z.array(index_1.IngredientSchema),
-            },
-        },
-        getForUser: {
+        get: {
             method: "GET",
             path: "/ingredients",
+            query: index_1.IngredientGetQuerySchema,
             responses: {
                 200: zod_1.z.array(index_1.IngredientSchema),
             },

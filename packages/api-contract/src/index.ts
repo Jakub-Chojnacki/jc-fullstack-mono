@@ -3,6 +3,7 @@ import { z } from "zod";
 import {
   BooleanQuerySchema,
   IngredientCreateSchema,
+  IngredientGetQuerySchema,
   IngredientSchema,
   LoginSchema,
   RecipeCreateSchema,
@@ -36,16 +37,10 @@ export const NotFoundSchema = z.object({
 export const contract = c.router(
   {
     ingredients: {
-      getGlobal: {
-        method: "GET",
-        path: "/ingredients/global",
-        responses: {
-          200: z.array(IngredientSchema),
-        },
-      },
-      getForUser: {
+      get: {
         method: "GET",
         path: "/ingredients",
+        query: IngredientGetQuerySchema,
         responses: {
           200: z.array(IngredientSchema),
         },

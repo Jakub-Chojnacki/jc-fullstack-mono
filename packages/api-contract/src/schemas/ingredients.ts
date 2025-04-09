@@ -71,3 +71,5 @@ export const IngredientGetQuerySchema = z.object({
   queryFilter: GetQueryFilter.optional(),
   isDeleted: BooleanQuerySchema.optional(),
 });
+
+export type TIngredientGetQuery = z.infer<typeof IngredientGetQuerySchema>;

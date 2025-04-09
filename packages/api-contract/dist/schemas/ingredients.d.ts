@@ -149,3 +149,4 @@ export declare const IngredientGetQuerySchema: z.ZodObject<{
     isDeleted?: unknown;
     queryFilter?: "USER" | "GLOBAL" | "ALL" | undefined;
 }>;
+export type TIngredientGetQuery = z.infer<typeof IngredientGetQuerySchema>;
