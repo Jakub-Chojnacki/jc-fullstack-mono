@@ -5,7 +5,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { TsRestException } from '@ts-rest/nest';
 import * as bcrypt from 'bcrypt';
 import { type Response } from 'express';
 
@@ -155,7 +154,7 @@ export class AuthService {
   }
 
   async me(userId: number) {
-    wrapWithTsRestError(
+    return wrapWithTsRestError(
       contract.auth.me,
       async () =>
         await this.prisma.user.findUnique({
