@@ -5,13 +5,27 @@ import { ShoppingListIngredientsService } from './shopping-list-ingredients.serv
 describe('ShoppingListIngredientsController', () => {
   let controller: ShoppingListIngredientsController;
 
+  const mockShoppingListIngredientService = {
+    create: jest.fn(),
+    delete: jest.fn(),
+    update: jest.fn(),
+    get: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ShoppingListIngredientsController],
-      providers: [ShoppingListIngredientsService],
+      providers: [
+        {
+          provide: ShoppingListIngredientsService,
+          useValue: mockShoppingListIngredientService,
+        },
+      ],
     }).compile();
 
-    controller = module.get<ShoppingListIngredientsController>(ShoppingListIngredientsController);
+    controller = module.get<ShoppingListIngredientsController>(
+      ShoppingListIngredientsController,
+    );
   });
 
   it('should be defined', () => {

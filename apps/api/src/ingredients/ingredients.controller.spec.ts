@@ -5,10 +5,22 @@ import { IngredientsService } from './ingredients.service';
 describe('IngredientsController', () => {
   let controller: IngredientsController;
 
+  const mockIngredientsService = {
+    create: jest.fn(),
+    get: jest.fn(),
+    delete: jest.fn(),
+    update: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [IngredientsController],
-      providers: [IngredientsService],
+      providers: [
+        {
+          provide: IngredientsService,
+          useValue: mockIngredientsService,
+        },
+      ],
     }).compile();
 
     controller = module.get<IngredientsController>(IngredientsController);
