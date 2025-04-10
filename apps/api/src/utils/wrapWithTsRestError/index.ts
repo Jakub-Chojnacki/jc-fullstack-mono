@@ -15,6 +15,8 @@ const wrapWithTsRestError = async (
       throw new TsRestException(contractEndpoint, prismaError);
     }
 
+    console.log('Error in wrapWithTsRestError:', error);
+
     throw new TsRestException(contractEndpoint, {
       status: 500,
       body: { message: 'Internal server error' },

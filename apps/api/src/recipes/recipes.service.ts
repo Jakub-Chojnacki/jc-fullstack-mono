@@ -189,19 +189,19 @@ export class RecipesService {
             })
           : Promise.resolve();
 
-        const updateIngredientsPromise = ingredientsToUpdate.map(
+        const updateIngredientsPromise = ingredientsToUpdate.length ? ingredientsToUpdate.map(
           (recipeIngredient) =>
             prisma.recipeIngredient.update({
               where: { id: recipeIngredient.id },
               data: recipeIngredient,
             }),
-        );
+        ) : Promise.resolve();
 
         return await Promise.all([
           updateRecipePromise,
           deleteIngredientsPromise,
           createIngredientsPromise,
-          ...updateIngredientsPromise,
+          updateIngredientsPromise,
         ]);
       });
 

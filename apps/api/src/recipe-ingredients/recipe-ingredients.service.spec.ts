@@ -58,7 +58,7 @@ describe('RecipeIngredientsService', () => {
   it('should update a recipe ingredient', async () => {
     prisma.recipeIngredient.update.mockResolvedValue(mockData);
 
-    const result = await service.update(1, mockData);
+    const result = await service.update({ id: 1, body: mockData });
     expect(result).toEqual(mockData);
 
     expect(prisma.recipeIngredient.update).toHaveBeenCalledWith({
@@ -73,12 +73,15 @@ describe('RecipeIngredientsService', () => {
     prisma.recipeIngredient.update.mockRejectedValue(error);
 
     await expect(
-      service.update(999, {
-        amount: 150,
-        recipeId: 1,
-        ingredientId: 1,
-        isGlobal: false,
-        unit: 'GRAMS',
+      service.update({
+        id: 999,
+        body: {
+          amount: 150,
+          recipeId: 1,
+          ingredientId: 1,
+          isGlobal: false,
+          unit: 'GRAMS',
+        },
       }),
     ).rejects.toThrow(TsRestException);
   });
@@ -86,7 +89,7 @@ describe('RecipeIngredientsService', () => {
   it('should delete a recipe ingredient', async () => {
     prisma.recipeIngredient.delete.mockResolvedValue(mockData);
 
-    const result = await service.delete(1);
+    const result = await service.delete({ id: 1 });
     expect(result).toEqual(mockData);
 
     expect(prisma.recipeIngredient.delete).toHaveBeenCalledWith({
@@ -99,6 +102,6 @@ describe('RecipeIngredientsService', () => {
 
     prisma.recipeIngredient.delete.mockRejectedValue(error);
 
-    await expect(service.delete(999)).rejects.toThrow(TsRestException);
+    await expect(service.delete({ id: 999 })).rejects.toThrow(TsRestException);
   });
 });
