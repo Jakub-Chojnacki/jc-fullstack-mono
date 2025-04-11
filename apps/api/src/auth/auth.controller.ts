@@ -59,6 +59,13 @@ export class AuthController {
     return tsRestHandler(contract.auth.me, async () => {
       const user = await this.authService.me(userId);
 
+      if (!user) {
+        return {
+          status: 404,
+          body: { message: 'User not found' },
+        };
+      }
+
       return {
         status: 200,
         body: user,

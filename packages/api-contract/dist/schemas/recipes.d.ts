@@ -154,7 +154,7 @@ export declare const RecipeGetOneSchema: z.ZodObject<z.objectUtil.extendShape<{
     description: z.ZodString;
     isDeleted: z.ZodOptional<z.ZodBoolean>;
 }, {
-    recipeIngredients: z.ZodArray<z.ZodObject<z.objectUtil.extendShape<z.objectUtil.extendShape<Omit<{
+    recipeIngredients: z.ZodOptional<z.ZodArray<z.ZodObject<z.objectUtil.extendShape<z.objectUtil.extendShape<Omit<{
         id: z.ZodNumber;
         createdAt: z.ZodDate;
         updatedAt: z.ZodDate;
@@ -181,7 +181,7 @@ export declare const RecipeGetOneSchema: z.ZodObject<z.objectUtil.extendShape<{
         id?: number | undefined;
         name?: string | undefined;
         isGlobal?: boolean | undefined;
-    }>, "many">;
+    }>, "many">>;
 }>, "strip", z.ZodTypeAny, {
     id: number;
     name: string;
@@ -189,16 +189,16 @@ export declare const RecipeGetOneSchema: z.ZodObject<z.objectUtil.extendShape<{
     updatedAt: Date;
     userId: number;
     description: string;
-    recipeIngredients: {
+    isGlobal?: boolean | undefined;
+    isDeleted?: boolean | undefined;
+    recipeIngredients?: {
         amount: number;
         unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
         ingredientId: number;
         id?: number | undefined;
         name?: string | undefined;
         isGlobal?: boolean | undefined;
-    }[];
-    isGlobal?: boolean | undefined;
-    isDeleted?: boolean | undefined;
+    }[] | undefined;
 }, {
     id: number;
     name: string;
@@ -206,16 +206,16 @@ export declare const RecipeGetOneSchema: z.ZodObject<z.objectUtil.extendShape<{
     updatedAt: Date;
     userId: number;
     description: string;
-    recipeIngredients: {
+    isGlobal?: boolean | undefined;
+    isDeleted?: boolean | undefined;
+    recipeIngredients?: {
         amount: number;
         unit: "GRAMS" | "LITERS" | "MILLILITERS" | "PIECES" | "UNITS";
         ingredientId: number;
         id?: number | undefined;
         name?: string | undefined;
         isGlobal?: boolean | undefined;
-    }[];
-    isGlobal?: boolean | undefined;
-    isDeleted?: boolean | undefined;
+    }[] | undefined;
 }>;
 export type TRecipeGetOne = z.infer<typeof RecipeGetOneSchema>;
 export declare const RecipeGetQuerySchema: z.ZodObject<{

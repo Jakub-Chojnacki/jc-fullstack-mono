@@ -17,7 +17,7 @@ export type Tokens = z.infer<typeof TokensSchema>;
 export const UserSchema = z.object({
   id: z.number(),
   email: z.string(),
-  name: z.string(),
+  name: z.string().nullable(),
 });
 
 export type UserDto = z.infer<typeof UserSchema>;

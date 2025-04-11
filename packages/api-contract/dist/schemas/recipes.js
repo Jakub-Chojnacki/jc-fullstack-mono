@@ -30,7 +30,7 @@ exports.RecipeUpdateSchema = exports.RecipeSchema.omit({
     recipeIngredients: zod_1.z.array(ingredients_1.RecipeIngredientUpdateSchema),
 });
 exports.RecipeGetOneSchema = exports.RecipeSchema.extend({
-    recipeIngredients: zod_1.z.array(ingredients_1.RecipeIngredientUpdateSchema.extend({ name: zod_1.z.string().optional() })),
+    recipeIngredients: zod_1.z.array(ingredients_1.RecipeIngredientUpdateSchema.extend({ name: zod_1.z.string().optional() })).optional(),
 });
 exports.RecipeGetQuerySchema = zod_1.z.object({
     queryFilter: utils_1.GetQueryFilter.optional(),

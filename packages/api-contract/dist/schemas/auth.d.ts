@@ -24,14 +24,14 @@ export type Tokens = z.infer<typeof TokensSchema>;
 export declare const UserSchema: z.ZodObject<{
     id: z.ZodNumber;
     email: z.ZodString;
-    name: z.ZodString;
+    name: z.ZodNullable<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     email: string;
     id: number;
-    name: string;
+    name: string | null;
 }, {
     email: string;
     id: number;
-    name: string;
+    name: string | null;
 }>;
 export type UserDto = z.infer<typeof UserSchema>;
