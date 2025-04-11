@@ -22,11 +22,9 @@ describe('ScheduleMealsService', () => {
     };
   };
   beforeEach(async () => {
-    // Fake date
     const fakeNow = new Date('2025-01-01T00:00:00.000Z');
     jest.useFakeTimers().setSystemTime(fakeNow);
 
-    // Dynamic values based on fake date
     startDate = fakeNow.toISOString();
 
     const futureDate = new Date(fakeNow);

@@ -7,13 +7,14 @@ import { ShoppingListIngredientsService } from './shopping-list-ingredients.serv
 describe('ShoppingListIngredientsService', () => {
   let service: ShoppingListIngredientsService;
 
-  const userId = 1;
+  const userId = 123;
+  
   const mockData: TShoppingListIngredientCreate & { userId: number } = {
     ingredientId: 1,
     amount: 100,
     isDone: false,
     unit: 'GRAMS',
-    userId: 1,
+    userId,
   };
 
   let prisma: {
