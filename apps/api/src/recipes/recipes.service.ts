@@ -54,30 +54,31 @@ export class RecipesService {
 
   async getOne(id: number, userId: number, withIngredients?: string) {
     return wrapWithTsRestError(contract.recipes.getOne, async () => {
-      const recipe = await this.prisma.recipe.findFirst({
+      const sendIngredients = withIngredients === 'true';
+
+      const recipe = await this.prisma.recipe.findUnique({
         where: {
           id,
           userId,
         },
         include: {
-          recipeIngredients: true,
+          recipeIngredients: sendIngredients,
         },
       });
 
-      const sendIngredients = withIngredients === 'true';
 
-      if (sendIngredients) {
+      if (sendIngredients && recipe) {
         const ingredients = await this.prisma.ingredient.findMany({
           where: {
             id: {
-              in: recipe?.recipeIngredients.map((i) => i.ingredientId) || [],
+              in: recipe.recipeIngredients.map((i) => i.ingredientId) || [],
             },
           },
         });
 
         return {
           ...recipe,
-          recipeIngredients: recipe?.recipeIngredients.map(
+          recipeIngredients: recipe.recipeIngredients.map(
             (recipeIngredient) => ({
               ...recipeIngredient,
               name: ingredients.find(

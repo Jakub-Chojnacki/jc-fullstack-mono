@@ -98,7 +98,11 @@ describe('ShoppingListIngredientsService', () => {
       mockIngredientIsDone,
     );
 
-    const result = await service.update(1, mockIngredientIsDone, userId);
+    const result = await service.update({
+      id: 1,
+      data: mockIngredientIsDone,
+      userId,
+    });
     expect(result).toEqual(mockIngredientIsDone);
 
     expect(prisma.shoppingListIngredient.update).toHaveBeenCalledWith({
@@ -116,14 +120,14 @@ describe('ShoppingListIngredientsService', () => {
     prisma.shoppingListIngredient.update.mockRejectedValue(error);
 
     await expect(
-      service.update(
-        999,
-        {
+      service.update({
+        id: 999,
+        data: {
           ...mockData,
           isDone: true,
         },
         userId,
-      ),
+      }),
     ).rejects.toThrow(TsRestException);
   });
 });

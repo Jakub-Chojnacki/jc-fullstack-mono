@@ -3,10 +3,10 @@ import { TsRestException } from '@ts-rest/nest';
 import handlePrismaErrorCode from '../handlePrismaErrorCode';
 import isPrismaError from '../isPrismaError';
 
-const wrapWithTsRestError = async (
+const wrapWithTsRestError = async <T>(
   contractEndpoint: AppRoute,
-  fn: () => Promise<any>,
-): Promise<any> => {
+  fn: () => Promise<T>,
+): Promise<T> => {
   try {
     return await fn();
   } catch (error) {
@@ -14,8 +14,6 @@ const wrapWithTsRestError = async (
       const prismaError = handlePrismaErrorCode(error);
       throw new TsRestException(contractEndpoint, prismaError);
     }
-
-    console.log('Error in wrapWithTsRestError:', error);
 
     throw new TsRestException(contractEndpoint, {
       status: 500,
