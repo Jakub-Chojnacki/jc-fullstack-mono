@@ -37,7 +37,7 @@ import {
 import useGetIngredients from "@/queries/useGetIngredients";
 
 const IngredientSelect = () => {
-  const { data } = useGetIngredients()
+  const { data } = useGetIngredients();
   const { control, formState } = useFormContext<TRecipeFormInput>();
 
   const { append, fields, update, remove } = useFieldArray({
@@ -97,7 +97,7 @@ const IngredientSelect = () => {
                             {ingredients?.map((ingredient) => (
                               <CommandItem
                                 key={ingredient.value}
-                                value={String(ingredient.value)}
+                                value={String(ingredient.label)}
                                 onSelect={(currentValue) => {
                                   update(index, {
                                     ...field,

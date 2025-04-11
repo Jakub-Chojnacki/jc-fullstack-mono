@@ -7,7 +7,7 @@ const useCreateScheduledMeal = () => {
   const mutation = apiClient.scheduleMeals.create.useMutation({
     onSuccess: () => {
       toast.success("Meal scheduled successfully!");
-      queryClient.invalidateQueries({ queryKey: ["scheduleMeals"] });
+      queryClient.invalidateQueries({ queryKey: ["scheduledMeals"] });
     },
     onError: () => {
       toast.error("Error scheduling a meal!");

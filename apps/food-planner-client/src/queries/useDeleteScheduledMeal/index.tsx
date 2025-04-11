@@ -6,7 +6,7 @@ import { queryClient } from "@/main";
 const useDeleteScheduledMeal = () => {
   const mutation = apiClient.scheduleMeals.delete.useMutation({
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["scheduleMeals"] });
+      queryClient.invalidateQueries({ queryKey: ["scheduledMeals"] });
       toast.success("Meal deleted successfully!");
     },
     onError: () => {
