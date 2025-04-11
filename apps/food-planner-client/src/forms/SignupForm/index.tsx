@@ -1,3 +1,10 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Link } from "@tanstack/react-router";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import useSignUp from "@/queries/useSignUp";
+
 import { Button } from "@components/ui/button";
 import {
   Card,
@@ -15,30 +22,11 @@ import {
   FormMessage,
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import { z } from "zod";
-
-
-import apiClient from "@/api-client";
 
 import { signupFormSchema } from "./schema";
 
-
 const SignupForm = () => {
-  const navigate = useNavigate({ from: "/signup" });
-
-  const { mutate } = apiClient.auth.signup.useMutation({
-    onError: () => {
-      toast.error("There was an error while signing you up! Try again later.");
-    },
-    onSuccess: () => {
-      toast.success("Account created successfully!");
-      navigate({ to: "/app" });
-    },
-  });
+  const { mutate } = useSignUp();
 
   const form = useForm<z.infer<typeof signupFormSchema>>({
     resolver: zodResolver(signupFormSchema),

@@ -1,10 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import { z } from "zod";
 
-import apiClient from "@/api-client";
+import useCreateRecipe from "@/queries/useCreateRecipe";
+import useUpdateRecipe from "@/queries/useUpdateRecipe";
+
 import IngredientSelect from "@/components/IngredientSelect";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -17,35 +17,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { queryClient } from "@/main";
 
 import { RecipeFormSchema } from "./schema";
 import { TRecipeFormProps } from "./types";
 
 const RecipeForm = ({ initialData }: TRecipeFormProps) => {
-  const navigate = useNavigate();
-
-  const { mutate } = apiClient.recipes.create.useMutation({
-    onError: () => {
-      toast.error("There was an error while trying to save the recipe!");
-    },
-    onSuccess: () => {
-      toast.success("Recipe added successfully!");
-      queryClient.invalidateQueries({ queryKey: ["recipes"] });
-      navigate({ to: "/app/recipes" });
-    },
-  });
-
-  const { mutate: updateRecipe } = apiClient.recipes.update.useMutation({
-    onError: () => {
-      toast.error("There was an error while trying to save the recipe!");
-    },
-    onSuccess: () => {
-      toast.success("Recipe updated successfully!");
-      queryClient.invalidateQueries({ queryKey: ["recipes"] });
-      navigate({ to: "/app/recipes" });
-    },
-  });
+  const { mutate } = useCreateRecipe();
+  const { mutate: updateRecipe } = useUpdateRecipe();
 
   const form = useForm<z.infer<typeof RecipeFormSchema>>({
     resolver: zodResolver(RecipeFormSchema),
