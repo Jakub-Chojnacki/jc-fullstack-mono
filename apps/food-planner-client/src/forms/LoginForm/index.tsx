@@ -1,3 +1,10 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Link } from "@tanstack/react-router";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import useSignIn from "@/queries/useSignIn";
+
 import { Button } from "@components/ui/button";
 import {
   Card,
@@ -15,31 +22,11 @@ import {
   FormMessage,
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import { z } from "zod";
-
-
-import apiClient from "@/api-client";
 
 import { loginFormSchema } from "./schema";
 
-
 const LoginForm = () => {
-  const navigate = useNavigate({ from: "/signin" });
-
-  const { mutate } = apiClient.auth.signin.useMutation({
-    onError: () => {
-      toast.error("Invalid credentials!");
-    },
-    onSuccess: () => {
-      toast.success("Logged in successfully!");
-      navigate({ to: "/app" });
-    },
-  });
-
+  const { mutate } = useSignIn();
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: { email: "", password: "" },

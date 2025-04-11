@@ -2,9 +2,10 @@ import { EMealTypes } from "@jcmono/api-contract";
 import { format } from "date-fns";
 import { ChevronLeft, ChevronRight, Plus, X } from "lucide-react";
 import { useState } from "react";
-import toast from "react-hot-toast";
 
-import apiClient from "@/api-client";
+import useGetScheduledMeals from "@/queries/useGetScheduledMeals";
+import useDeleteScheduledMeal from "@/queries/useDeleteScheduledMeal";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,7 +16,6 @@ import {
 } from "@/components/ui/card";
 import ScheduleMealForm from "@/forms/ScheduleMealForm";
 import useDaysOfWeek from "@/hooks/useDaysOfWeek";
-import { queryClient } from "@/main";
 
 import { mealTypes } from "./const";
 
@@ -30,22 +30,14 @@ const ScheduleView = () => {
   const { daysOfWeek, startDate, endDate, previousWeek, nextWeek } =
     useDaysOfWeek();
 
-  const { data } = apiClient.scheduleMeals.get.useQuery(["scheduleMeals"], {
+  const { data } = useGetScheduledMeals({
     query: {
-      startDate: startDate.toISOString(),
-      endDate: endDate.toISOString(),
+      startDate: startDate,
+      endDate: endDate,
     },
   });
 
-  const { mutate } = apiClient.scheduleMeals.delete.useMutation({
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["scheduleMeals"] });
-      toast.success("Meal deleted successfully!");
-    },
-    onError: () => {
-      toast.error("Error deleting meal.");
-    },
-  });
+  const { mutate } = useDeleteScheduledMeal();
 
   const openAddMealDialog = (day: Date, mealType: EMealTypes): void => {
     setSelectedDay(day);

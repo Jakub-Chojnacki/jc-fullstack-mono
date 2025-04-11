@@ -1,10 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import { z } from "zod";
 
-import apiClient from "@/api-client";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,23 +12,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { queryClient } from "@/main";
 
 import { IngredientFormSchema } from "./schema";
+import useCreateIngredient from "@/queries/useCreateIngredient";
 
 const IngredientForm = () => {
-  const navigate = useNavigate();
-
-  const { mutate } = apiClient.ingredients.create.useMutation({
-    onError: () => {
-      toast.error("There was an error while trying to save the ingredient!");
-    },
-    onSuccess: () => {
-      toast.success("Ingredient added successfully!");
-      queryClient.invalidateQueries({ queryKey: ["ingredients"] });
-      navigate({ to: "/app/ingredients" });
-    },
-  });
+  const { mutate } = useCreateIngredient();
 
   const form = useForm<z.infer<typeof IngredientFormSchema>>({
     resolver: zodResolver(IngredientFormSchema),

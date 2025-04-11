@@ -1,7 +1,5 @@
 import { Globe, Lock } from "lucide-react";
 
-import apiClient from "@/api-client";
-
 import IngredientCard from "../IngredientCard";
 import { Badge } from "../ui/badge";
 import {
@@ -13,12 +11,10 @@ import {
 } from "../ui/card";
 
 import { TRecipePreviewProps } from "./types";
+import useGetOneRecipe from "@/queries/useGetOneRecipe";
 
 const RecipePreview = ({ id }: TRecipePreviewProps) => {
-  const { data, isError } = apiClient.recipes.getOne.useQuery([{ id }], {
-    params: { id },
-    query: { withIngredients: "true" },
-  });
+  const { data, isError } = useGetOneRecipe({ id: +id, withIngredients: true });
 
   if (!data && isError) {
     return <div>Recipe not found!</div>;
@@ -64,7 +60,7 @@ const RecipePreview = ({ id }: TRecipePreviewProps) => {
           </div>
           <div className="my-4">
             <h3 className="font-bold">Ingredients:</h3>
-            {recipeIngredients.map((ingredient) => (
+            {recipeIngredients?.map((ingredient) => (
               <IngredientCard key={ingredient.id} ingredient={ingredient} />
             ))}
           </div>

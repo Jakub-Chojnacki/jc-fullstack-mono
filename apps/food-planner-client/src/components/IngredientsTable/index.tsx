@@ -13,10 +13,6 @@ import {
 } from "@tanstack/react-table";
 import { Plus, Trash } from "lucide-react";
 import { useState } from "react";
-import toast from "react-hot-toast";
-
-import apiClient from "@/api-client";
-import { queryClient } from "@/main";
 
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -29,18 +25,16 @@ import {
   TableRow,
 } from "../ui/table";
 
+import useDeleteIngredient from "@/queries/useDeleteIngredient";
+import useGetIngredients from "@/queries/useGetIngredients";
+
 const IngredientsTable = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const navigation = useNavigate({ from: "/app/ingredients" });
 
-  const { data } = apiClient.ingredients.getForUser.useQuery(["ingredients"]);
-  const { mutate } = apiClient.ingredients.delete.useMutation({
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["ingredients"] });
-      toast.success("Ingredient deleted successfully.");
-    },
-  });
+  const { data } = useGetIngredients();
+  const { mutate } = useDeleteIngredient();
 
   const handleDelete = (id: number) => {
     //TODO: Add Confirmation Dialog

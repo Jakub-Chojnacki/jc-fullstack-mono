@@ -120,7 +120,7 @@ export const contract = c.router(
         path: "/recipes/:id",
         pathParams: z.object({ id: StringToNumberSchema }),
         query: z.object({
-          withIngredients: z.string().optional(),
+          withIngredients: BooleanQuerySchema.optional(),
         }),
         responses: {
           200: RecipeGetOneSchema,

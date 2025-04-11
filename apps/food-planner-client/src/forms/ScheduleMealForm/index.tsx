@@ -3,7 +3,6 @@ import { format } from "date-fns";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-import apiClient from "@/api-client";
 import RecipeSelect from "@/components/RecipeSelect";
 import { mealTypes } from "@/components/ScheduleView/const";
 import { Button } from "@/components/ui/button";
@@ -24,8 +23,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { queryClient } from "@/main";
 
+import useCreateScheduledMeal from "@/queries/useCreateScheduledMeal";
 import {
   ScheduleMealFormSchema,
   ScheduleMealFormSchemaWithRecipeId,
@@ -53,16 +52,7 @@ const ScheduleMealForm = ({
     closeDialog();
   };
 
-  const { mutate } = apiClient.scheduleMeals.create.useMutation({
-    onSuccess: () => {
-      toast.success("Meal scheduled successfully!");
-      queryClient.invalidateQueries({ queryKey: ["scheduleMeals"] });
-      handleCloseDialog();
-    },
-    onError: () => {
-      toast.error("Error scheduling a meal!");
-    },
-  });
+  const { mutate } = useCreateScheduledMeal();
 
   const onSubmit = (values: TScheduleMealFormValues): void => {
     if (!values.recipeId) {
@@ -80,12 +70,19 @@ const ScheduleMealForm = ({
       return;
     }
 
-    mutate({
-      body: {
-        ...finalValues.data,
-        scheduledAt: new Date(finalValues.data.scheduledAt),
+    mutate(
+      {
+        body: {
+          ...finalValues.data,
+          scheduledAt: new Date(finalValues.data.scheduledAt),
+        },
       },
-    });
+      {
+        onSuccess: () => {
+          handleCloseDialog();
+        },
+      }
+    );
   };
 
   return (

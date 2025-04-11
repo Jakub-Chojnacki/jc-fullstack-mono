@@ -109,7 +109,7 @@ exports.contract = c.router({
             path: "/recipes/:id",
             pathParams: zod_1.z.object({ id: index_1.StringToNumberSchema }),
             query: zod_1.z.object({
-                withIngredients: zod_1.z.string().optional(),
+                withIngredients: index_1.BooleanQuerySchema.optional(),
             }),
             responses: {
                 200: index_1.RecipeGetOneSchema,
