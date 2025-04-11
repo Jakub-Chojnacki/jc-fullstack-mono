@@ -28,13 +28,14 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import useGetIngredients from "@/queries/useGetIngredients";
 
 const IngredientsTable = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const navigation = useNavigate({ from: "/app/ingredients" });
 
-  const { data } = apiClient.ingredients.getForUser.useQuery(["ingredients"]);
+  const { data } = useGetIngredients()
   const { mutate } = apiClient.ingredients.delete.useMutation({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ingredients"] });

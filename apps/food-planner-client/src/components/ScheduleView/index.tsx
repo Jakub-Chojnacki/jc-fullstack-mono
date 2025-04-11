@@ -18,6 +18,7 @@ import useDaysOfWeek from "@/hooks/useDaysOfWeek";
 import { queryClient } from "@/main";
 
 import { mealTypes } from "./const";
+import useGetScheduledMeals from "@/queries/useGetScheduledMeals";
 
 const ScheduleView = () => {
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
@@ -30,10 +31,10 @@ const ScheduleView = () => {
   const { daysOfWeek, startDate, endDate, previousWeek, nextWeek } =
     useDaysOfWeek();
 
-  const { data } = apiClient.scheduleMeals.get.useQuery(["scheduleMeals"], {
+  const { data } = useGetScheduledMeals({
     query: {
-      startDate: startDate.toISOString(),
-      endDate: endDate.toISOString(),
+      startDate: startDate,
+      endDate: endDate,
     },
   });
 

@@ -2,8 +2,6 @@ import { ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { FieldValues } from "react-hook-form";
 
-import apiClient from "@/api-client";
-
 import { Button } from "../ui/button";
 import {
   Command,
@@ -23,6 +21,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 import { TRecipeSelectProps } from "./types";
+import useGetRecipes from "@/queries/useGetRecipes";
 
 const RecipeSelect = <T extends FieldValues>({
   control,
@@ -30,7 +29,7 @@ const RecipeSelect = <T extends FieldValues>({
 }: TRecipeSelectProps<T>) => {
   const [commandOpen, setCommandOpen] = useState(false);
 
-  const { data } = apiClient.recipes.getForUser.useQuery(["recipesUser"]);
+  const { data } = useGetRecipes();
 
   return (
     <FormField

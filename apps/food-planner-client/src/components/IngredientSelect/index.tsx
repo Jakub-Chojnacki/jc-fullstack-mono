@@ -2,7 +2,6 @@ import { QuantityUnit } from "@jcmono/api-contract";
 import { Check, ChevronsUpDown, Trash } from "lucide-react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
-import apiClient from "@/api-client";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -35,12 +34,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import useGetIngredients from "@/queries/useGetIngredients";
 
 const IngredientSelect = () => {
-  const { data } = apiClient.ingredients.getForUser.useQuery([
-    "ingredientsUser",
-  ]);
-
+  const { data } = useGetIngredients()
   const { control, formState } = useFormContext<TRecipeFormInput>();
 
   const { append, fields, update, remove } = useFieldArray({
