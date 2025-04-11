@@ -83,18 +83,18 @@ export declare const ScheduleMealsGetSchema: z.ZodObject<z.objectUtil.extendShap
         isDeleted: z.ZodOptional<z.ZodBoolean>;
     }, "strip", z.ZodTypeAny, {
         id: number;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
-        name: string;
         userId: number;
         description: string;
         isGlobal?: boolean | undefined;
         isDeleted?: boolean | undefined;
     }, {
         id: number;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
-        name: string;
         userId: number;
         description: string;
         isGlobal?: boolean | undefined;
@@ -108,9 +108,9 @@ export declare const ScheduleMealsGetSchema: z.ZodObject<z.objectUtil.extendShap
     scheduledAt: string | Date;
     recipe: {
         id: number;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
-        name: string;
         userId: number;
         description: string;
         isGlobal?: boolean | undefined;
@@ -125,9 +125,9 @@ export declare const ScheduleMealsGetSchema: z.ZodObject<z.objectUtil.extendShap
     scheduledAt: string | Date;
     recipe: {
         id: number;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
-        name: string;
         userId: number;
         description: string;
         isGlobal?: boolean | undefined;

@@ -7,12 +7,11 @@ import { ScheduleMealsService } from './schedule-meals.service';
 describe('ScheduleMealsService', () => {
   let service: ScheduleMealsService;
 
-  const mockData: TScheduleMealsCreate = {
-    userId: 1,
-    recipeId: 1,
-    scheduledAt: new Date(),
-    mealType: 'BREAKFAST',
-  };
+  const mockUserId = 123;
+
+  let startDate: string;
+  let endDate: string;
+  let mockData: TScheduleMealsCreate;
 
   let prisma: {
     scheduledMeal: {
@@ -22,8 +21,22 @@ describe('ScheduleMealsService', () => {
       delete: jest.Mock;
     };
   };
-
   beforeEach(async () => {
+    const fakeNow = new Date('2025-01-01T00:00:00.000Z');
+    jest.useFakeTimers().setSystemTime(fakeNow);
+
+    startDate = fakeNow.toISOString();
+
+    const futureDate = new Date(fakeNow);
+    futureDate.setDate(futureDate.getDate() + 5);
+    endDate = futureDate.toISOString();
+
+    mockData = {
+      recipeId: 1,
+      scheduledAt: startDate,
+      mealType: 'BREAKFAST',
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ScheduleMealsService,
@@ -45,6 +58,10 @@ describe('ScheduleMealsService', () => {
     prisma = module.get(PrismaService);
   });
 
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
@@ -52,25 +69,30 @@ describe('ScheduleMealsService', () => {
   it('should create a scheduled meal', async () => {
     prisma.scheduledMeal.create.mockResolvedValue(mockData);
 
-    const result = await service.create(mockData);
+    const result = await service.create(mockUserId, mockData);
     expect(result).toEqual(mockData);
 
     expect(prisma.scheduledMeal.create).toHaveBeenCalledWith({
-      data: mockData,
+      data: { ...mockData, userId: mockUserId },
     });
   });
 
   it('should update a scheduled meal', async () => {
-    prisma.scheduledMeal.update.mockResolvedValue(mockData);
+    const mockDataWithDate = {
+      ...mockData,
+      scheduledAt: new Date(mockData.scheduledAt),
+    };
+
+    prisma.scheduledMeal.update.mockResolvedValue(mockDataWithDate);
 
     const result = await service.update(1, mockData);
-    expect(result).toEqual(mockData);
+    expect(result).toEqual(mockDataWithDate);
 
     expect(prisma.scheduledMeal.update).toHaveBeenCalledWith({
       where: {
         id: 1,
       },
-      data: mockData,
+      data: mockDataWithDate,
     });
   });
 
@@ -87,12 +109,13 @@ describe('ScheduleMealsService', () => {
   it('should delete a scheduled meal', async () => {
     prisma.scheduledMeal.delete.mockResolvedValue({ id: 1 });
 
-    const result = await service.delete(1);
+    const result = await service.delete({ id: 1, userId: mockUserId });
     expect(result).toEqual({ id: 1 });
 
     expect(prisma.scheduledMeal.delete).toHaveBeenCalledWith({
       where: {
         id: 1,
+        userId: mockUserId,
       },
     });
   });
@@ -102,18 +125,31 @@ describe('ScheduleMealsService', () => {
 
     prisma.scheduledMeal.delete.mockRejectedValue(error);
 
-    await expect(service.delete(999)).rejects.toThrow(TsRestException);
+    await expect(
+      service.delete({ id: 999, userId: mockUserId }),
+    ).rejects.toThrow(TsRestException);
   });
 
   it('should get scheduled meals for a user', async () => {
     prisma.scheduledMeal.findMany.mockResolvedValue([mockData]);
 
-    const result = await service.get(1);
+    const result = await service.get({
+      userId: mockUserId,
+      startDate,
+      endDate,
+    });
     expect(result).toEqual([mockData]);
 
     expect(prisma.scheduledMeal.findMany).toHaveBeenCalledWith({
       where: {
-        userId: 1,
+        userId: mockUserId,
+        scheduledAt: {
+          gte: new Date(startDate),
+          lte: new Date(endDate),
+        },
+      },
+      include: {
+        recipe: true,
       },
     });
   });

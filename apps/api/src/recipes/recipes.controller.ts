@@ -1,8 +1,8 @@
-import { Controller } from '@nestjs/common';
-import { RecipesService } from './recipes.service';
-import { tsRestHandler, TsRestHandler } from '@ts-rest/nest';
 import { contract } from '@jcmono/api-contract';
+import { Controller } from '@nestjs/common';
+import { tsRestHandler, TsRestHandler } from '@ts-rest/nest';
 import { GetCurrentUserId } from 'src/common/decorators';
+import { RecipesService } from './recipes.service';
 
 @Controller()
 export class RecipesController {
@@ -39,12 +39,19 @@ export class RecipesController {
   async getOne(@GetCurrentUserId() userId: number) {
     return tsRestHandler(
       contract.recipes.getOne,
-      async ({ params: { id }, query: { withIngredients } }) => {
+      async ({ params: { id }, query: { withIngredients }}) => {
         const recipes = await this.recipesService.getOne(
           id,
           userId,
           withIngredients,
         );
+
+        if (!recipes) {
+          return {
+            status: 404,
+            body: { message: 'Recipe not found' },
+          };
+        }
 
         return {
           status: 200,

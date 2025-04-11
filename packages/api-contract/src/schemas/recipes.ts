@@ -46,7 +46,7 @@ export type TRecipeUpdate = z.infer<typeof RecipeUpdateSchema>;
 export const RecipeGetOneSchema = RecipeSchema.extend({
   recipeIngredients: z.array(
     RecipeIngredientUpdateSchema.extend({ name: z.string().optional() })
-  ),
+  ).optional(),
 });
 
 export type TRecipeGetOne = z.infer<typeof RecipeGetOneSchema>;

@@ -9,17 +9,17 @@ export declare const IngredientSchema: z.ZodObject<{
     isDeleted: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
     id: number;
+    name: string;
     createdAt: Date;
     updatedAt: Date;
-    name: string;
     userId: number;
     isGlobal?: boolean | undefined;
     isDeleted?: boolean | undefined;
 }, {
     id: number;
+    name: string;
     createdAt: Date;
     updatedAt: Date;
-    name: string;
     userId: number;
     isGlobal?: boolean | undefined;
     isDeleted?: boolean | undefined;
