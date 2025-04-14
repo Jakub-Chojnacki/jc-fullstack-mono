@@ -52,9 +52,8 @@ export class RecipesService {
     };
   }
 
-  async getOne(id: number, userId: number, withIngredients?: string) {
+  async getOne(id: number, userId: number, withIngredients?: boolean) {
     return wrapWithTsRestError(contract.recipes.getOne, async () => {
-      const sendIngredients = withIngredients === 'true';
 
       const recipe = await this.prisma.recipe.findUnique({
         where: {
@@ -62,12 +61,12 @@ export class RecipesService {
           userId,
         },
         include: {
-          recipeIngredients: sendIngredients,
+          recipeIngredients: withIngredients,
         },
       });
 
 
-      if (sendIngredients && recipe) {
+      if (withIngredients && recipe) {
         const ingredients = await this.prisma.ingredient.findMany({
           where: {
             id: {
