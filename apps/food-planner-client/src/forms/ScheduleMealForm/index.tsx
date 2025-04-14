@@ -25,13 +25,14 @@ import {
 } from "@/components/ui/select";
 import useCreateScheduledMeal from "@/queries/useCreateScheduledMeal";
 
-import type {
-  TScheduleMealFormValues,
-} from "./schema";
 import {
   ScheduleMealFormSchema,
   ScheduleMealFormSchemaWithRecipeId,
 } from "./schema";
+import type {
+  TScheduleMealFormValues,
+} from "./schema";
+
 import type { TScheduleMealFormProps } from "./types";
 
 function ScheduleMealForm({

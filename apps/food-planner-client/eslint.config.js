@@ -33,7 +33,6 @@ export default antfu(
         "off",
         {
           tsconfigRootDir: ".",
-
         },
       ],
       "import/order": [
@@ -42,51 +41,64 @@ export default antfu(
           "groups": [
             "builtin",
             "external",
-            ["internal", "parent", "sibling", "index"],
+            "internal",
+            "parent",
+            "sibling",
+            "index",
           ],
           "pathGroups": [
             {
-              pattern: "*/**",
+              pattern: "@hooks/**",
               group: "external",
               position: "after",
             },
             {
-              pattern: "@hooks/**",
-              group: "internal",
-              position: "after",
-            },
-            {
               pattern: "@queries/**",
-              group: "internal",
+              group: "external",
               position: "after",
             },
             {
               pattern: "@components/**",
-              group: "internal",
+              group: "external",
               position: "after",
             },
             {
               pattern: "@forms/**",
-              group: "internal",
+              group: "external",
               position: "after",
             },
             {
               pattern: "@layouts/**",
-              group: "internal",
+              group: "external",
               position: "after",
             },
             {
               pattern: "@utils/**",
-              group: "internal",
+              group: "external",
               position: "after",
             },
             {
-              pattern: "./**",
-              group: "internal",
+              pattern: "@/**",
+              group: "external",
+              position: "after",
+            },
+            {
+              pattern: "{@/consts/**,./**/consts,../**/consts}",
+              group: "sibling",
+              position: "after",
+            },
+            {
+              pattern: "{./styles,./styles.scss,./styles.module.scss}",
+              group: "sibling",
+              position: "after",
+            },
+            {
+              pattern: "./types",
+              group: "sibling",
               position: "after",
             },
           ],
-          "pathGroupsExcludedImportTypes": ["builtin", "external"],
+          "pathGroupsExcludedImportTypes": [],
           "alphabetize": {
             order: "asc",
             caseInsensitive: true,
@@ -113,101 +125,3 @@ export default antfu(
     },
   },
 );
-
-// tseslint.config(
-//   { ignores: ["dist"] },
-//   {
-//     extends: [js.configs.recommended, ...tseslint.configs.recommended],
-//     files: ["**/*.{ts,tsx}"],
-//     languageOptions: {
-//       ecmaVersion: 2020,
-//       globals: globals.browser,
-//     },
-//     plugins: {
-//       "react-hooks": reactHooks,
-//       "react-refresh": reactRefresh,
-//       import: importPlugin,
-//     },
-//     rules: {
-//       ...reactHooks.configs.recommended.rules,
-//       "react-refresh/only-export-components": [
-//         "warn",
-//         { allowConstantExport: true },
-//       ],
-//       "import/order": [
-//         "error",
-//         {
-//           groups: [
-//             "builtin",
-//             "external",
-//             ["internal", "parent", "sibling", "index"],
-//           ],
-//           pathGroups: [
-//             {
-//               pattern: "*/**",
-//               group: "external",
-//               position: "after",
-//             },
-//             {
-//               pattern: "@hooks/**",
-//               group: "internal",
-//               position: "after",
-//             },
-//             {
-//               pattern: "@queries/**",
-//               group: "internal",
-//               position: "after",
-//             },
-//             {
-//               pattern: "@components/**",
-//               group: "internal",
-//               position: "after",
-//             },
-//             {
-//               pattern: "@forms/**",
-//               group: "internal",
-//               position: "after",
-//             },
-//             {
-//               pattern: "@layouts/**",
-//               group: "internal",
-//               position: "after",
-//             },
-//             {
-//               pattern: "@utils/**",
-//               group: "internal",
-//               position: "after",
-//             },
-//             {
-//               pattern: "./**",
-//               group: "internal",
-//               position: "after",
-//             },
-//           ],
-//           pathGroupsExcludedImportTypes: ["builtin", "external"],
-//           alphabetize: {
-//             order: "asc",
-//             caseInsensitive: true,
-//           },
-//           "newlines-between": "always",
-//         },
-//       ],
-//     },
-//     settings: {
-//       "import/resolver": {
-//         alias: {
-//           map: [
-//             ["@", "./src"],
-//             ["@components", "./src/app/components"],
-//             ["@hooks", "./src/app/hooks"],
-//             ["@utils", "./src/app/utils"],
-//             ["@forms", "./src/app/forms"],
-//             ["@queries", "./src/app/queries"],
-//             ["@layouts", "./src/app/layouts"],
-//           ],
-//           extensions: [".js", ".ts", ".jsx", ".tsx"],
-//         },
-//       },
-//     },
-//   }
-// );

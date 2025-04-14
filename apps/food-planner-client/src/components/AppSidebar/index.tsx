@@ -1,3 +1,5 @@
+import * as React from "react";
+
 import NavMain from "@components/NavMain";
 import NavUser from "@components/NavUser";
 import ThemeToggle from "@components/ThemeToggle";
@@ -8,7 +10,6 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@components/ui/sidebar";
-import * as React from "react";
 
 import { navMainItems } from "./const";
 

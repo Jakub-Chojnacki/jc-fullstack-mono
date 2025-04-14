@@ -1,3 +1,5 @@
+import { BadgeCheck, Bell, ChevronsUpDown, LogOut } from "lucide-react";
+
 import { Avatar, AvatarFallback } from "@components/ui/avatar";
 import {
   DropdownMenu,
@@ -14,7 +16,6 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@components/ui/sidebar";
-import { BadgeCheck, Bell, ChevronsUpDown, LogOut } from "lucide-react";
 
 import useAuthMe from "@/queries/useAuthMe";
 import useLogout from "@/queries/useLogout";
