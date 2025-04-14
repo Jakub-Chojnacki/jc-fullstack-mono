@@ -1,8 +1,8 @@
 import { Card, CardContent } from "../ui/card";
 
-import { TIngredientCardProps } from "./types";
+import type { TIngredientCardProps } from "./types";
 
-const IngredientCard = ({ ingredient }: TIngredientCardProps) => {
+function IngredientCard({ ingredient }: TIngredientCardProps) {
   const { name, amount, unit } = ingredient;
 
   const text = `${name} | ${amount} ${unit.toLowerCase()}`;
@@ -14,6 +14,6 @@ const IngredientCard = ({ ingredient }: TIngredientCardProps) => {
       </CardContent>
     </Card>
   );
-};
+}
 
 export default IngredientCard;

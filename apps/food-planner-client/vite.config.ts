@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 
 import commonjs from "@rollup/plugin-commonjs";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";

@@ -7,9 +7,9 @@ import {
 } from "date-fns";
 import { useState } from "react";
 
-import { TUseDaysOfWeek } from "./types";
+import type { TUseDaysOfWeek } from "./types";
 
-const useDaysOfWeek = ():TUseDaysOfWeek => {
+function useDaysOfWeek(): TUseDaysOfWeek {
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const startDate = startOfWeek(currentDate, { weekStartsOn: 1 }); // Start on Monday
@@ -32,6 +32,6 @@ const useDaysOfWeek = ():TUseDaysOfWeek => {
     previousWeek,
     nextWeek,
   };
-};
+}
 
 export default useDaysOfWeek;

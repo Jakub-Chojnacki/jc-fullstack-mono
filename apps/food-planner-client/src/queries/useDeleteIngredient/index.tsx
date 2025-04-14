@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import apiClient from "@/api-client";
 import { queryClient } from "@/main";
 
-const useDeleteIngredient = () => {
+function useDeleteIngredient() {
   const mutation = apiClient.ingredients.delete.useMutation({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ingredients"] });
@@ -12,6 +12,6 @@ const useDeleteIngredient = () => {
   });
 
   return mutation;
-};
+}
 
 export default useDeleteIngredient;

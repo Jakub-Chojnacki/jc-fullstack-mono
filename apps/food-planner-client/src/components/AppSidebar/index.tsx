@@ -1,4 +1,3 @@
-
 import NavMain from "@components/NavMain";
 import NavUser from "@components/NavUser";
 import ThemeToggle from "@components/ThemeToggle";
@@ -13,7 +12,7 @@ import * as React from "react";
 
 import { navMainItems } from "./const";
 
-const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
+function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -31,6 +30,6 @@ const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
       <SidebarRail />
     </Sidebar>
   );
-};
+}
 
 export default AppSidebar;

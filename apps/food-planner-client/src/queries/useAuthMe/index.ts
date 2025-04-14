@@ -5,7 +5,7 @@ import { queryClient } from "@/main";
 
 import { AUTH_ME_QUERY_KEY, GC_TIME_MS, REFETCH_INTERVAL_MS } from "./const";
 
-const useAuthMe = () => {
+function useAuthMe() {
   const { mutate } = apiClient.auth.refreshToken.useMutation();
 
   const { isLoading, error, ...query } = apiClient.auth.me.useQuery(
@@ -16,7 +16,7 @@ const useAuthMe = () => {
       refetchInterval: REFETCH_INTERVAL_MS,
       queryKey: AUTH_ME_QUERY_KEY,
       retry: false,
-    }
+    },
   );
 
   useEffect(() => {
@@ -27,6 +27,6 @@ const useAuthMe = () => {
   }, [isLoading, error, mutate]);
 
   return { isLoading, error, ...query };
-};
+}
 
 export default useAuthMe;

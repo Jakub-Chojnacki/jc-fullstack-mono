@@ -2,7 +2,7 @@ import AppSidebar from "@components/AppSidebar";
 import SidebarHeader from "@components/SidebarHeader";
 import { SidebarInset, SidebarProvider } from "@components/ui/sidebar";
 
-const MainLayout = ({ children }: { children: React.ReactElement }) => {
+function MainLayout({ children }: { children: React.ReactElement }) {
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -14,6 +14,6 @@ const MainLayout = ({ children }: { children: React.ReactElement }) => {
       </SidebarInset>
     </SidebarProvider>
   );
-};
+}
 
 export default MainLayout;

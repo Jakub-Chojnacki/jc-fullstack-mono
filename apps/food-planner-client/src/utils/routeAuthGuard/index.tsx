@@ -4,17 +4,18 @@ import apiClient from "@/api-client";
 import { queryClient } from "@/main";
 import { AUTH_ME_QUERY_KEY } from "@/queries/useAuthMe/const";
 
-const routeAuthGuard = async () => {
+async function routeAuthGuard() {
   try {
     const user = await apiClient.auth.me.ensureQueryData(
       queryClient,
-      AUTH_ME_QUERY_KEY
+      AUTH_ME_QUERY_KEY,
     );
 
     return { user };
-  } catch {
+  }
+  catch {
     throw redirect({ to: "/signin" });
   }
-};
+}
 
 export default routeAuthGuard;

@@ -19,7 +19,7 @@ import { BadgeCheck, Bell, ChevronsUpDown, LogOut } from "lucide-react";
 import useAuthMe from "@/queries/useAuthMe";
 import useLogout from "@/queries/useLogout";
 
-const NavUser = () => {
+function NavUser() {
   const { data, isLoading } = useAuthMe();
   const { mutate } = useLogout();
 
@@ -101,6 +101,6 @@ const NavUser = () => {
       </SidebarMenu>
     );
   }
-};
+}
 
 export default NavUser;

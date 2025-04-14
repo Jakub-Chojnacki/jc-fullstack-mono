@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import apiClient from "@/api-client";
 import { queryClient } from "@/main";
 
-const useDeleteScheduledMeal = () => {
+function useDeleteScheduledMeal() {
   const mutation = apiClient.scheduleMeals.delete.useMutation({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["scheduledMeals"] });
@@ -15,6 +15,6 @@ const useDeleteScheduledMeal = () => {
   });
 
   return mutation;
-};
+}
 
 export default useDeleteScheduledMeal;

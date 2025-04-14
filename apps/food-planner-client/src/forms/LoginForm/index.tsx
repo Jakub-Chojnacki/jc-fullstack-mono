@@ -1,10 +1,3 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "@tanstack/react-router";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-import useSignIn from "@/queries/useSignIn";
-
 import { Button } from "@components/ui/button";
 import {
   Card,
@@ -22,10 +15,16 @@ import {
   FormMessage,
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Link } from "@tanstack/react-router";
+import { useForm } from "react-hook-form";
+import type { z } from "zod";
+
+import useSignIn from "@/queries/useSignIn";
 
 import { loginFormSchema } from "./schema";
 
-const LoginForm = () => {
+function LoginForm() {
   const { mutate } = useSignIn();
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -90,7 +89,8 @@ const LoginForm = () => {
               </div>
 
               <div className="mt-4 text-center text-sm">
-                Don&apos;t have an account?{" "}
+                Don&apos;t have an account?
+                {" "}
                 <Link to="/signup" className="underline underline-offset-4">
                   Sign up
                 </Link>
@@ -101,6 +101,6 @@ const LoginForm = () => {
       </Card>
     </div>
   );
-};
+}
 
 export default LoginForm;

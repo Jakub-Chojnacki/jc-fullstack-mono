@@ -2,7 +2,7 @@
 
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
-import { Control, FieldValues, Path } from "react-hook-form";
+import type { Control, FieldValues, Path } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -41,17 +41,19 @@ export function DatePicker<T extends FieldValues>({
             <PopoverTrigger asChild className="w-full">
               <FormControl>
                 <Button
-                  variant={"outline"}
+                  variant="outline"
                   className={cn(
                     " pl-3 text-left font-normal w-full",
-                    !field.value && "text-muted-foreground"
+                    !field.value && "text-muted-foreground",
                   )}
                 >
-                  {field.value ? (
-                    format(field.value, "PPP")
-                  ) : (
-                    <span>Pick a date</span>
-                  )}
+                  {field.value
+                    ? (
+                        format(field.value, "PPP")
+                      )
+                    : (
+                        <span>Pick a date</span>
+                      )}
                   <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                 </Button>
               </FormControl>
@@ -61,9 +63,8 @@ export function DatePicker<T extends FieldValues>({
                 mode="single"
                 selected={field.value}
                 onSelect={field.onChange}
-                disabled={(date) =>
-                  date > new Date() || date < new Date("1900-01-01")
-                }
+                disabled={date =>
+                  date > new Date() || date < new Date("1900-01-01")}
                 initialFocus
               />
             </PopoverContent>

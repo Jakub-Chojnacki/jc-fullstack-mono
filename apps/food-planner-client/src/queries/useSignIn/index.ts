@@ -1,9 +1,9 @@
+import { useNavigate } from "@tanstack/react-router";
 import toast from "react-hot-toast";
 
 import apiClient from "@/api-client";
-import { useNavigate } from "@tanstack/react-router";
 
-const useSignIn = () => {
+function useSignIn() {
   const navigate = useNavigate();
 
   const mutation = apiClient.auth.signin.useMutation({
@@ -17,6 +17,6 @@ const useSignIn = () => {
   });
 
   return mutation;
-};
+}
 
 export default useSignIn;

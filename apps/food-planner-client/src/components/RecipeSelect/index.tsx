@@ -1,6 +1,8 @@
 import { ChevronRight } from "lucide-react";
 import { useState } from "react";
-import { FieldValues } from "react-hook-form";
+import type { FieldValues } from "react-hook-form";
+
+import useGetRecipes from "@/queries/useGetRecipes";
 
 import { Button } from "../ui/button";
 import {
@@ -20,13 +22,12 @@ import {
 } from "../ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
-import { TRecipeSelectProps } from "./types";
-import useGetRecipes from "@/queries/useGetRecipes";
+import type { TRecipeSelectProps } from "./types";
 
-const RecipeSelect = <T extends FieldValues>({
+function RecipeSelect<T extends FieldValues>({
   control,
   name,
-}: TRecipeSelectProps<T>) => {
+}: TRecipeSelectProps<T>) {
   const [commandOpen, setCommandOpen] = useState(false);
 
   const { data } = useGetRecipes();
@@ -59,7 +60,7 @@ const RecipeSelect = <T extends FieldValues>({
                       <CommandList>
                         <CommandEmpty>No recipes found.</CommandEmpty>
                         <CommandGroup>
-                          {data?.body.map((recipe) => (
+                          {data?.body.map(recipe => (
                             <CommandItem
                               key={recipe.id}
                               value={recipe.name}
@@ -86,6 +87,6 @@ const RecipeSelect = <T extends FieldValues>({
       )}
     />
   );
-};
+}
 
 export default RecipeSelect;

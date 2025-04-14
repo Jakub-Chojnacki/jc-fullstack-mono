@@ -23,7 +23,7 @@ export const RecipeFormSchema = z.object({
           }
           return value;
         }),
-    })
+    }),
   ),
 });
 
