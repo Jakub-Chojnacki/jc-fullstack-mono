@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import type { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -12,11 +12,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
-import { IngredientFormSchema } from "./schema";
 import useCreateIngredient from "@/queries/useCreateIngredient";
 
-const IngredientForm = () => {
+import { IngredientFormSchema } from "./schema";
+
+function IngredientForm() {
   const { mutate } = useCreateIngredient();
 
   const form = useForm<z.infer<typeof IngredientFormSchema>>({
@@ -53,6 +53,6 @@ const IngredientForm = () => {
       </form>
     </Form>
   );
-};
+}
 
 export default IngredientForm;

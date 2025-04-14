@@ -1,9 +1,10 @@
 import apiClient from "@/api-client";
-import { TUseGetScheduledMealsParams } from "./types";
 
-const useGetScheduledMeals = ({
+import type { TUseGetScheduledMealsParams } from "./types";
+
+function useGetScheduledMeals({
   query: { startDate, endDate },
-}: TUseGetScheduledMealsParams) => {
+}: TUseGetScheduledMealsParams) {
   const query = apiClient.scheduleMeals.get.useQuery(["scheduledMeals"], {
     query: {
       startDate: startDate.toISOString(),
@@ -12,6 +13,6 @@ const useGetScheduledMeals = ({
   });
 
   return query;
-};
+}
 
 export default useGetScheduledMeals;

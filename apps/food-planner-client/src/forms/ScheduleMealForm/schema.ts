@@ -19,8 +19,8 @@ export const ScheduleMealFormSchemaWithRecipeId = ScheduleMealFormSchema.extend(
         id: z.number(),
         name: z.string(),
       })
-      .transform((val) => val.id),
-  }
+      .transform(val => val.id),
+  },
 );
 
 export type TScheduleMealFormValues = z.infer<typeof ScheduleMealFormSchema>;

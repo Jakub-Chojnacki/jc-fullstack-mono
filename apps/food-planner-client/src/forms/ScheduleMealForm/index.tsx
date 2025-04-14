@@ -23,21 +23,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
 import useCreateScheduledMeal from "@/queries/useCreateScheduledMeal";
+
 import {
   ScheduleMealFormSchema,
   ScheduleMealFormSchemaWithRecipeId,
+} from "./schema";
+import type {
   TScheduleMealFormValues,
 } from "./schema";
-import { TScheduleMealFormProps } from "./types";
 
-const ScheduleMealForm = ({
+import type { TScheduleMealFormProps } from "./types";
+
+function ScheduleMealForm({
   addMealDialogOpen,
   handleCloseDialog: closeDialog,
   initialMealType,
   initialSelectedDay,
-}: TScheduleMealFormProps) => {
+}: TScheduleMealFormProps) {
   const form = useForm<TScheduleMealFormValues>({
     resolver: zodResolver(ScheduleMealFormSchema),
     defaultValues: {
@@ -81,7 +84,7 @@ const ScheduleMealForm = ({
         onSuccess: () => {
           handleCloseDialog();
         },
-      }
+      },
     );
   };
 
@@ -112,7 +115,7 @@ const ScheduleMealForm = ({
                         <SelectValue placeholder="Select meal type" />
                       </SelectTrigger>
                       <SelectContent>
-                        {mealTypes.map((type) => (
+                        {mealTypes.map(type => (
                           <SelectItem key={type} value={type}>
                             {type}
                           </SelectItem>
@@ -146,6 +149,6 @@ const ScheduleMealForm = ({
       </DialogContent>
     </Dialog>
   );
-};
+}
 
 export default ScheduleMealForm;

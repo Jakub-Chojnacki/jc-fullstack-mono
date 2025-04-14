@@ -3,9 +3,6 @@ import { format } from "date-fns";
 import { ChevronLeft, ChevronRight, Plus, X } from "lucide-react";
 import { useState } from "react";
 
-import useGetScheduledMeals from "@/queries/useGetScheduledMeals";
-import useDeleteScheduledMeal from "@/queries/useDeleteScheduledMeal";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,24 +13,26 @@ import {
 } from "@/components/ui/card";
 import ScheduleMealForm from "@/forms/ScheduleMealForm";
 import useDaysOfWeek from "@/hooks/useDaysOfWeek";
+import useDeleteScheduledMeal from "@/queries/useDeleteScheduledMeal";
+import useGetScheduledMeals from "@/queries/useGetScheduledMeals";
 
 import { mealTypes } from "./const";
 
-const ScheduleView = () => {
+function ScheduleView() {
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
   const [selectedMealType, setSelectedMealType] = useState<EMealTypes>(
-    EMealTypes.BREAKFAST
+    EMealTypes.BREAKFAST,
   );
 
   const [addMealDialogOpen, setAddMealDialogOpen] = useState(false);
 
-  const { daysOfWeek, startDate, endDate, previousWeek, nextWeek } =
-    useDaysOfWeek();
+  const { daysOfWeek, startDate, endDate, previousWeek, nextWeek }
+    = useDaysOfWeek();
 
   const { data } = useGetScheduledMeals({
     query: {
-      startDate: startDate,
-      endDate: endDate,
+      startDate,
+      endDate,
     },
   });
 
@@ -60,7 +59,10 @@ const ScheduleView = () => {
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <span className="text-lg font-medium px-2">
-            {format(startDate, "MMM d")} - {format(endDate, "MMM d, yyyy")}
+            {format(startDate, "MMM d")}
+            {" "}
+            -
+            {format(endDate, "MMM d, yyyy")}
           </span>
           <Button variant="outline" size="icon" onClick={nextWeek}>
             <ChevronRight className="h-4 w-4" />
@@ -69,7 +71,7 @@ const ScheduleView = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
-        {daysOfWeek.map((day) => (
+        {daysOfWeek.map(day => (
           <Card key={day.toString()} className="overflow-hidden">
             <CardHeader className="p-3 bg-muted">
               <CardTitle className="text-center text-sm">
@@ -82,9 +84,9 @@ const ScheduleView = () => {
             <CardContent className="p-3 space-y-3">
               {mealTypes.map((mealType) => {
                 const foundMeal = data?.body.find(
-                  (meal) =>
-                    meal.mealType === mealType &&
-                    meal.scheduledAt === day.toISOString()
+                  meal =>
+                    meal.mealType === mealType
+                    && meal.scheduledAt === day.toISOString(),
                 );
 
                 return (
@@ -92,38 +94,40 @@ const ScheduleView = () => {
                     <div className="text-xs font-medium text-muted-foreground">
                       {mealType}
                     </div>
-                    {foundMeal ? (
-                      <div className="p-2 border rounded-md bg-card relative group">
-                        <div className="flex items-center gap-2">
-                          <div className="flex-1 min-w-0">
-                            <div className="font-medium text-sm truncate">
-                              {foundMeal.recipe.name}
+                    {foundMeal
+                      ? (
+                          <div className="p-2 border rounded-md bg-card relative group">
+                            <div className="flex items-center gap-2">
+                              <div className="flex-1 min-w-0">
+                                <div className="font-medium text-sm truncate">
+                                  {foundMeal.recipe.name}
+                                </div>
+                              </div>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity absolute top-1 right-1"
+                                onClick={() =>
+                                  mutate({ params: { id: foundMeal.id } })}
+                              >
+                                <X className="h-3 w-3" />
+                              </Button>
                             </div>
                           </div>
+                        )
+                      : (
                           <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity absolute top-1 right-1"
+                            variant="outline"
+                            className="w-full h-10 border-dashed text-xs justify-start"
                             onClick={() =>
-                              mutate({ params: { id: foundMeal.id } })
-                            }
+                              openAddMealDialog(day, mealType as EMealTypes)}
                           >
-                            <X className="h-3 w-3" />
+                            <Plus className="h-3 w-3 mr-1" />
+                            Add
+                            {" "}
+                            {mealType}
                           </Button>
-                        </div>
-                      </div>
-                    ) : (
-                      <Button
-                        variant="outline"
-                        className="w-full h-10 border-dashed text-xs justify-start"
-                        onClick={() =>
-                          openAddMealDialog(day, mealType as EMealTypes)
-                        }
-                      >
-                        <Plus className="h-3 w-3 mr-1" />
-                        Add {mealType}
-                      </Button>
-                    )}
+                        )}
                   </div>
                 );
               })}
@@ -143,6 +147,6 @@ const ScheduleView = () => {
       </div>
     </div>
   );
-};
+}
 
 export default ScheduleView;

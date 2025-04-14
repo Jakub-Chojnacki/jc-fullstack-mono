@@ -1,9 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-import useCreateRecipe from "@/queries/useCreateRecipe";
-import useUpdateRecipe from "@/queries/useUpdateRecipe";
+import type { z } from "zod";
 
 import IngredientSelect from "@/components/IngredientSelect";
 import { Button } from "@/components/ui/button";
@@ -17,11 +14,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import useCreateRecipe from "@/queries/useCreateRecipe";
+import useUpdateRecipe from "@/queries/useUpdateRecipe";
 
 import { RecipeFormSchema } from "./schema";
-import { TRecipeFormProps } from "./types";
 
-const RecipeForm = ({ initialData }: TRecipeFormProps) => {
+import type { TRecipeFormProps } from "./types";
+
+function RecipeForm({ initialData }: TRecipeFormProps) {
   const { mutate } = useCreateRecipe();
   const { mutate: updateRecipe } = useUpdateRecipe();
 
@@ -54,7 +54,8 @@ const RecipeForm = ({ initialData }: TRecipeFormProps) => {
         },
         params: { id: initialData.id },
       });
-    } else {
+    }
+    else {
       mutate({ body: values });
     }
   };
@@ -114,6 +115,6 @@ const RecipeForm = ({ initialData }: TRecipeFormProps) => {
       </form>
     </Form>
   );
-};
+}
 
 export default RecipeForm;

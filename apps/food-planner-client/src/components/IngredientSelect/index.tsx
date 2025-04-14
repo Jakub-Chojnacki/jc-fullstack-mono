@@ -16,8 +16,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { TRecipeFormInput } from "@/forms/RecipeForm/schema";
+import type { TRecipeFormInput } from "@/forms/RecipeForm/schema";
 import { cn } from "@/lib/utils";
+import useGetIngredients from "@/queries/useGetIngredients";
 
 import {
   FormControl,
@@ -34,26 +35,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import useGetIngredients from "@/queries/useGetIngredients";
 
-const IngredientSelect = () => {
+function IngredientSelect() {
   const { data } = useGetIngredients();
   const { control, formState } = useFormContext<TRecipeFormInput>();
 
   const { append, fields, update, remove } = useFieldArray({
-    control: control,
+    control,
     name: "recipeIngredients",
   });
 
-  const ingredients =
-    data?.body?.map((ingredient) => ({
+  const ingredients
+    = data?.body?.map(ingredient => ({
       label: ingredient.name,
       value: ingredient.id,
     })) || [];
 
   const showErrorMessageForField = (
     index: number,
-    field: keyof TRecipeFormInput["recipeIngredients"][0]
+    field: keyof TRecipeFormInput["recipeIngredients"][0],
   ): string | null => {
     return (
       formState?.errors?.recipeIngredients?.[index]?.[field]?.message || null
@@ -63,7 +63,7 @@ const IngredientSelect = () => {
   return (
     <div className="flex flex-col gap-2 items-center">
       {fields.map((field, index) => (
-        <div>
+        <div key={field.id}>
           <div className="flex flex-row gap-2 items-center" key={field.id}>
             <Popover>
               <FormField
@@ -80,9 +80,9 @@ const IngredientSelect = () => {
                       >
                         {field.ingredientId
                           ? ingredients?.find(
-                              (ingredient) =>
-                                ingredient.value === field.ingredientId
-                            )?.label
+                            ingredient =>
+                              ingredient.value === field.ingredientId,
+                          )?.label
                           : "Select ingredient..."}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
@@ -94,7 +94,7 @@ const IngredientSelect = () => {
                         <CommandList>
                           <CommandEmpty>No ingredients found.</CommandEmpty>
                           <CommandGroup>
-                            {ingredients?.map((ingredient) => (
+                            {ingredients?.map(ingredient => (
                               <CommandItem
                                 key={ingredient.value}
                                 value={String(ingredient.label)}
@@ -110,7 +110,7 @@ const IngredientSelect = () => {
                                     "mr-2 h-4 w-4",
                                     field.ingredientId === ingredient.value
                                       ? "opacity-100"
-                                      : "opacity-0"
+                                      : "opacity-0",
                                   )}
                                 />
                                 {ingredient.label}
@@ -135,11 +135,10 @@ const IngredientSelect = () => {
                       <Input
                         {...field}
                         type="number"
-                        onChange={(e) =>
+                        onChange={e =>
                           field.onChange(
-                            e.target.value ? Number(e.target.value) : 0
-                          )
-                        }
+                            e.target.value ? Number(e.target.value) : 0,
+                          )}
                       />
                     </FormControl>
                   </FormItem>
@@ -162,7 +161,7 @@ const IngredientSelect = () => {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {QuantityUnit.map((unit) => (
+                          {QuantityUnit.map(unit => (
                             <SelectItem key={unit} value={unit}>
                               {unit}
                             </SelectItem>
@@ -185,9 +184,9 @@ const IngredientSelect = () => {
             </div>
           </div>
           <FormMessage>
-            {showErrorMessageForField(index, "ingredientId") ||
-              showErrorMessageForField(index, "amount") ||
-              showErrorMessageForField(index, "unit")}
+            {showErrorMessageForField(index, "ingredientId")
+              || showErrorMessageForField(index, "amount")
+              || showErrorMessageForField(index, "unit")}
           </FormMessage>
         </div>
       ))}
@@ -200,13 +199,12 @@ const IngredientSelect = () => {
             unit: QuantityUnit[0],
             amount: 0,
             ingredientId: null,
-          })
-        }
+          })}
       >
         + Add ingredient
       </Button>
     </div>
   );
-};
+}
 
 export default IngredientSelect;

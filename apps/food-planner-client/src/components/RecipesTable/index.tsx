@@ -1,18 +1,25 @@
 import type { TIngredient } from "@jcmono/api-contract";
 import { Outlet, useNavigate } from "@tanstack/react-router";
-import {
-  type ColumnDef,
+import type {
+  ColumnDef,
   ColumnFiltersState,
+  SortingState,
+} from "@tanstack/react-table";
+import {
+
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  type SortingState,
+
   useReactTable,
 } from "@tanstack/react-table";
 import { Edit, Plus, Search, Trash } from "lucide-react";
 import { useState } from "react";
+
+import useDeleteRecipe from "@/queries/useDeleteRecipe";
+import useGetRecipes from "@/queries/useGetRecipes";
 
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -25,10 +32,7 @@ import {
   TableRow,
 } from "../ui/table";
 
-import useGetRecipes from "@/queries/useGetRecipes";
-import useDeleteRecipe from "@/queries/useDeleteRecipe";
-
-const RecipesTable = () => {
+function RecipesTable() {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const navigation = useNavigate({ from: "/app/recipes" });
@@ -37,7 +41,7 @@ const RecipesTable = () => {
   const { mutate } = useDeleteRecipe();
 
   const handleDelete = (id: number) => {
-    //TODO: Add Confirmation Dialog
+    // TODO: Add Confirmation Dialog
     mutate({ params: { id } });
   };
 
@@ -54,8 +58,7 @@ const RecipesTable = () => {
             variant="ghost"
             size="icon"
             onClick={() =>
-              navigation({ to: `/app/recipes/preview/${row.original.id}` })
-            }
+              navigation({ to: `/app/recipes/preview/${row.original.id}` })}
           >
             <Search className="h-4 w-4" />
           </Button>
@@ -63,8 +66,7 @@ const RecipesTable = () => {
             variant="ghost"
             size="icon"
             onClick={() =>
-              navigation({ to: `/app/recipes/edit/${row.original.id}` })
-            }
+              navigation({ to: `/app/recipes/edit/${row.original.id}` })}
           >
             <Edit className="h-4 w-4" />
           </Button>
@@ -107,9 +109,8 @@ const RecipesTable = () => {
         <Input
           placeholder="Search recipes..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
+          onChange={event =>
+            table.getColumn("name")?.setFilterValue(event.target.value)}
           className="max-w-sm"
         />
         <Button onClick={() => navigation({ to: "/app/recipes/add" })}>
@@ -120,7 +121,7 @@ const RecipesTable = () => {
       <div className="rounded-md border relative overflow-auto flex-1">
         <Table>
           <TableHeader className="sticky top-0 bg-background">
-            {table.getHeaderGroups().map((headerGroup) => (
+            {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
@@ -129,7 +130,7 @@ const RecipesTable = () => {
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -138,38 +139,45 @@ const RecipesTable = () => {
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+            {table.getRowModel().rows?.length
+              ? (
+                  table.getRowModel().rows.map(row => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                    >
+                      {row.getVisibleCells().map(cell => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                )
+              : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      No recipes found.
                     </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No recipes found.
-                </TableCell>
-              </TableRow>
-            )}
+                  </TableRow>
+                )}
           </TableBody>
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="text-sm text-muted-foreground">
-          Page {table.getState().pagination.pageIndex + 1} of{" "}
+          Page
+          {" "}
+          {table.getState().pagination.pageIndex + 1}
+          {" "}
+          of
+          {" "}
           {table.getPageCount()}
         </div>
         <Button
@@ -194,6 +202,6 @@ const RecipesTable = () => {
       </div>
     </div>
   );
-};
+}
 
 export default RecipesTable;

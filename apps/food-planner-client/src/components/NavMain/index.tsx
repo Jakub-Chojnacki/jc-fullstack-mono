@@ -1,13 +1,14 @@
+import { Link } from "@tanstack/react-router";
+
 import {
   SidebarGroup,
   SidebarMenu,
   SidebarMenuButton,
 } from "@components/ui/sidebar";
-import { Link } from "@tanstack/react-router";
 
-import { TNavMainProps } from "./types";
+import type { TNavMainProps } from "./types";
 
-const NavMain = ({ items }: TNavMainProps) => {
+function NavMain({ items }: TNavMainProps) {
   return (
     <SidebarGroup>
       <SidebarMenu>
@@ -22,6 +23,6 @@ const NavMain = ({ items }: TNavMainProps) => {
       </SidebarMenu>
     </SidebarGroup>
   );
-};
+}
 
 export default NavMain;

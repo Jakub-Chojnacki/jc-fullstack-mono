@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import apiClient from "@/api-client";
 import { queryClient } from "@/main";
 
-const useCreateScheduledMeal = () => {
+function useCreateScheduledMeal() {
   const mutation = apiClient.scheduleMeals.create.useMutation({
     onSuccess: () => {
       toast.success("Meal scheduled successfully!");
@@ -15,6 +15,6 @@ const useCreateScheduledMeal = () => {
   });
 
   return mutation;
-};
+}
 
 export default useCreateScheduledMeal;

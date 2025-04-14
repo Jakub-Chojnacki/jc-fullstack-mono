@@ -1,11 +1,11 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
 
-import ScheduleView from '@/components/ScheduleView'
+import ScheduleView from "@/components/ScheduleView";
 
-export const Route = createFileRoute('/app/_route/')({
+export const Route = createFileRoute("/app/_route/")({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
-  return <ScheduleView/>
+  return <ScheduleView />;
 }

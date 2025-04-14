@@ -1,12 +1,14 @@
+import type {
+  LucideIcon,
+} from "lucide-react";
 import {
   Apple,
-  LucideIcon,
   NotebookPen,
   ShoppingBasket,
   Utensils,
 } from "lucide-react";
 
-import { SinglePath } from "@/main";
+import type { SinglePath } from "@/main";
 
 type TNavMainItem = { title: string; url: SinglePath; icon?: LucideIcon };
 

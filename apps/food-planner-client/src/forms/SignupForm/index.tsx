@@ -1,9 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-import useSignUp from "@/queries/useSignUp";
+import type { z } from "zod";
 
 import { Button } from "@components/ui/button";
 import {
@@ -23,9 +21,11 @@ import {
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
 
+import useSignUp from "@/queries/useSignUp";
+
 import { signupFormSchema } from "./schema";
 
-const SignupForm = () => {
+function SignupForm() {
   const { mutate } = useSignUp();
 
   const form = useForm<z.infer<typeof signupFormSchema>>({
@@ -127,7 +127,8 @@ const SignupForm = () => {
               </div>
 
               <div className="mt-4 text-center text-sm">
-                Already have an account?{" "}
+                Already have an account?
+                {" "}
                 <Link to="/signin" className="underline underline-offset-4">
                   Sign in
                 </Link>
@@ -138,6 +139,6 @@ const SignupForm = () => {
       </Card>
     </div>
   );
-};
+}
 
 export default SignupForm;

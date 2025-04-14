@@ -1,10 +1,10 @@
+import { useNavigate } from "@tanstack/react-router";
 import toast from "react-hot-toast";
 
 import apiClient from "@/api-client";
 import { queryClient } from "@/main";
-import { useNavigate } from "@tanstack/react-router";
 
-const useUpdateRecipe = () => {
+function useUpdateRecipe() {
   const navigate = useNavigate();
 
   const mutation = apiClient.recipes.update.useMutation({
@@ -19,6 +19,6 @@ const useUpdateRecipe = () => {
   });
 
   return mutation;
-};
+}
 
 export default useUpdateRecipe;

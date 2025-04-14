@@ -1,17 +1,17 @@
 import apiClient from "@/api-client";
 
-import { TUseGetOneRecipeParams } from "./types";
+import type { TUseGetOneRecipeParams } from "./types";
 
-const useGetOneRecipe = ({
+function useGetOneRecipe({
   id,
   withIngredients = false,
-}: TUseGetOneRecipeParams) => {
+}: TUseGetOneRecipeParams) {
   const query = apiClient.recipes.getOne.useQuery([{ id }], {
     params: { id },
     query: { withIngredients },
   });
 
   return query;
-};
+}
 
 export default useGetOneRecipe;

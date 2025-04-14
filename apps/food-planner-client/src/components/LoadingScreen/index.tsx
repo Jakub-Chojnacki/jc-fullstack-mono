@@ -1,6 +1,6 @@
 import { Loader2 } from "lucide-react";
 
-const LoadingScreen = () => {
+function LoadingScreen() {
   return (
     <div className="flex flex-col items-center h-full justify-center space-y-2 text-center">
       <Loader2 className="h-10 w-10 animate-spin text-primary" />
@@ -10,6 +10,6 @@ const LoadingScreen = () => {
       </p>
     </div>
   );
-};
+}
 
 export default LoadingScreen;

@@ -1,4 +1,4 @@
-import { EMealTypes } from "@jcmono/api-contract";
+import type { EMealTypes } from "@jcmono/api-contract";
 
 export type TScheduleMealFormProps = {
   addMealDialogOpen: boolean;

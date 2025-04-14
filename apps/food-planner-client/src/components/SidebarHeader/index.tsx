@@ -2,7 +2,7 @@ import { Separator } from "@radix-ui/react-separator";
 
 import { SidebarTrigger } from "../ui/sidebar";
 
-const SidebarHeader = () => {
+function SidebarHeader() {
   return (
     <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 sticky top-0 bg-background lg:hidden">
       <div className="flex items-center gap-2 px-4 w-full">
@@ -13,6 +13,6 @@ const SidebarHeader = () => {
       </div>
     </header>
   );
-};
+}
 
 export default SidebarHeader;

@@ -1,5 +1,7 @@
 import { Globe, Lock } from "lucide-react";
 
+import useGetOneRecipe from "@/queries/useGetOneRecipe";
+
 import IngredientCard from "../IngredientCard";
 import { Badge } from "../ui/badge";
 import {
@@ -10,10 +12,9 @@ import {
   CardTitle,
 } from "../ui/card";
 
-import { TRecipePreviewProps } from "./types";
-import useGetOneRecipe from "@/queries/useGetOneRecipe";
+import type { TRecipePreviewProps } from "./types";
 
-const RecipePreview = ({ id }: TRecipePreviewProps) => {
+function RecipePreview({ id }: TRecipePreviewProps) {
   const { data, isError } = useGetOneRecipe({ id: +id, withIngredients: true });
 
   if (!data && isError) {
@@ -28,23 +29,25 @@ const RecipePreview = ({ id }: TRecipePreviewProps) => {
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
             <CardTitle className="text-xl font-bold">{name}</CardTitle>
-            {isGlobal ? (
-              <Badge
-                variant="outline"
-                className="flex items-center gap-1 bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
-              >
-                <Globe className="h-3 w-3" />
-                Public
-              </Badge>
-            ) : (
-              <Badge
-                variant="outline"
-                className="flex items-center gap-1 bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300"
-              >
-                <Lock className="h-3 w-3" />
-                Private
-              </Badge>
-            )}
+            {isGlobal
+              ? (
+                  <Badge
+                    variant="outline"
+                    className="flex items-center gap-1 bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
+                  >
+                    <Globe className="h-3 w-3" />
+                    Public
+                  </Badge>
+                )
+              : (
+                  <Badge
+                    variant="outline"
+                    className="flex items-center gap-1 bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300"
+                  >
+                    <Lock className="h-3 w-3" />
+                    Private
+                  </Badge>
+                )}
           </div>
           <CardDescription className="line-clamp-2 text-sm text-muted-foreground">
             {description}
@@ -60,7 +63,7 @@ const RecipePreview = ({ id }: TRecipePreviewProps) => {
           </div>
           <div className="my-4">
             <h3 className="font-bold">Ingredients:</h3>
-            {recipeIngredients?.map((ingredient) => (
+            {recipeIngredients?.map(ingredient => (
               <IngredientCard key={ingredient.id} ingredient={ingredient} />
             ))}
           </div>
@@ -68,6 +71,6 @@ const RecipePreview = ({ id }: TRecipePreviewProps) => {
       </Card>
     );
   }
-};
+}
 
 export default RecipePreview;

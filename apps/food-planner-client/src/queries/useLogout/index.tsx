@@ -1,12 +1,13 @@
-import { AUTH_ME_QUERY_KEY } from "@queries/useAuthMe/const";
 import { useNavigate } from "@tanstack/react-router";
+
+import { AUTH_ME_QUERY_KEY } from "@queries/useAuthMe/const";
 
 import apiClient from "@/api-client";
 import { queryClient } from "@/main";
 
-const useLogout = () => {
+function useLogout() {
   const navigate = useNavigate();
-  
+
   const mutation = apiClient.auth.logout.useMutation({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: AUTH_ME_QUERY_KEY });
@@ -16,6 +17,6 @@ const useLogout = () => {
   });
 
   return mutation;
-};
+}
 
 export default useLogout;
