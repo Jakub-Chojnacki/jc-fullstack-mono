@@ -10,6 +10,8 @@
   "scripts": {
     "build": "turbo run build --filter=./packages/api-contract && turbo run build --filter=./apps/*",
     "test": "turbo run test",
+    "setup": "npm run build --workspace=packages/api-contract && npm run generate:prisma",
+    "generate:prisma": "npx prisma generate --schema=apps/api/prisma/schema.prisma",
     "dev": "turbo run dev",
     "lint": "turbo run lint"
   },

@@ -24,6 +24,7 @@ jc-fullstack-mono/
 
 ### 2. Install dependencies
 `npm install` - in the root directory
+`npm run setup` - in the root directory, it's a script that prepares internal packages and runs npx prisma generate in api
 
 ### 3. Set up the database (Prisma)
 
@@ -33,7 +34,6 @@ Inside `apps/api`:
 
 Then generate the Prisma client and push the schema:
 
-`npm prisma generate` 
 `npm prisma db push`
 
 ### 4. Run the dev servers
