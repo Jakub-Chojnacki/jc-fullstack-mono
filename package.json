@@ -8,7 +8,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "turbo run build",
+    "build": "turbo run build --filter=./packages/api-contract && turbo run build --filter=./apps/*",
     "test": "turbo run test",
     "dev": "turbo run dev",
     "lint": "turbo run lint"
