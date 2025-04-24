@@ -194,7 +194,8 @@ describe('RecipesService', () => {
       isGlobal: updateDto.isGlobal,
     });
 
-    prisma.$transaction.mockImplementation(async (cb) => cb(prisma as any));
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
+    prisma.$transaction.mockImplementation((cb) => cb(prisma as any));
 
     prisma.recipeIngredient.deleteMany.mockResolvedValue({ count: 1 });
     prisma.recipeIngredient.createMany.mockResolvedValue({ count: 1 });

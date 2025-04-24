@@ -8,7 +8,7 @@ describe('ShoppingListIngredientsService', () => {
   let service: ShoppingListIngredientsService;
 
   const userId = 123;
-  
+
   const mockData: TShoppingListIngredientCreate & { userId: number } = {
     ingredientId: 1,
     amount: 100,

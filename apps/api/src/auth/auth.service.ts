@@ -21,7 +21,7 @@ export class AuthService {
   private accessExpirationSeconds = 60 * 15; // 15 minutes in seconds
   private refreshExpirationSeconds = 60 * 60 * 24 * 7; // 7 days in seconds
 
-  async setTokensInCookies(
+  setTokensInCookies(
     response: Response,
     accessToken: string,
     refreshToken: string,
@@ -83,7 +83,7 @@ export class AuthService {
 
     await this.updateRtHash(id, refresh_token);
 
-    await this.setTokensInCookies(response, access_token, refresh_token);
+    this.setTokensInCookies(response, access_token, refresh_token);
 
     return 'User has been created';
   }
@@ -107,7 +107,7 @@ export class AuthService {
 
     await this.updateRtHash(id, refresh_token);
 
-    await this.setTokensInCookies(response, access_token, refresh_token);
+    this.setTokensInCookies(response, access_token, refresh_token);
 
     return 'User has been signed in';
   }
@@ -148,7 +148,7 @@ export class AuthService {
 
     await this.updateRtHash(id, refresh_token);
 
-    await this.setTokensInCookies(response, access_token, refresh_token);
+    this.setTokensInCookies(response, access_token, refresh_token);
 
     return 'Tokens have been refreshed';
   }

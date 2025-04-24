@@ -10,7 +10,7 @@ export class RecipeIngredientsController {
   ) {}
 
   @TsRestHandler(contract.recipeIngredients.create)
-  async create() {
+  create() {
     return tsRestHandler(
       contract.recipeIngredients.create,
       async ({ body }) => {
@@ -26,7 +26,7 @@ export class RecipeIngredientsController {
   }
 
   @TsRestHandler(contract.recipeIngredients.update)
-  async update() {
+  update() {
     return tsRestHandler(
       contract.recipeIngredients.update,
       async ({ body, params: { id } }) => {
@@ -42,7 +42,7 @@ export class RecipeIngredientsController {
   }
 
   @TsRestHandler(contract.recipeIngredients.delete)
-  async delete() {
+  delete() {
     return tsRestHandler(
       contract.recipeIngredients.delete,
       async ({ params: { id } }) => {

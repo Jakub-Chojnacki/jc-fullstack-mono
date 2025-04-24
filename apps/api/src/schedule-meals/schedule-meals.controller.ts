@@ -1,15 +1,15 @@
 import { contract } from '@jcmono/api-contract';
 import { Controller } from '@nestjs/common';
 import { tsRestHandler, TsRestHandler } from '@ts-rest/nest';
-import { ScheduleMealsService } from './schedule-meals.service';
 import { GetCurrentUserId } from 'src/common/decorators';
+import { ScheduleMealsService } from './schedule-meals.service';
 
 @Controller()
 export class ScheduleMealsController {
   constructor(private readonly scheduleMealsService: ScheduleMealsService) {}
 
   @TsRestHandler(contract.scheduleMeals.create)
-  async create(@GetCurrentUserId() userId: number) {
+  create(@GetCurrentUserId() userId: number) {
     return tsRestHandler(contract.scheduleMeals.create, async ({ body }) => {
       const createdScheduledMeal = await this.scheduleMealsService.create(
         userId,
@@ -24,7 +24,7 @@ export class ScheduleMealsController {
   }
 
   @TsRestHandler(contract.scheduleMeals.update)
-  async update() {
+  update() {
     return tsRestHandler(
       contract.scheduleMeals.update,
       async ({ params: { id }, body }) => {
@@ -39,7 +39,7 @@ export class ScheduleMealsController {
   }
 
   @TsRestHandler(contract.scheduleMeals.delete)
-  async delete(@GetCurrentUserId() userId: number) {
+  delete(@GetCurrentUserId() userId: number) {
     return tsRestHandler(
       contract.scheduleMeals.delete,
       async ({ params: { id } }) => {
@@ -57,7 +57,7 @@ export class ScheduleMealsController {
   }
 
   @TsRestHandler(contract.scheduleMeals.get)
-  async get(@GetCurrentUserId() userId: number) {
+  get(@GetCurrentUserId() userId: number) {
     return tsRestHandler(contract.scheduleMeals.get, async ({ query }) => {
       const scheduledMeals = await this.scheduleMealsService.get({
         userId,
@@ -72,7 +72,7 @@ export class ScheduleMealsController {
   }
 
   @TsRestHandler(contract.scheduleMeals.getById)
-  async getById(@GetCurrentUserId() userId: number) {
+  getById(@GetCurrentUserId() userId: number) {
     return tsRestHandler(
       contract.scheduleMeals.getById,
       async ({ params: { id } }) => {
