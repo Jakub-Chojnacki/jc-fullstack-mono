@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+      "moduleResolution": "node",
+      "target": "ES2020",
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "rootDir": "src",
+      "types": ["node"],
+      "declaration": true,
+      "composite": true
+    },
+    "exclude": ["node_modules", "dist"]
+  }
+  
