@@ -54,7 +54,6 @@ export class RecipesService {
 
   async getOne(id: number, userId: number, withIngredients?: boolean) {
     return wrapWithTsRestError(contract.recipes.getOne, async () => {
-
       const recipe = await this.prisma.recipe.findUnique({
         where: {
           id,
@@ -64,7 +63,6 @@ export class RecipesService {
           recipeIngredients: withIngredients,
         },
       });
-
 
       if (withIngredients && recipe) {
         const ingredients = await this.prisma.ingredient.findMany({
@@ -189,13 +187,14 @@ export class RecipesService {
             })
           : Promise.resolve();
 
-        const updateIngredientsPromise = ingredientsToUpdate.length ? ingredientsToUpdate.map(
-          (recipeIngredient) =>
-            prisma.recipeIngredient.update({
-              where: { id: recipeIngredient.id },
-              data: recipeIngredient,
-            }),
-        ) : Promise.resolve();
+        const updateIngredientsPromise = ingredientsToUpdate.length
+          ? ingredientsToUpdate.map((recipeIngredient) =>
+              prisma.recipeIngredient.update({
+                where: { id: recipeIngredient.id },
+                data: recipeIngredient,
+              }),
+            )
+          : Promise.resolve();
 
         return await Promise.all([
           updateRecipePromise,

@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { ExtractJwt, Strategy } from 'passport-jwt';
 import { type Request as RequestType } from 'express';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { JwtPayload } from '../types';
 
 @Injectable()
 export class AtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -15,14 +16,15 @@ export class AtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  async validate(payload: any) {
+  validate(payload: JwtPayload) {
     return payload;
   }
 
-  private static extractJWT(req: RequestType): string | null {
+  private static extractJWT(this: void, req: RequestType): string | null {
     if (
       req.cookies &&
       'access_token' in req.cookies &&
+      typeof req.cookies.access_token === 'string' &&
       req.cookies.access_token.length > 0
     ) {
       return req.cookies.access_token;

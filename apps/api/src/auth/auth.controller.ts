@@ -17,7 +17,7 @@ export class AuthController {
 
   @TsRestHandler(contract.auth.signup)
   @Public()
-  async signup(@Res({ passthrough: true }) res: Response) {
+  signup(@Res({ passthrough: true }) res: Response) {
     return tsRestHandler(
       contract.auth.signup,
       async ({ body: { email, password } }) => {
@@ -36,7 +36,7 @@ export class AuthController {
 
   @TsRestHandler(contract.auth.signin)
   @Public()
-  async signin(@Res({ passthrough: true }) res: Response) {
+  signin(@Res({ passthrough: true }) res: Response) {
     return tsRestHandler(
       contract.auth.signin,
       async ({ body: { email, password } }) => {
@@ -55,7 +55,7 @@ export class AuthController {
 
   @UseGuards(AtGuard)
   @TsRestHandler(contract.auth.me)
-  async me(@GetCurrentUserId() userId: number) {
+  me(@GetCurrentUserId() userId: number) {
     return tsRestHandler(contract.auth.me, async () => {
       const user = await this.authService.me(userId);
 
@@ -75,7 +75,7 @@ export class AuthController {
 
   @UseGuards(AtGuard)
   @TsRestHandler(contract.auth.logout)
-  async logout(
+  logout(
     @GetCurrentUserId() userId: number,
     @Res({
       passthrough: true,
@@ -98,7 +98,7 @@ export class AuthController {
   @TsRestHandler(contract.auth.refreshToken)
   @Public()
   @UseGuards(RtGuard)
-  async refreshToken(
+  refreshToken(
     @GetCurrentUser('refreshToken') refreshToken: string,
     @GetCurrentUserId() userId: number,
     @Res({
