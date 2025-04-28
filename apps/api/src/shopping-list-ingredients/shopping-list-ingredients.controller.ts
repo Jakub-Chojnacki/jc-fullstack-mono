@@ -42,6 +42,25 @@ export class ShoppingListIngredientsController {
     );
   }
 
+  @TsRestHandler(contract.shoppingListIngredient.createFromRecipe)
+  createFromRecipe(@GetCurrentUserId() userId: number) {
+    return tsRestHandler(
+      contract.shoppingListIngredient.createFromRecipe,
+      async ({ params: { id } }) => {
+        const createdShoppingListIngredient =
+          await this.shoppingListIngredientsService.createFromRecipe(
+            id,
+            userId,
+          );
+
+        return {
+          status: 201,
+          body: createdShoppingListIngredient,
+        };
+      },
+    );
+  }
+
   @TsRestHandler(contract.shoppingListIngredient.delete)
   delete(@GetCurrentUserId() userId: number) {
     return tsRestHandler(

@@ -186,6 +186,16 @@ export const contract = c.router(
           201: ShoppingListIngredientSchema,
         },
       },
+      createFromRecipe: {
+        method: "POST",
+        path: "/shoppingListIngredient/recipe/:id",
+        pathParams: z.object({ id: StringToNumberSchema }),
+        body: null,
+        responses:{
+            201:z.array(ShoppingListIngredientSchema),
+            404: NotFoundSchema,
+        }
+      },
       update: {
         method: "PUT",
         path: "/shoppingListIngredient/:id",

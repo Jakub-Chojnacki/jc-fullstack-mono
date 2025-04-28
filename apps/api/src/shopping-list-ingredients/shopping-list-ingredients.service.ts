@@ -51,6 +51,49 @@ export class ShoppingListIngredientsService {
     );
   }
 
+  createFromRecipe(recipeId: number, userId: number) {
+    return wrapWithTsRestError(
+      contract.shoppingListIngredient.delete,
+      async () => {
+        const recipe = await this.prisma.recipe.findUnique({
+          where: {
+            id: recipeId,
+          },
+          select: {
+            recipeIngredients: {
+              select: {
+                id: true,
+                amount: true,
+                unit: true,
+                ingredientId: true,
+              },
+            },
+          },
+        });
+
+        if (!recipe) {
+          throw new Error('Recipe not found');
+        }
+
+        const shoppingListIngredientsToCreate = recipe.recipeIngredients.map(
+          (ingredient) => ({
+            ...ingredient,
+            userId,
+            isDone: false,
+            isDeleted: false,
+          }),
+        );
+
+        const shoppingListIngredients =
+          await this.prisma.shoppingListIngredient.createManyAndReturn({
+            data: shoppingListIngredientsToCreate,
+          });
+
+        return shoppingListIngredients;
+      },
+    );
+  }
+
   delete(id: number, userId: number) {
     return wrapWithTsRestError(
       contract.shoppingListIngredient.delete,
