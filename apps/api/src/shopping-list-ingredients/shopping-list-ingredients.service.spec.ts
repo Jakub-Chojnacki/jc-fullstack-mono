@@ -9,10 +9,49 @@ describe('ShoppingListIngredientsService', () => {
 
   const userId = 123;
 
+  const mockRecipe = {
+    id: 1,
+    name: 'Test Recipe',
+    recipeIngredients: [
+      {
+        ingredientId: 1,
+        amount: 100,
+        unit: 'GRAMS',
+      },
+      {
+        ingredientId: 2,
+        amount: 50,
+        unit: 'GRAMS',
+      },
+    ],
+  };
+
+  const mockDataFromRecipe: (TShoppingListIngredientCreate & {
+    userId: number;
+  })[] = [
+    {
+      ingredientId: 1,
+      amount: 100,
+      isDone: false,
+      isDeleted: false,
+      unit: 'GRAMS',
+      userId,
+    },
+    {
+      ingredientId: 2,
+      amount: 50,
+      isDone: false,
+      isDeleted: false,
+      unit: 'GRAMS',
+      userId,
+    },
+  ];
+
   const mockData: TShoppingListIngredientCreate & { userId: number } = {
     ingredientId: 1,
     amount: 100,
     isDone: false,
+    isDeleted: false,
     unit: 'GRAMS',
     userId,
   };
@@ -23,6 +62,10 @@ describe('ShoppingListIngredientsService', () => {
       create: jest.Mock;
       update: jest.Mock;
       delete: jest.Mock;
+      createManyAndReturn: jest.Mock;
+    };
+    recipe: {
+      findUnique: jest.Mock;
     };
   };
 
@@ -38,6 +81,10 @@ describe('ShoppingListIngredientsService', () => {
               create: jest.fn(),
               update: jest.fn(),
               delete: jest.fn(),
+              createManyAndReturn: jest.fn(),
+            },
+            recipe: {
+              findUnique: jest.fn(),
             },
           },
         },
@@ -63,6 +110,40 @@ describe('ShoppingListIngredientsService', () => {
     expect(prisma.shoppingListIngredient.create).toHaveBeenCalledWith({
       data: mockData,
     });
+  });
+
+  it('should create multiple shopping list ingredients from recipeId', async () => {
+    prisma.shoppingListIngredient.createManyAndReturn.mockResolvedValue(
+      mockDataFromRecipe,
+    );
+
+    prisma.recipe.findUnique.mockResolvedValue(mockRecipe);
+
+    const result = await service.createFromRecipe(mockRecipe.id, userId);
+
+    expect(prisma.recipe.findUnique).toHaveBeenCalledWith({
+      where: {
+        id: mockRecipe.id,
+      },
+      select: {
+        recipeIngredients: {
+          select: {
+            id: true,
+            amount: true,
+            unit: true,
+            ingredientId: true,
+          },
+        },
+      },
+    });
+
+    expect(
+      prisma.shoppingListIngredient.createManyAndReturn,
+    ).toHaveBeenCalledWith({
+      data: mockDataFromRecipe,
+    });
+
+    expect(result).toEqual(mockDataFromRecipe);
   });
 
   it('should delete a shopping list ingredient', async () => {

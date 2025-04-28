@@ -14,9 +14,9 @@ export class ShoppingListIngredientsController {
   get(@GetCurrentUserId() userId: number) {
     return tsRestHandler(
       contract.shoppingListIngredient.get,
-      async ({ query: { isDone } }) => {
+      async ({ query }) => {
         const shoppingListIngredients =
-          await this.shoppingListIngredientsService.get({ isDone, userId });
+          await this.shoppingListIngredientsService.get({ ...query, userId });
 
         return {
           status: 200,
@@ -33,6 +33,25 @@ export class ShoppingListIngredientsController {
       async ({ body }) => {
         const createdShoppingListIngredient =
           await this.shoppingListIngredientsService.create(body, userId);
+
+        return {
+          status: 201,
+          body: createdShoppingListIngredient,
+        };
+      },
+    );
+  }
+
+  @TsRestHandler(contract.shoppingListIngredient.createFromRecipe)
+  createFromRecipe(@GetCurrentUserId() userId: number) {
+    return tsRestHandler(
+      contract.shoppingListIngredient.createFromRecipe,
+      async ({ params: { id } }) => {
+        const createdShoppingListIngredient =
+          await this.shoppingListIngredientsService.createFromRecipe(
+            id,
+            userId,
+          );
 
         return {
           status: 201,
