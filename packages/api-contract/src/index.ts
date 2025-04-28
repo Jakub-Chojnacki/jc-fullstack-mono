@@ -14,6 +14,7 @@ import {
   RecipeIngredientUpdateSchema,
   RecipeSchema,
   ShoppingListIngredientCreateSchema,
+  ShoppingListIngredientGetQuerySchema,
   ShoppingListIngredientSchema,
   ShoppingListIngredientUpdateSchema,
   StringToNumberSchema,
@@ -171,9 +172,7 @@ export const contract = c.router(
       get: {
         method: "GET",
         path: "/shoppingListIngredient",
-        query: z.object({
-          isDone: BooleanQuerySchema.optional(),
-        }),
+        query: ShoppingListIngredientGetQuerySchema,
         responses: {
           200: z.array(ShoppingListIngredientSchema),
           404: NotFoundSchema,

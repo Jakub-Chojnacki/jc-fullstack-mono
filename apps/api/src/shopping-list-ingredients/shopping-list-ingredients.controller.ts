@@ -14,9 +14,9 @@ export class ShoppingListIngredientsController {
   get(@GetCurrentUserId() userId: number) {
     return tsRestHandler(
       contract.shoppingListIngredient.get,
-      async ({ query: { isDone } }) => {
+      async ({ query }) => {
         const shoppingListIngredients =
-          await this.shoppingListIngredientsService.get({ isDone, userId });
+          await this.shoppingListIngredientsService.get({ ...query, userId });
 
         return {
           status: 200,

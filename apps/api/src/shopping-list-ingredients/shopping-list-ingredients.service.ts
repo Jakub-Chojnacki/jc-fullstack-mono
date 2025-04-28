@@ -1,6 +1,7 @@
 import {
   contract,
   TShoppingListIngredientCreate,
+  type TShoppingListIngredientGetQuery,
   TShoppingListIngredientUpdate,
 } from '@jcmono/api-contract';
 import { Injectable } from '@nestjs/common';
@@ -12,7 +13,12 @@ import wrapWithTsRestError from 'src/utils/wrapWithTsRestError';
 export class ShoppingListIngredientsService {
   constructor(private prisma: PrismaService) {}
 
-  get({ isDone, userId }: { isDone: boolean | undefined; userId: number }) {
+  get({
+    isDone,
+    userId,
+    page = 1,
+    take = 50,
+  }: TShoppingListIngredientGetQuery & { userId: number }) {
     return wrapWithTsRestError(
       contract.shoppingListIngredient.get,
       async () =>
@@ -23,6 +29,7 @@ export class ShoppingListIngredientsService {
             isDeleted: false,
           },
           take: 50,
+          skip: take * (page - 1),
           orderBy: {
             createdAt: 'desc',
           },

@@ -13,6 +13,7 @@ describe('ShoppingListIngredientsService', () => {
     ingredientId: 1,
     amount: 100,
     isDone: false,
+    isDeleted: false,
     unit: 'GRAMS',
     userId,
   };

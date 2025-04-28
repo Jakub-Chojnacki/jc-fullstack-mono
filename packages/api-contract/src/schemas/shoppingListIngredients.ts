@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { QuantityUnit } from "./ingredients";
+import { BooleanQuerySchema } from "./utils";
 
 export const ShoppingListIngredientSchema = z.object({
   id: z.number(),
@@ -9,6 +10,7 @@ export const ShoppingListIngredientSchema = z.object({
   amount: z.number(),
   unit: z.enum(QuantityUnit),
   isDone: z.boolean(),
+  isDeleted: z.boolean(),
   ingredientId: z.number(),
   userId: z.number(),
 });
@@ -39,4 +41,14 @@ export const ShoppingListIngredientUpdateSchema =
 
 export type TShoppingListIngredientUpdate = z.infer<
   typeof ShoppingListIngredientUpdateSchema
+>;
+
+export const ShoppingListIngredientGetQuerySchema = z.object({
+  page: z.number().optional(),
+  take: z.number().optional(),
+  isDone: BooleanQuerySchema.optional(),
+ })
+
+export type TShoppingListIngredientGetQuery = z.infer<
+  typeof ShoppingListIngredientGetQuerySchema
 >;
