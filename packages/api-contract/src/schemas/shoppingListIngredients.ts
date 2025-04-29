@@ -19,6 +19,20 @@ export type TShoppingListIngredient = z.infer<
   typeof ShoppingListIngredientSchema
 >;
 
+export const ShoppingListIngredientGetSchema = ShoppingListIngredientSchema.omit({
+  createdAt: true,
+  updatedAt: true,
+  userId: true,
+}).extend({
+  ingredient: z.object({
+    name:z.string()
+  })
+})
+
+export type TShoppingListIngredientGet = z.infer<
+  typeof ShoppingListIngredientGetSchema
+>;
+
 export const ShoppingListIngredientCreateSchema =
   ShoppingListIngredientSchema.omit({
     id: true,

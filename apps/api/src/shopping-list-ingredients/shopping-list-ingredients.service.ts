@@ -28,11 +28,20 @@ export class ShoppingListIngredientsService {
             userId,
             isDeleted: false,
           },
+          omit: {
+            createdAt: true,
+            updatedAt: true,
+            userId: true,
+          },
+          include: {
+            ingredient: {
+              select: {
+                name: true,
+              },
+            },
+          },
           take: 50,
           skip: take * (page - 1),
-          orderBy: {
-            createdAt: 'desc',
-          },
         }),
     );
   }
