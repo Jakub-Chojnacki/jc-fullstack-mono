@@ -4,7 +4,7 @@ import apiClient from "@/api-client";
 import { queryClient } from "@/main";
 
 function useDeleteShoppingListIngredient() {
-  const mutation = apiClient.scheduleMeals.delete.useMutation({
+  const mutation = apiClient.shoppingListIngredient.delete.useMutation({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["shoppingListIngredients"] });
       toast.success("Ingredient deleted successfully!");
