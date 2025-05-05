@@ -54,7 +54,7 @@ function AddShoppingListItemForm() {
       <CardContent>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col items-end sm:flex-row gap-3">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-3 flex-col md:items-end md:flex-row">
             <Popover>
               <FormField
                 control={control}

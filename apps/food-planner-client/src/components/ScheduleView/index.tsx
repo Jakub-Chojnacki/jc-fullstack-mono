@@ -1,6 +1,6 @@
 import { EMealTypes } from "@jcmono/api-contract";
 import { format } from "date-fns";
-import { ChevronLeft, ChevronRight, Plus, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, NotebookPen, Plus, X } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,8 @@ import ScheduleMealForm from "@/forms/ScheduleMealForm";
 import useDaysOfWeek from "@/hooks/useDaysOfWeek";
 import useDeleteScheduledMeal from "@/queries/useDeleteScheduledMeal";
 import useGetScheduledMeals from "@/queries/useGetScheduledMeals";
+
+import HeaderWithIcon from "../HeaderWithIcon";
 
 import { mealTypes } from "./const";
 
@@ -52,8 +54,9 @@ function ScheduleView() {
 
   return (
     <div className="container mx-auto py-10 px-4">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Meal Schedule</h1>
+      <div className="flex flex-col justify-between items-center mb-8 lg:flex-row ">
+        <HeaderWithIcon icon={NotebookPen} title="Meal Schedule" />
+
         <div className="flex items-center gap-2">
           <Button variant="outline" size="icon" onClick={previousWeek}>
             <ChevronLeft className="h-4 w-4" />
@@ -70,7 +73,7 @@ function ScheduleView() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-7 gap-4">
         {daysOfWeek.map(day => (
           <Card key={day.toString()} className="overflow-hidden">
             <CardHeader className="p-3 bg-muted">
