@@ -112,11 +112,14 @@ export class AuthService {
     return 'User has been signed in';
   }
 
-  async logout(userId: number) {
+  async logout(userId: number, res: Response) {
     await this.prisma.user.updateMany({
       where: { id: userId, hashedRt: { not: null } },
       data: { hashedRt: null },
     });
+
+    res.cookie('access_token', '', { httpOnly: true, maxAge: 0 });
+    res.cookie('refresh_token', '', { httpOnly: true, maxAge: 0 });
   }
 
   async updateRtHash(userId: number, rt: string) {
