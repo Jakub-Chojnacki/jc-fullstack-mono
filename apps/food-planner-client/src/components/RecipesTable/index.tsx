@@ -6,7 +6,6 @@ import type {
   SortingState,
 } from "@tanstack/react-table";
 import {
-
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -15,12 +14,13 @@ import {
 
   useReactTable,
 } from "@tanstack/react-table";
-import { Edit, Plus, Search, Trash } from "lucide-react";
+import { Edit, Plus, Search, Trash, Utensils } from "lucide-react";
 import { useState } from "react";
 
 import useDeleteRecipe from "@/queries/useDeleteRecipe";
 import useGetRecipes from "@/queries/useGetRecipes";
 
+import HeaderWithIcon from "../HeaderWithIcon";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import {
@@ -104,7 +104,7 @@ function RecipesTable() {
 
   return (
     <div className="h-[calc(100dvh-theme(space.4))] flex flex-col">
-      <h2 className="bold text-2xl">Recipes</h2>
+      <HeaderWithIcon icon={Utensils} title="Recipes" />
       <div className="flex items-center justify-between py-4 gap-4">
         <Input
           placeholder="Search recipes..."

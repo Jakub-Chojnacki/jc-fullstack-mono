@@ -4,6 +4,7 @@ import useGetShoppingListIngredients from "@queries/useGetShoppingListIngredient
 
 import AddShoppingListItemForm from "@forms/AddShoppingListItemForm";
 
+import HeaderWithIcon from "../HeaderWithIcon";
 import ShoppingListItem from "../ShoppingListItem";
 import { Card, CardContent } from "../ui/card";
 
@@ -11,13 +12,11 @@ function ShoppingList() {
   const { data } = useGetShoppingListIngredients();
 
   return (
-    <div>
-      <div className="flex items-center">
-        <ShoppingBag className="h-6 w-6 mr-2" />
-        <h2 className="text-3xl font-bold">Shopping List</h2>
+    <div className="max-h-full overflow-hidden flex flex-col">
+      <HeaderWithIcon icon={ShoppingBag} title="Shopping List" />
+      <div className="">
+        <AddShoppingListItemForm />
       </div>
-
-      <AddShoppingListItemForm />
 
       {data && !data.body.length && (
         <div className="text-center py-12">
@@ -30,7 +29,7 @@ function ShoppingList() {
       )}
 
       {data && data.body.length > 0 && (
-        <Card className="my-4">
+        <Card className="my-4 overflow-y-auto max-h-[calc(100vh-48px)]">
           <CardContent className="p-0">
             <ul className="divide-y">
               {data.body.map(item => <ShoppingListItem key={item.id} item={item} />)}
@@ -39,6 +38,7 @@ function ShoppingList() {
         </Card>
       )}
     </div>
+
   );
 }
 

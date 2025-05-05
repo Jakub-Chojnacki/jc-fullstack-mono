@@ -4,7 +4,7 @@ import type {
 import {
   Apple,
   NotebookPen,
-  ShoppingBasket,
+  ShoppingBag,
   Utensils,
 } from "lucide-react";
 
@@ -16,5 +16,5 @@ export const navMainItems: TNavMainItem[] = [
   { title: "Dashboard", url: "/app", icon: NotebookPen },
   { title: "Ingredients", url: "/app/ingredients", icon: Apple },
   { title: "Recipes", url: "/app/recipes", icon: Utensils },
-  { title: "Shopping List", url: "/app/shopping", icon: ShoppingBasket },
+  { title: "Shopping List", url: "/app/shopping", icon: ShoppingBag },
 ];

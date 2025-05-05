@@ -6,7 +6,6 @@ import type {
   SortingState,
 } from "@tanstack/react-table";
 import {
-
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -14,12 +13,13 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Plus, Trash } from "lucide-react";
+import { Apple, Plus, Trash } from "lucide-react";
 import { useState } from "react";
 
 import useDeleteIngredient from "@/queries/useDeleteIngredient";
 import useGetIngredients from "@/queries/useGetIngredients";
 
+import HeaderWithIcon from "../HeaderWithIcon";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import {
@@ -87,7 +87,7 @@ function IngredientsTable() {
 
   return (
     <div className="h-[calc(100dvh-theme(space.4))] flex flex-col">
-      <h2 className="bold text-2xl ">Ingredients</h2>
+      <HeaderWithIcon icon={Apple} title="Ingredients" />
       <div className="flex items-center justify-between  gap-4 py-4">
         <Input
           placeholder="Search ingredients..."
