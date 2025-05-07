@@ -10,7 +10,6 @@ function useAuthMe() {
       staleTime: GC_TIME_MS,
       refetchInterval: REFETCH_INTERVAL_MS,
       queryKey: AUTH_ME_QUERY_KEY,
-      retry: false,
     },
   );
 

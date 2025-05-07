@@ -17,7 +17,8 @@ function processQueue(error: any, response: any = null) {
   });
   failedQueue = [];
 }
-const BASE_URL = `${"http://localhost:5173"}`;
+
+const BASE_URL = window.location.origin;
 
 export const axiosClient: AxiosInstance = axios.create({
   baseURL: "",
