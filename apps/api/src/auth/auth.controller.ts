@@ -83,10 +83,7 @@ export class AuthController {
     res: Response,
   ) {
     return tsRestHandler(contract.auth.logout, async () => {
-      await this.authService.logout(userId);
-
-      res.cookie('access_token', '', { httpOnly: true, maxAge: 0 });
-      res.cookie('refresh_token', '', { httpOnly: true, maxAge: 0 });
+      await this.authService.logout(userId, res);
 
       return {
         status: 200,
@@ -112,11 +109,6 @@ export class AuthController {
         refreshToken,
         res,
       );
-
-      res.send({
-        status: 200,
-        body: message,
-      });
 
       return {
         status: 200,

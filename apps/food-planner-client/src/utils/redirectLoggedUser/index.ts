@@ -1,19 +1,11 @@
-import { redirect } from "@tanstack/react-router";
-
 import apiClient from "@/api-client";
-import { queryClient } from "@/main";
-import { AUTH_ME_QUERY_KEY } from "@/queries/useAuthMe/const";
+import { router } from "@/main";
 
 async function redirectLoggedUser() {
-  try {
-    const user = await apiClient.auth.me.ensureQueryData(queryClient, AUTH_ME_QUERY_KEY);
+  const user = await apiClient.auth.me.query();
 
-    if (user) {
-      return redirect({ to: "/app" });
-    }
-  }
-  catch {
-    return null;
+  if (user.status === 200) {
+    router.navigate({ to: "/app" });
   }
 }
 
