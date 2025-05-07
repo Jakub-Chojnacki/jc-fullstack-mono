@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
@@ -21,12 +21,15 @@ import {
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
 
+import { queryClient } from "@/main";
+import { AUTH_ME_QUERY_KEY } from "@/queries/useAuthMe/const";
 import useSignUp from "@/queries/useSignUp";
 
 import { signupFormSchema } from "./schema";
 
 function SignupForm() {
   const { mutate } = useSignUp();
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof signupFormSchema>>({
     resolver: zodResolver(signupFormSchema),
@@ -43,7 +46,15 @@ function SignupForm() {
       return;
     }
 
-    mutate({ body: values });
+    mutate(
+      { body: values },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: AUTH_ME_QUERY_KEY });
+          navigate({ from: "/signup", to: "/app" });
+        },
+      },
+    );
   };
 
   return (

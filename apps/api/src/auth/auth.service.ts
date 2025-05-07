@@ -24,7 +24,7 @@ export class AuthService {
   setTokensInCookies(
     response: Response,
     accessToken: string,
-    refreshToken: string,
+    refreshToken?: string,
   ) {
     response.cookie('access_token', accessToken, {
       httpOnly: true,
@@ -33,11 +33,13 @@ export class AuthService {
     });
 
     // Set the Refresh Token in an HTTP-only cookie
-    response.cookie('refresh_token', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: this.refreshExpirationSeconds * 1000, // 7 days in milliseconds
-    });
+    if (refreshToken) {
+      response.cookie('refresh_token', refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: this.refreshExpirationSeconds * 1000, // 7 days in milliseconds
+      });
+    }
   }
 
   hashData(data: string) {
@@ -147,11 +149,9 @@ export class AuthService {
 
     const { id, email } = user;
 
-    const { access_token, refresh_token } = await this.getToken(id, email);
+    const { access_token } = await this.getToken(id, email);
 
-    await this.updateRtHash(id, refresh_token);
-
-    this.setTokensInCookies(response, access_token, refresh_token);
+    this.setTokensInCookies(response, access_token);
 
     return 'Tokens have been refreshed';
   }

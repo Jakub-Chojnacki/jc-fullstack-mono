@@ -9,10 +9,21 @@ import "./index.css";
 import { routeTree } from "./routeTree.gen";
 
 export const router = createRouter({ routeTree });
+declare module "@tanstack/react-router" {
+  // eslint-disable-next-line ts/consistent-type-definitions
+  interface Register {
+    router: typeof router;
+  }
+}
 
 export type SinglePath = keyof (typeof router)["routesByPath"];
 
-export const queryClient = new QueryClient();
+export const queryClient = new QueryClient({ defaultOptions: {
+  queries: {
+    retry: false,
+    refetchOnWindowFocus: false,
+  },
+} });
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
