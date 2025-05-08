@@ -1,0 +1,8 @@
+:80
+
+root * /usr/share/caddy
+
+# Handle static assets properly
+try_files {path} {path}/ /index.html
+
+file_server
