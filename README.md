@@ -32,9 +32,11 @@ Inside `apps/api`:
 
  Create a .env file and add values according to the .env.example file.
 
+You can generate a database container in docker with "npm run dev:db"
+
 Then generate the Prisma client and push the schema:
 
-`npm prisma db push`
+`npx prisma db push`
 
 ### 4. Run the dev servers
 
