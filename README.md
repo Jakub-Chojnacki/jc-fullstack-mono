@@ -1,6 +1,6 @@
 # Monorepo Food Planner App
 
-![CI status](https://github.com/Jakub-Chojnacki/jc-fullstack-monor/actions/workflows/ci.yml/badge.svg)
+![CI status](https://github.com/Jakub-Chojnacki/jc-fullstack-mono/actions/workflows/ci.yml/badge.svg)
 
 
 
