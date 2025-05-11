@@ -18,10 +18,10 @@ function processQueue(error: any, response: any = null) {
   failedQueue = [];
 }
 
-const BASE_URL = window.location.origin;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 
 export const axiosClient: AxiosInstance = axios.create({
-  baseURL: "",
+  baseURL: BASE_URL,
   withCredentials: true,
 });
 
@@ -32,9 +32,17 @@ axiosClient.interceptors.response.use(
       _retry?: boolean;
     };
 
+    if (error.code === "ERR_NETWORK") {
+      /* This is mostly for CORS errors.
+      A CORS error doesn't return a 401 and it can cause an infinite loop which will crash the browser
+      */
+      return new Promise(() => {
+        (originalRequest as any)._noRetry = true;
+      });
+    }
+
     const isAuthError
-      = error.response?.status === 401
-        && originalRequest.url?.includes("/api/auth");
+      = error.response?.status === 401 && originalRequest.url?.includes("/api/auth");
 
     if (
       error.response?.status === 401
@@ -46,7 +54,7 @@ axiosClient.interceptors.response.use(
       if (!isRefreshing) {
         isRefreshing = true;
         try {
-          await axiosClient.post(`${BASE_URL}/api/auth/refresh`);
+          await axiosClient.post(`/api/auth/refresh`);
           processQueue(null);
         }
         catch (err) {

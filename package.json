@@ -13,6 +13,7 @@
     "setup": "npm run build --workspace=packages/api-contract && npm run generate:prisma",
     "generate:prisma": "npx prisma generate --schema=apps/api/prisma/schema.prisma",
     "dev": "turbo run dev",
+    "dev:db":"docker compose -f docker-compose.dev.yml up",
     "lint": "turbo run lint"
   },
   "packageManager": "npm@10.8.2"
