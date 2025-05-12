@@ -26,5 +26,7 @@ FROM node:lts-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=builder /app/ .
+COPY apps/api/start.sh ./start.sh
+RUN chmod +x apps/api/start.sh
 
 CMD ["node", "apps/api/dist/main"]
