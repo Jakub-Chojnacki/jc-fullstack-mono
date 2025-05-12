@@ -26,5 +26,6 @@ FROM node:lts-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=builder /app/ .
+RUN npx prisma db push
 
 CMD ["node", "apps/api/dist/main"]
