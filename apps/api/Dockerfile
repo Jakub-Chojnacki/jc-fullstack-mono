@@ -17,6 +17,10 @@ RUN npm install -g prisma
 RUN prisma generate
 
 FROM node:lts-alpine AS builder
+ARG TURBO_TEAM
+ENV TURBO_TEAM=$TURBO_TEAM
+ARG TURBO_TOKEN
+ENV TURBO_TOKEN=$TURBO_TOKEN
 WORKDIR /app
 COPY --from=installer /app/ .
 COPY --from=pruner /app/out/full .
@@ -26,7 +30,9 @@ FROM node:lts-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=builder /app/ .
-COPY apps/api/start.sh ./start.sh
-RUN chmod +x apps/api/start.sh
+RUN npm install -g prisma
 
-CMD ["node", "apps/api/dist/main"]
+COPY apps/api/start.sh ./start.sh
+RUN chmod +x ./start.sh
+
+CMD ["./start.sh"]
