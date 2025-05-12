@@ -29,6 +29,8 @@ export class AuthService {
     response.cookie('access_token', accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
+      sameSite: 'none',
+      domain: process.env.CORS_ORIGIN,
       maxAge: this.accessExpirationSeconds * 1000, // 15 minutes in milliseconds
     });
 
@@ -37,6 +39,8 @@ export class AuthService {
       response.cookie('refresh_token', refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
+        sameSite: 'none',
+        domain: process.env.CORS_ORIGIN,
         maxAge: this.refreshExpirationSeconds * 1000, // 7 days in milliseconds
       });
     }
