@@ -97,11 +97,11 @@ function IngredientSelect() {
                             {ingredients?.map(ingredient => (
                               <CommandItem
                                 key={ingredient.value}
-                                value={String(ingredient.label)}
+                                value={String(ingredient.value)}
                                 onSelect={(currentValue) => {
                                   update(index, {
                                     ...field,
-                                    ingredientId: +currentValue,
+                                    ingredientId: Number(currentValue),
                                   });
                                 }}
                               >
