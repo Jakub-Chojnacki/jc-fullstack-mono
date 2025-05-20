@@ -1,6 +1,13 @@
 import { EMealTypes } from "@jcmono/api-contract";
 import { format } from "date-fns";
-import { ChevronLeft, ChevronRight, NotebookPen, Plus, X } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  NotebookPen,
+  Plus,
+  ShoppingBag,
+  X,
+} from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -15,6 +22,7 @@ import ScheduleMealForm from "@/forms/ScheduleMealForm";
 import useDaysOfWeek from "@/hooks/useDaysOfWeek";
 import useDeleteScheduledMeal from "@/queries/useDeleteScheduledMeal";
 import useGetScheduledMeals from "@/queries/useGetScheduledMeals";
+import useShoppingListFromMeal from "@/queries/useShoppingListFromMeal";
 
 import HeaderWithIcon from "../HeaderWithIcon";
 
@@ -39,6 +47,7 @@ function ScheduleView() {
   });
 
   const { mutate } = useDeleteScheduledMeal();
+  const { mutate: createShoppingListFromMeal, isPending: isCreateShoppingListFromMealPending } = useShoppingListFromMeal();
 
   const openAddMealDialog = (day: Date, mealType: EMealTypes): void => {
     setSelectedDay(day);
@@ -106,6 +115,18 @@ function ScheduleView() {
                                   {foundMeal.recipe.name}
                                 </div>
                               </div>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                disabled={isCreateShoppingListFromMealPending}
+                                className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity absolute top-1 right-8"
+                                onClick={() =>
+                                  createShoppingListFromMeal({
+                                    params: { id: foundMeal.id },
+                                  })}
+                              >
+                                <ShoppingBag className="h-3 w-3" />
+                              </Button>
                               <Button
                                 variant="ghost"
                                 size="icon"

@@ -71,7 +71,6 @@ export class ShoppingListIngredientsService {
           select: {
             recipeIngredients: {
               select: {
-                id: true,
                 amount: true,
                 unit: true,
                 ingredientId: true,
