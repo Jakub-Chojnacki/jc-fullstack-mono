@@ -35,18 +35,16 @@ function MealCard({
     onAddMeal(selectedDay, mealType as EMealTypes);
   };
 
+  const badgeStyles = `px-3 py-1.5 rounded-xl text-sm font-bold border ${
+    mealTypeColors[mealType as EMealTypes]
+    || "bg-gray-50 border-gray-200 text-gray-800"
+  }`;
+
   return (
     <Card className="overflow-hidden">
       <CardContent className="p-4">
         <div className="flex items-center gap-4 mb-3">
-          <div
-            className={`px-3 py-1.5 rounded-xl text-sm font-bold border ${
-              mealTypeColors[mealType as EMealTypes]
-              || "bg-gray-50 border-gray-200 text-gray-800"
-            }`}
-          >
-            {mealType}
-          </div>
+          <div className={badgeStyles}>{mealType}</div>
           <div className="h-px bg-border flex-1"></div>
         </div>
 
@@ -61,6 +59,7 @@ function MealCard({
                     <p className="text-sm text-muted-foreground">
                       Click to view full recipe details
                     </p>
+                    {/* TODO: Add handling for details */}
                   </div>
                   <div className="flex gap-2">
                     <Button
@@ -68,7 +67,7 @@ function MealCard({
                       size="icon"
                       disabled={isCreateShoppingListFromMealPending}
                       className="h-10 w-10 rounded-lg"
-                      onClick={() => handleCreateShoppingList(foundMeal.id)}
+                      onClick={() => handleCreateShoppingList(foundMeal.recipe.id)}
                     >
                       <ShoppingBag className="h-5 w-5" />
                     </Button>
