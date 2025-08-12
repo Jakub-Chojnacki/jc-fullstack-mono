@@ -23,14 +23,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { YEAR_MONTH_DAY_FORMAT } from "@/constants/dates";
 import useCreateScheduledMeal from "@/queries/useCreateScheduledMeal";
 
+import type {
+  TScheduleMealFormValues,
+} from "./schema";
 import {
   ScheduleMealFormSchema,
   ScheduleMealFormSchemaWithRecipeId,
-} from "./schema";
-import type {
-  TScheduleMealFormValues,
 } from "./schema";
 
 import type { TScheduleMealFormProps } from "./types";
@@ -94,7 +95,7 @@ function ScheduleMealForm({
         <DialogHeader>
           <DialogTitle>Add Meal</DialogTitle>
           <DialogDescription>
-            {`Schedule a meal for ${format(form.watch("scheduledAt"), "EEEE, MMMM d")}`}
+            {`Schedule a meal for ${format(form.watch("scheduledAt"), YEAR_MONTH_DAY_FORMAT)}`}
           </DialogDescription>
         </DialogHeader>
 

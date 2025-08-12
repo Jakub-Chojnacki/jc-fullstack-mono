@@ -15,7 +15,7 @@ import { navMainItems } from "./const";
 
 function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="none" {...props} className="min-h-screen">
       <SidebarHeader>
         <div className="flex items-center justify-between truncate">
           <span className="text-lg font-semibold">Food Planner</span>

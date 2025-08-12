@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { BasePrismaSchema } from "./utils";
 import { RecipeSchema } from "./recipes";
+import { BasePrismaSchema } from "./utils";
 
 export const MealTypes = ["BREAKFAST", "LUNCH", "DINNER", "SNACK"] as const;
 
@@ -34,5 +34,6 @@ export const ScheduleMealsGetSchema = ScheduleMealsSchema.extend({
 });
 
 export type TScheduleMeals = z.infer<typeof ScheduleMealsSchema>;
+export type TScheduleMealsGet = z.infer<typeof ScheduleMealsGetSchema>;
 export type TScheduleMealsCreate = z.infer<typeof ScheduleMealsCreateSchema>;
 export type TScheduleMealsUpdate = z.infer<typeof ScheduleMealsUpdateSchema>;

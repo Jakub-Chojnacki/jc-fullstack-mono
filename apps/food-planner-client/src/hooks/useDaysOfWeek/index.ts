@@ -10,7 +10,7 @@ import { useState } from "react";
 import type { TUseDaysOfWeek } from "./types";
 
 function useDaysOfWeek(): TUseDaysOfWeek {
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(() => new Date());
 
   const startDate = startOfWeek(currentDate, { weekStartsOn: 1 }); // Start on Monday
   const endDate = endOfWeek(currentDate, { weekStartsOn: 1 });
