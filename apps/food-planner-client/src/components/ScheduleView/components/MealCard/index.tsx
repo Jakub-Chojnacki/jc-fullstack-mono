@@ -67,7 +67,7 @@ function MealCard({
                       variant="ghost"
                       size="icon"
                       disabled={isCreateShoppingListFromMealPending}
-                      className="h-10 w-10 hover:bg-green-100 rounded-lg"
+                      className="h-10 w-10 rounded-lg"
                       onClick={() => handleCreateShoppingList(foundMeal.id)}
                     >
                       <ShoppingBag className="h-5 w-5" />
@@ -75,7 +75,7 @@ function MealCard({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-10 w-10 hover:bg-red-100 rounded-lg"
+                      className="h-10 w-10 rounded-lg"
                       onClick={() => handleDeleteMeal(foundMeal.id)}
                     >
                       <X className="h-5 w-5" />

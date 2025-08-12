@@ -10,8 +10,8 @@ function ScheduleHeader({ currentViewDay }: ScheduleHeaderProps) {
   const isToday = isSameDay(currentViewDay, new Date());
 
   return (
-    <div className="flex items-center justify-between mb-6">
-      <div className="flex items-center gap-4">
+    <div className="flex items-center justify-center md:justify-between mb-6">
+      <div className="flex flex-col md:flex-row justify-center items-center gap-4">
         <div className="flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full border border-primary/20">
           <NotebookPen className="h-5 w-5 text-primary" />
           <span className="text-sm font-medium text-primary">

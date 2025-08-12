@@ -42,7 +42,6 @@ function ScheduleView() {
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <div className="container mx-auto py-6 px-4">
         <ScheduleHeader currentViewDay={currentViewDay} />
-
         <DayNavigation
           daysOfWeek={daysOfWeek}
           currentViewDay={currentViewDay}
@@ -50,13 +49,11 @@ function ScheduleView() {
           onPreviousWeek={previousWeek}
           onNextWeek={nextWeek}
         />
-
         <DailyMealsView
           selectedDay={currentViewDay}
           meals={data?.body || []}
           onAddMeal={openAddMealDialog}
         />
-
         {addMealDialogOpen && (
           <ScheduleMealForm
             addMealDialogOpen={addMealDialogOpen}
