@@ -1,8 +1,7 @@
 import type { EMealTypes, TScheduleMealsGet } from "@jcmono/api-contract";
 
 export type MealCardProps = {
-  mealType: string;
+  mealType: EMealTypes;
   foundMeal: TScheduleMealsGet | undefined;
-  selectedDay: Date;
-  onAddMeal: (day: Date, mealType: EMealTypes) => void;
+  currentViewDay: Date;
 };

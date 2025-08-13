@@ -37,7 +37,6 @@ import {
 import type { TScheduleMealFormProps } from "./types";
 
 function ScheduleMealForm({
-  addMealDialogOpen,
   handleCloseDialog: closeDialog,
   initialMealType,
   initialSelectedDay,
@@ -90,7 +89,7 @@ function ScheduleMealForm({
   };
 
   return (
-    <Dialog open={addMealDialogOpen} onOpenChange={handleCloseDialog}>
+    <Dialog open onOpenChange={handleCloseDialog}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Add Meal</DialogTitle>
