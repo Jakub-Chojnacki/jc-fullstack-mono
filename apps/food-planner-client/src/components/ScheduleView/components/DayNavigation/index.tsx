@@ -33,12 +33,13 @@ function DayNavigation({
           const isToday = isSameDay(day, new Date());
           const dayOfWeek = format(day, SHORT_DAY_OF_WEEK_FORMAT);
           const dayOfMonth = format(day, DAY_FORMAT);
+          const handleDayChange = () => onDayChange(day);
 
           return (
             <button
               key={day.toString()}
               type="button"
-              onClick={() => onDayChange(day)}
+              onClick={handleDayChange}
               className={`flex flex-col items-center px-3 py-1.5 rounded-lg transition-all duration-200 min-w-[50px] ${
                 isSelected
                   ? "bg-primary text-primary-foreground shadow-md"

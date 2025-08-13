@@ -25,15 +25,6 @@ function SingleMealType({
 
   const [addMealDialogOpen, setAddMealDialogOpen] = useState(false);
 
-  const openAddMealDialog = (): void => {
-    setSelectedMealType(mealType);
-    setAddMealDialogOpen(true);
-  };
-
-  const handleCloseDialog = (): void => {
-    setSelectedMealType(EMealTypes.BREAKFAST);
-    setAddMealDialogOpen(false);
-  };
   const { mutate: deleteMeal } = useDeleteScheduledMeal();
 
   const {
@@ -42,11 +33,21 @@ function SingleMealType({
   } = useShoppingListFromMeal();
 
   const handleCreateShoppingList = (mealId: number): void => {
-    createShoppingListFromMeal({ params: { id: mealId.toString() } });
+    createShoppingListFromMeal({ params: { id: mealId } });
   };
 
   const handleDeleteMeal = (mealId: number): void => {
-    deleteMeal({ params: { id: mealId.toString() } });
+    deleteMeal({ params: { id: mealId } });
+  };
+
+  const openAddMealDialog = (): void => {
+    setSelectedMealType(mealType);
+    setAddMealDialogOpen(true);
+  };
+
+  const handleCloseDialog = (): void => {
+    setSelectedMealType(EMealTypes.BREAKFAST);
+    setAddMealDialogOpen(false);
   };
 
   const badgeStyles = `px-3 py-1.5 rounded-xl text-sm font-bold border ${
