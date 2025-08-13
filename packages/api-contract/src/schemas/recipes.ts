@@ -44,9 +44,14 @@ export const RecipeUpdateSchema = RecipeSchema.omit({
 export type TRecipeUpdate = z.infer<typeof RecipeUpdateSchema>;
 
 export const RecipeGetOneSchema = RecipeSchema.extend({
-  recipeIngredients: z.array(
-    RecipeIngredientUpdateSchema.extend({ name: z.string().optional() })
-  ).optional(),
+  recipeIngredients: z
+    .array(
+      RecipeIngredientUpdateSchema.extend({
+        name: z.string().optional(),
+        id: z.number(),
+      })
+    )
+    .optional(),
 });
 
 export type TRecipeGetOne = z.infer<typeof RecipeGetOneSchema>;
