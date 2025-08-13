@@ -1,3 +1,3 @@
 export type TRecipePreviewProps = {
-  id: string;
+  id: string | number;
 };

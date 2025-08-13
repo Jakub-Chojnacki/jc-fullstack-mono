@@ -1,34 +1,33 @@
+import type { EMealTypes } from "@jcmono/api-contract";
+import { isPast, isSameDay, isToday } from "date-fns";
+
 import { mealTypes } from "../../const";
-import MealCard from "../MealCard";
+import SingleMealType from "../SingleMealType";
 
 import type { DailyMealsViewProps } from "./types";
 
 function DailyMealsView({
-  selectedDay,
   meals,
-  onAddMeal,
+  currentViewDay,
 }: DailyMealsViewProps) {
-  const isPast = selectedDay < new Date(new Date().setHours(0, 0, 0, 0));
+  const isInPast = isPast(currentViewDay) && !isToday(currentViewDay);
 
   return (
-    <div className={`max-w-4xl mx-auto ${isPast ? "opacity-85" : ""}`}>
+    <div className={`max-w-4xl mx-auto ${isInPast ? "opacity-85" : ""}`}>
       <div className="grid gap-4">
         {mealTypes.map((mealType) => {
           const foundMeal = meals.find(
             meal =>
               meal.mealType === mealType
-              && (typeof meal.scheduledAt === "string"
-                ? meal.scheduledAt === selectedDay.toISOString()
-                : meal.scheduledAt.toISOString() === selectedDay.toISOString()),
+              && isSameDay(meal.scheduledAt, currentViewDay),
           );
 
           return (
-            <MealCard
-              key={mealType}
-              mealType={mealType}
+            <SingleMealType
+              key={`meal-${mealType}-${currentViewDay.toISOString()}`}
+              mealType={mealType as EMealTypes}
               foundMeal={foundMeal}
-              selectedDay={selectedDay}
-              onAddMeal={onAddMeal}
+              currentViewDay={currentViewDay}
             />
           );
         })}
