@@ -2,7 +2,7 @@ import { Globe, Lock } from "lucide-react";
 
 import useGetOneRecipe from "@/queries/useGetOneRecipe";
 
-import IngredientCard from "../IngredientCard";
+import IngredientCard from "../RecipeIngredientCard";
 import { Badge } from "../ui/badge";
 import {
   Card,
@@ -61,7 +61,7 @@ function RecipePreview({ id }: TRecipePreviewProps) {
               className="h-full w-full object-cover transition-all hover:scale-105"
             />
           </div>
-          <div className="my-4">
+          <div className="my-4 flex flex-col gap-2">
             <h3 className="font-bold">Ingredients:</h3>
             {recipeIngredients?.map(ingredient => (
               <IngredientCard key={ingredient.id} ingredient={ingredient} />
