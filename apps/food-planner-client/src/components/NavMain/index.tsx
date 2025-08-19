@@ -1,10 +1,9 @@
-import { Link } from "@tanstack/react-router";
-
 import {
   SidebarGroup,
   SidebarMenu,
   SidebarMenuButton,
-} from "@components/ui/sidebar";
+} from "@jcmono/ui";
+import { Link } from "@tanstack/react-router";
 
 import type { TNavMainProps } from "./types";
 

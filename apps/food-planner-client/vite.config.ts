@@ -11,17 +11,16 @@ export default defineConfig(({ mode }) => {
 
   const API_TARGET = `${env.VITE_API_BASE_URL ?? "http://localhost:3000"}`;
 
-  return ({
+  return {
     plugins: [
       TanStackRouterVite({ autoCodeSplitting: true }),
       react(),
       tsconfigPaths(),
     ],
-    build: {
-
-    },
+    build: {},
     optimizeDeps: {
       include: ["@jcmono/api-contract/**/*"],
+      exclude: ["@jcmono/ui"],
     },
     resolve: {
       alias: {
@@ -34,7 +33,6 @@ export default defineConfig(({ mode }) => {
         "@layouts": path.resolve(__dirname, "./src/layouts"),
       },
     },
-
     server: {
       proxy: {
         "/api": {
@@ -43,6 +41,5 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
-  });
-},
-);
+  };
+});

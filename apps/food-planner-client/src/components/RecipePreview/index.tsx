@@ -1,16 +1,9 @@
+import { Badge, Card, CardContent, CardDescription, CardHeader, CardTitle } from "@jcmono/ui";
 import { Globe, Lock } from "lucide-react";
 
 import useGetOneRecipe from "@/queries/useGetOneRecipe";
 
 import IngredientCard from "../RecipeIngredientCard";
-import { Badge } from "../ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
 
 import type { TRecipePreviewProps } from "./types";
 

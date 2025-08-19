@@ -1,7 +1,7 @@
+import { Dialog, DialogContent } from "@jcmono/ui";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 
 import RecipePreview from "@/components/RecipePreview";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/app/_route/recipes/preview/$id")({
   component: RouteComponent,

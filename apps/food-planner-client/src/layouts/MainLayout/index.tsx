@@ -1,5 +1,6 @@
+import { SidebarInset, SidebarProvider } from "@jcmono/ui";
+
 import AppSidebar from "@components/AppSidebar";
-import { SidebarInset, SidebarProvider } from "@components/ui/sidebar";
 
 import MobileSidebarHeader from "@/components/MobileSidebarHeader";
 

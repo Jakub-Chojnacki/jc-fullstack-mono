@@ -1,40 +1,11 @@
 import { QuantityUnit } from "@jcmono/api-contract";
+import { Button, Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, FormControl, FormField, FormItem, FormLabel, FormMessage, Input, Popover, PopoverContent, PopoverTrigger, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@jcmono/ui";
 import { Check, ChevronsUpDown, Trash } from "lucide-react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
-import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import type { TRecipeFormInput } from "@/forms/RecipeForm/schema";
 import { cn } from "@/lib/utils";
 import useGetIngredients from "@/queries/useGetIngredients";
-
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
 
 function IngredientSelect() {
   const { data } = useGetIngredients();

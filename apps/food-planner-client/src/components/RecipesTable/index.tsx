@@ -1,4 +1,5 @@
 import type { TIngredient } from "@jcmono/api-contract";
+import { Button, Input, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@jcmono/ui";
 import { Outlet, useNavigate } from "@tanstack/react-router";
 import type {
   ColumnDef,
@@ -21,16 +22,6 @@ import useDeleteRecipe from "@/queries/useDeleteRecipe";
 import useGetRecipes from "@/queries/useGetRecipes";
 
 import HeaderWithIcon from "../HeaderWithIcon";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../ui/table";
 
 function RecipesTable() {
   const [sorting, setSorting] = useState<SortingState>([]);

@@ -1,26 +1,9 @@
+import { Button, Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, FormControl, FormField, FormItem, FormLabel, FormMessage, Popover, PopoverContent, PopoverTrigger } from "@jcmono/ui";
 import { ChevronRight } from "lucide-react";
 import { useState } from "react";
 import type { FieldValues } from "react-hook-form";
 
 import useGetRecipes from "@/queries/useGetRecipes";
-
-import { Button } from "../ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "../ui/command";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 import type { TRecipeSelectProps } from "./types";
 

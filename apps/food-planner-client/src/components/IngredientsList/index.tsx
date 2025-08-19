@@ -1,3 +1,4 @@
+import { Button, Input } from "@jcmono/ui";
 import { useNavigate } from "@tanstack/react-router";
 import { Apple, Plus } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -6,8 +7,6 @@ import useDeleteIngredient from "@/queries/useDeleteIngredient";
 import useGetIngredients from "@/queries/useGetIngredients";
 
 import HeaderWithIcon from "../HeaderWithIcon";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
 
 import SingleIngredientCard from "./components/SingleIngredientCard";
 

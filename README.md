@@ -12,10 +12,11 @@ This is a modern monorepo with **Turborepo**, a shared **ts-rest** API contract,
 ```text
 jc-fullstack-mono/
 ├── apps/
-│   ├── food-planner-client/   # Frontend - React + TanStack Router
+│   ├── food-planner-client/   # Frontend - React Vite + TanStack Router
 │   └── api/           # Backend - NestJS + Prisma
 ├── packages/
 │   ├── api-contract/  # Shared ts-rest contract
+│   └── ui/           # Shared shadcn/ui components
 ├── turbo.json         # Turborepo config
 ├── package.json
 ├── docker-compose.dev.yml # Easy to setup postgres container    

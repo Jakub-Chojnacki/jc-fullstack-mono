@@ -1,7 +1,6 @@
+import { Button, Card, CardContent } from "@jcmono/ui";
 import { Trash } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 import type { TIngredientCardProps } from "./types";

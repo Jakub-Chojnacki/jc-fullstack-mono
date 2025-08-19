@@ -1,7 +1,7 @@
+import { Button } from "@jcmono/ui";
 import { format, isSameDay } from "date-fns";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import {
   DAY_FORMAT,
   SHORT_DAY_OF_WEEK_FORMAT,

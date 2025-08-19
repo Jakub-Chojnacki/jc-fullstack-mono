@@ -1,3 +1,4 @@
+import { Card, CardContent } from "@jcmono/ui";
 import { ShoppingBag, ShoppingCart } from "lucide-react";
 
 import useGetShoppingListIngredients from "@queries/useGetShoppingListIngredients";
@@ -6,7 +7,6 @@ import AddShoppingListItemForm from "@forms/AddShoppingListItemForm";
 
 import HeaderWithIcon from "../HeaderWithIcon";
 import ShoppingListItem from "../ShoppingListItem";
-import { Card, CardContent } from "../ui/card";
 
 function ShoppingList() {
   const { data } = useGetShoppingListIngredients();
