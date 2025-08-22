@@ -1,5 +1,5 @@
 import { Button, Input } from "@jcmono/ui";
-import { useNavigate } from "@tanstack/react-router";
+import { Outlet, useNavigate } from "@tanstack/react-router";
 import { Apple, Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 
@@ -95,7 +95,7 @@ function IngredientsList() {
 
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="text-sm text-muted-foreground">
-          {`Page ${currentPage} of ${totalPages}`}
+          {`Page ${currentPage} of ${Math.max(totalPages, 1)}`}
         </div>
         <Button
           variant="outline"
@@ -109,11 +109,12 @@ function IngredientsList() {
           variant="outline"
           size="sm"
           onClick={handleNextPage}
-          disabled={currentPage === totalPages}
+          disabled={currentPage === totalPages || !totalPages}
         >
           Next
         </Button>
       </div>
+      <Outlet />
     </div>
   );
 }
