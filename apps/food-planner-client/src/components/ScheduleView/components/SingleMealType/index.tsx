@@ -1,9 +1,8 @@
 import { EMealTypes } from "@jcmono/api-contract";
+import { Button, Card, CardContent } from "@jcmono/ui";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import ScheduleMealForm from "@/forms/ScheduleMealForm";
 import useDeleteScheduledMeal from "@/queries/useDeleteScheduledMeal";
 import useShoppingListFromMeal from "@/queries/useShoppingListFromMeal";

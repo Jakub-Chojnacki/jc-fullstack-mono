@@ -1,8 +1,6 @@
+import { Separator, SidebarTrigger } from "@jcmono/ui";
+
 import useIsMobile from "@hooks/useIsMobile";
-
-import { Separator } from "@components/ui/separator";
-
-import { SidebarTrigger } from "../ui/sidebar";
 
 function MobileSidebarHeader() {
   const isMobile = useIsMobile();

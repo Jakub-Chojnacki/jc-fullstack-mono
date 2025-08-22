@@ -1,10 +1,8 @@
+import { Button, Checkbox } from "@jcmono/ui";
 import { Trash } from "lucide-react";
 
 import useDeleteShoppingListIngredient from "@queries/useDeleteShoppingListIngredient";
 import useUpdateShoppingListIngredient from "@queries/useUpdateShoppingListIngredient";
-
-import { Button } from "../ui/button";
-import { Checkbox } from "../ui/checkbox";
 
 import type { TShoppingListItemProps } from "./types";
 

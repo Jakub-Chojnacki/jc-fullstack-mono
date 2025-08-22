@@ -1,28 +1,27 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format } from "date-fns";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-
-import RecipeSelect from "@/components/RecipeSelect";
-import { mealTypes } from "@/components/ScheduleView/const";
-import { Button } from "@/components/ui/button";
-import DatePicker from "@/components/ui/datepicker";
 import {
+  Button,
+  DatePicker,
   Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Form, FormField } from "@/components/ui/form";
-import {
+  Form,
+  FormField,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@jcmono/ui";
+import { format } from "date-fns";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+
+import RecipeSelect from "@/components/RecipeSelect";
+import { mealTypes } from "@/components/ScheduleView/const";
 import { YEAR_MONTH_DAY_FORMAT } from "@/constants/dates";
 import useCreateScheduledMeal from "@/queries/useCreateScheduledMeal";
 

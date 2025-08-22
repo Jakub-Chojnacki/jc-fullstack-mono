@@ -1,15 +1,15 @@
-import * as React from "react";
-
-import NavMain from "@components/NavMain";
-import NavUser from "@components/NavUser";
-import ThemeToggle from "@components/ThemeToggle";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@components/ui/sidebar";
+} from "@jcmono/ui";
+import * as React from "react";
+
+import NavMain from "@components/NavMain";
+import NavUser from "@components/NavUser";
+import ThemeToggle from "@components/ThemeToggle";
 
 import { navMainItems } from "./const";
 

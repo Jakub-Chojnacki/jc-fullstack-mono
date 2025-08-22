@@ -1,21 +1,5 @@
+import { Avatar, AvatarFallback, DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@jcmono/ui";
 import { BadgeCheck, Bell, ChevronsUpDown, LogOut } from "lucide-react";
-
-import { Avatar, AvatarFallback } from "@components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@components/ui/dropdown-menu";
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "@components/ui/sidebar";
 
 import useAuthMe from "@/queries/useAuthMe";
 import useLogout from "@/queries/useLogout";

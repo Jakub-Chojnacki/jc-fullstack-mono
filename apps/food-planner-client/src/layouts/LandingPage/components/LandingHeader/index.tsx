@@ -1,8 +1,8 @@
+import { Button } from "@jcmono/ui";
 import { Link } from "@tanstack/react-router";
 import { ChefHat } from "lucide-react";
 
 import ThemeToggle from "@/components/ThemeToggle";
-import { Button } from "@/components/ui/button";
 
 function LandingHeader() {
   return (

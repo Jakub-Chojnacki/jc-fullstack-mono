@@ -1,17 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Button, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from "@jcmono/ui";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import useCreateIngredient from "@/queries/useCreateIngredient";
 
 import { IngredientFormSchema } from "./schema";

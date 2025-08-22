@@ -1,6 +1,6 @@
+import { Dialog, DialogContent } from "@jcmono/ui";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 
-import { Dialog, DialogContent } from "@/components/ui/dialog";
 import RecipeForm from "@/forms/RecipeForm";
 import useGetOneRecipe from "@/queries/useGetOneRecipe";
 

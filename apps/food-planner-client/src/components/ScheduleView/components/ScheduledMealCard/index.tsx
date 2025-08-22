@@ -1,8 +1,7 @@
+import { Button, Dialog, DialogContent, DialogTrigger } from "@jcmono/ui";
 import { ShoppingBag, X } from "lucide-react";
 
 import RecipePreview from "@/components/RecipePreview";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 import type { ScheduledMealCardProps } from "./types";
 
