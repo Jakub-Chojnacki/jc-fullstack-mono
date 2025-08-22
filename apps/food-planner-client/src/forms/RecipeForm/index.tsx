@@ -3,7 +3,7 @@ import { Button, Checkbox, Form, FormControl, FormField, FormItem, FormLabel, Fo
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
-import IngredientSelect from "@/components/IngredientSelect";
+import IngredientSelect from "@/forms/RecipeForm/components/IngredientSelect";
 import useCreateRecipe from "@/queries/useCreateRecipe";
 import useUpdateRecipe from "@/queries/useUpdateRecipe";
 

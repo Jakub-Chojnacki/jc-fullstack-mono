@@ -20,7 +20,7 @@ import { format } from "date-fns";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-import RecipeSelect from "@/components/RecipeSelect";
+import RecipeSelect from "@/components/ScheduleView/components/ScheduleRecipeSelect";
 import { mealTypes } from "@/components/ScheduleView/const";
 import { YEAR_MONTH_DAY_FORMAT } from "@/constants/dates";
 import useCreateScheduledMeal from "@/queries/useCreateScheduledMeal";

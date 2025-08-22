@@ -1,8 +1,7 @@
 import { SidebarInset, SidebarProvider } from "@jcmono/ui";
 
-import AppSidebar from "@components/AppSidebar";
-
-import MobileSidebarHeader from "@/components/MobileSidebarHeader";
+import AppSidebar from "@/layouts/MainLayout/components/AppSidebar";
+import MobileSidebarHeader from "@/layouts/MainLayout/components/MobileSidebarHeader";
 
 function MainLayout({ children }: { children: React.ReactElement }) {
   return (

@@ -5,12 +5,12 @@ import type { FieldValues } from "react-hook-form";
 
 import useGetRecipes from "@/queries/useGetRecipes";
 
-import type { TRecipeSelectProps } from "./types";
+import type { TScheduleRecipeSelectProps } from "./types";
 
-function RecipeSelect<T extends FieldValues>({
+function ScheduleRecipeSelect<T extends FieldValues>({
   control,
   name,
-}: TRecipeSelectProps<T>) {
+}: TScheduleRecipeSelectProps<T>) {
   const [commandOpen, setCommandOpen] = useState(false);
 
   const { data } = useGetRecipes();
@@ -72,4 +72,4 @@ function RecipeSelect<T extends FieldValues>({
   );
 }
 
-export default RecipeSelect;
+export default ScheduleRecipeSelect;

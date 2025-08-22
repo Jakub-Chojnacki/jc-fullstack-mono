@@ -7,9 +7,10 @@ import {
 } from "@jcmono/ui";
 import * as React from "react";
 
-import NavMain from "@components/NavMain";
-import NavUser from "@components/NavUser";
 import ThemeToggle from "@components/ThemeToggle";
+
+import NavMain from "@/layouts/MainLayout/components/NavMain";
+import NavUser from "@/layouts/MainLayout/components/NavUser";
 
 import { navMainItems } from "./const";
 

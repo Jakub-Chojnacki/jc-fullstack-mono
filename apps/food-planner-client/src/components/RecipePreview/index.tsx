@@ -3,7 +3,7 @@ import { Globe, Lock } from "lucide-react";
 
 import useGetOneRecipe from "@/queries/useGetOneRecipe";
 
-import IngredientCard from "../RecipeIngredientCard";
+import RecipeIngredientCard from "./components/RecipeIngredientCard";
 
 import type { TRecipePreviewProps } from "./types";
 
@@ -57,7 +57,7 @@ function RecipePreview({ id }: TRecipePreviewProps) {
           <div className="my-4 flex flex-col gap-2">
             <h3 className="font-bold">Ingredients:</h3>
             {recipeIngredients?.map(ingredient => (
-              <IngredientCard key={ingredient.id} ingredient={ingredient} />
+              <RecipeIngredientCard key={ingredient.id} ingredient={ingredient} />
             ))}
           </div>
         </CardContent>
