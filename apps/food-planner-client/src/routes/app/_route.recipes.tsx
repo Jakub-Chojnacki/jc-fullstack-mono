@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import RecipesTable from "@/components/RecipesTable";
+import RecipesList from "@/components/RecipesList";
 
 export const Route = createFileRoute("/app/_route/recipes")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  return <RecipesTable />;
+  return <RecipesList />;
 }
