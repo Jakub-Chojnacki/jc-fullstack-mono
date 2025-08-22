@@ -19,8 +19,8 @@ function ScheduleView() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-      <div className="container mx-auto py-6 px-4">
+    <div className="min-h-screen py-4">
+      <div className="container mx-auto px-4">
         <ScheduleHeader currentViewDay={currentViewDay} />
         <DayNavigation
           daysOfWeek={daysOfWeek}

@@ -6,7 +6,8 @@ import useGetShoppingListIngredients from "@queries/useGetShoppingListIngredient
 import AddShoppingListItemForm from "@forms/AddShoppingListItemForm";
 
 import HeaderWithIcon from "../HeaderWithIcon";
-import ShoppingListItem from "../ShoppingListItem";
+
+import ShoppingListItem from "./components/ShoppingListItem";
 
 function ShoppingList() {
   const { data } = useGetShoppingListIngredients();
