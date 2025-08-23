@@ -29,8 +29,9 @@ function AddShoppingListItemForm() {
 
   const { control, setValue } = form;
 
-  const onSubmit = (values: z.infer<typeof AddShoppingListItemFormSchema>) => {
+  const onSubmit = (values: z.infer<typeof AddShoppingListItemFormSchema>): void => {
     mutate({ body: { ...values, isDone: false, isDeleted: false } });
+    form.reset();
   };
 
   const handleSelectIngredient = (ingredientId: string): void =>

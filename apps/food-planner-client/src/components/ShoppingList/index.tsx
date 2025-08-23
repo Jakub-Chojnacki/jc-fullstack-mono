@@ -13,7 +13,7 @@ function ShoppingList() {
   const { data } = useGetShoppingListIngredients();
 
   return (
-    <div className="max-h-full overflow-hidden flex flex-col">
+    <div className="max-h-full overflow-hidden flex flex-col py-4">
       <HeaderWithIcon icon={ShoppingBag} title="Shopping List" />
       <div className="">
         <AddShoppingListItemForm />
