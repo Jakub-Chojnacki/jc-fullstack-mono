@@ -26,10 +26,13 @@ export class AuthService {
     accessToken: string,
     refreshToken?: string,
   ) {
+    const isProduction = process.env.NODE_ENV === 'production';
+    const isSecure = process.env.NODE_ENV === 'production';
+    const sameSite = isProduction ? 'none' : 'lax';
     response.cookie('access_token', accessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
+      secure: isSecure,
+      sameSite,
       maxAge: this.accessExpirationSeconds * 1000, // 15 minutes in milliseconds
     });
 
@@ -37,8 +40,8 @@ export class AuthService {
     if (refreshToken) {
       response.cookie('refresh_token', refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'none',
+        secure: isSecure,
+        sameSite,
         maxAge: this.refreshExpirationSeconds * 1000, // 7 days in milliseconds
       });
     }
