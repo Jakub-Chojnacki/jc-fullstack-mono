@@ -1,5 +1,6 @@
 import {
   contract,
+  MAXIMUM_SAVED_SHOPPING_LIST_ITEMS,
   TShoppingListIngredientCreate,
   type TShoppingListIngredientGetQuery,
   TShoppingListIngredientUpdate,
@@ -46,10 +47,33 @@ export class ShoppingListIngredientsService {
     );
   }
 
+  async checkIngredientLimit(
+    userId: number,
+    ingredientsToBeAddedCount: number = 1,
+  ) {
+    const currentCount = await this.prisma.shoppingListIngredient.count({
+      where: {
+        userId,
+        isDeleted: false,
+      },
+    });
+
+    if (
+      currentCount + ingredientsToBeAddedCount >
+      MAXIMUM_SAVED_SHOPPING_LIST_ITEMS
+    ) {
+      throw new Error(
+        `Maximum of ${MAXIMUM_SAVED_SHOPPING_LIST_ITEMS} ingredients reached. Adding this ingredient would make it ${currentCount + ingredientsToBeAddedCount}.`,
+      );
+    }
+  }
+
   create(body: TShoppingListIngredientCreate, userId: number) {
     return wrapWithTsRestError(
-      contract.shoppingListIngredient.delete,
+      contract.shoppingListIngredient.create,
       async () => {
+        await this.checkIngredientLimit(userId);
+
         const shoppingListIngredient =
           await this.prisma.shoppingListIngredient.create({
             data: { ...body, userId },
@@ -62,7 +86,7 @@ export class ShoppingListIngredientsService {
 
   createFromRecipe(recipeId: number, userId: number) {
     return wrapWithTsRestError(
-      contract.shoppingListIngredient.delete,
+      contract.shoppingListIngredient.createFromRecipe,
       async () => {
         const recipe = await this.prisma.recipe.findUnique({
           where: {
@@ -90,6 +114,11 @@ export class ShoppingListIngredientsService {
             isDone: false,
             isDeleted: false,
           }),
+        );
+
+        await this.checkIngredientLimit(
+          userId,
+          shoppingListIngredientsToCreate.length,
         );
 
         const shoppingListIngredients =
