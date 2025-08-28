@@ -19,7 +19,7 @@ import {
   ShoppingListIngredientSchema,
   ShoppingListIngredientUpdateSchema,
   StringToNumberSchema,
-  UserSchema,
+  UserSchema
 } from "./schemas/index";
 import {
   ScheduleMealsCreateSchema,
@@ -192,10 +192,10 @@ export const contract = c.router(
         path: "/shoppingListIngredient/recipe/:id",
         pathParams: z.object({ id: StringToNumberSchema }),
         body: null,
-        responses:{
-            201:z.array(ShoppingListIngredientSchema),
-            404: NotFoundSchema,
-        }
+        responses: {
+          201: z.array(ShoppingListIngredientSchema),
+          404: NotFoundSchema,
+        },
       },
       update: {
         method: "PUT",
