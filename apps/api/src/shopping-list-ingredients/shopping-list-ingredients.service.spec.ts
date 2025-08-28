@@ -59,7 +59,6 @@ describe('ShoppingListIngredientsService', () => {
     userId,
   };
 
-  // Helper function to generate expected error message
   const getExpectedLimitErrorMessage = (
     currentCount: number,
     ingredientsToAdd: number = 1,
