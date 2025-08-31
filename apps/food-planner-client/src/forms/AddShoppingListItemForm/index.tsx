@@ -15,7 +15,7 @@ function AddShoppingListItemForm() {
   const { data } = useGetIngredients();
 
   const ingredients
-    = useMemo(() => data?.body?.map(ingredient => ({
+    = useMemo(() => data?.body?.data?.map(ingredient => ({
       label: ingredient.name,
       value: ingredient.id,
     })) || [], [data]);
