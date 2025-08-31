@@ -1,6 +1,6 @@
 import { contract } from "@jcmono/api-contract";
 import { initQueryClient } from "@ts-rest/react-query";
-import type { AxiosError, AxiosResponse, Method } from "axios";
+import type { Method } from "axios";
 import { isAxiosError } from "axios";
 
 import { axiosClient } from "./axios-client";
@@ -10,6 +10,7 @@ export const apiClient = initQueryClient(contract, {
   baseUrl: "",
   // eslint-disable-next-line ts/ban-ts-comment
   // @ts-ignore
+  // https://ts-rest.com/client/fetch#using-alternative-http-clients
   api: async ({ path, method, headers, body }) => {
     try {
       const result = await axiosClient.request({
@@ -21,20 +22,20 @@ export const apiClient = initQueryClient(contract, {
       return {
         status: result.status,
         body: result.data,
-        headers: result.headers,
+        headers: new Headers(result.headers as Record<string, string>),
       };
     }
-    catch (e: Error | AxiosError | any) {
-      if (isAxiosError(e)) {
-        const error = e as AxiosError;
-        const response = error.response as AxiosResponse;
+    catch (error) {
+      if (isAxiosError(error) && error.response) {
         return {
-          status: response.status,
-          body: response.data,
-          headers: response.headers,
+          status: error.response.status,
+          body: error.response.data,
+          headers: new Headers(
+            error.response.headers as Record<string, string>,
+          ),
         };
       }
-      throw e;
+      throw error;
     }
   },
 });
