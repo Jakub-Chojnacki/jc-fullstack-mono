@@ -17,7 +17,7 @@ function IngredientSelect() {
   });
 
   const ingredients
-    = data?.body?.map(ingredient => ({
+    = data?.body?.data?.map(ingredient => ({
       label: ingredient.name,
       value: ingredient.id,
     })) || [];
@@ -65,7 +65,7 @@ function IngredientSelect() {
                         <CommandList>
                           <CommandEmpty>No ingredients found.</CommandEmpty>
                           <CommandGroup>
-                            {ingredients?.map(ingredient => (
+                            {ingredients.map(ingredient => (
                               <CommandItem
                                 key={ingredient.value}
                                 value={String(ingredient.value)}

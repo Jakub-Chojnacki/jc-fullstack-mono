@@ -13,7 +13,10 @@ function ScheduleRecipeSelect<T extends FieldValues>({
 }: TScheduleRecipeSelectProps<T>) {
   const [commandOpen, setCommandOpen] = useState(false);
 
-  const { data } = useGetRecipes();
+  const { data } = useGetRecipes({
+    page: 1,
+    take: 200,
+  });
 
   return (
     <FormField
@@ -43,7 +46,7 @@ function ScheduleRecipeSelect<T extends FieldValues>({
                       <CommandList>
                         <CommandEmpty>No recipes found.</CommandEmpty>
                         <CommandGroup>
-                          {data?.body.map(recipe => (
+                          {data?.body?.data.map(recipe => (
                             <CommandItem
                               key={recipe.id}
                               value={recipe.name}

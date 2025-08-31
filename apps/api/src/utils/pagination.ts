@@ -1,4 +1,5 @@
 import { BadRequestException } from '@nestjs/common';
+import { DEFAULT_TAKE } from 'src/common/constants/main';
 
 export interface PaginationParams {
   page?: string;
@@ -8,6 +9,7 @@ export interface PaginationParams {
 export interface ValidatedPagination {
   skip: number;
   take: number;
+  page: number;
 }
 
 export interface PaginationOptions {
@@ -15,17 +17,28 @@ export interface PaginationOptions {
   defaultTake?: number;
 }
 
+export interface PaginationMeta {
+  currentPage: number;
+  totalPages: number;
+  totalCount: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  itemsPerPage: number;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  pagination: PaginationMeta;
+}
+
 export function validatePagination(
   params: PaginationParams,
   options: PaginationOptions = {},
-): ValidatedPagination | null {
+): ValidatedPagination {
   const { page, take } = params;
-  const { maxTake = 100, defaultTake = 10 } = options;
+  const { maxTake = 100, defaultTake = DEFAULT_TAKE } = options;
 
-  if (page === undefined && take === undefined) {
-    return null;
-  }
-
+  // Always use defaults if parameters are not provided
   const pageStr = page ?? '1';
   const takeStr = take ?? defaultTake.toString();
 
@@ -51,5 +64,40 @@ export function validatePagination(
   return {
     skip,
     take: takeNum,
+    page: pageNum,
+  };
+}
+
+export function createPaginationMeta(
+  totalCount: number,
+  currentPage: number,
+  itemsPerPage: number,
+): PaginationMeta {
+  const totalPages = Math.ceil(totalCount / itemsPerPage);
+
+  return {
+    currentPage,
+    totalPages,
+    totalCount,
+    hasNextPage: currentPage < totalPages,
+    hasPreviousPage: currentPage > 1,
+    itemsPerPage,
+  };
+}
+
+export function createPaginatedResponse<T>(
+  data: T[],
+  totalCount: number,
+  pagination: ValidatedPagination,
+): PaginatedResponse<T> {
+  const meta = createPaginationMeta(
+    totalCount,
+    pagination.page,
+    pagination.take,
+  );
+
+  return {
+    data,
+    pagination: meta,
   };
 }
