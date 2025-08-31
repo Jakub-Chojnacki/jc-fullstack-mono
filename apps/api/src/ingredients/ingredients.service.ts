@@ -45,7 +45,7 @@ export class IngredientsService {
     if (search && typeof search === 'string' && search.trim()) {
       baseFilter.name = {
         contains: search.trim(),
-        mode: 'insensitive' as const, // Case-insensitive search
+        mode: 'insensitive' as const,
       };
     }
 
