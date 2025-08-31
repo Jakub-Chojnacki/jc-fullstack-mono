@@ -1,50 +1,47 @@
 import {
-  contract,
   MAXIMUM_SAVED_SHOPPING_LIST_ITEMS,
   TShoppingListIngredientCreate,
   type TShoppingListIngredientGetQuery,
   TShoppingListIngredientUpdate,
 } from '@jcmono/api-contract';
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-
-import wrapWithTsRestError from 'src/utils/wrapWithTsRestError';
 
 @Injectable()
 export class ShoppingListIngredientsService {
   constructor(private prisma: PrismaService) {}
 
-  get({
+  async get({
     isDone,
     userId,
     page = 1,
     take = 50,
   }: TShoppingListIngredientGetQuery & { userId: number }) {
-    return wrapWithTsRestError(
-      contract.shoppingListIngredient.get,
-      async () =>
-        await this.prisma.shoppingListIngredient.findMany({
-          where: {
-            isDone,
-            userId,
-            isDeleted: false,
+    return await this.prisma.shoppingListIngredient.findMany({
+      where: {
+        isDone,
+        userId,
+        isDeleted: false,
+      },
+      omit: {
+        createdAt: true,
+        updatedAt: true,
+        userId: true,
+      },
+      include: {
+        ingredient: {
+          select: {
+            name: true,
           },
-          omit: {
-            createdAt: true,
-            updatedAt: true,
-            userId: true,
-          },
-          include: {
-            ingredient: {
-              select: {
-                name: true,
-              },
-            },
-          },
-          take: 50,
-          skip: take * (page - 1),
-        }),
-    );
+        },
+      },
+      take: 50,
+      skip: take * (page - 1),
+    });
   }
 
   async checkIngredientLimit(
@@ -62,92 +59,78 @@ export class ShoppingListIngredientsService {
       currentCount + ingredientsToBeAddedCount >
       MAXIMUM_SAVED_SHOPPING_LIST_ITEMS
     ) {
-      throw new Error(
+      throw new BadRequestException(
         `Maximum of ${MAXIMUM_SAVED_SHOPPING_LIST_ITEMS} ingredients reached. Adding this ingredient would make it ${currentCount + ingredientsToBeAddedCount}.`,
       );
     }
   }
 
-  create(body: TShoppingListIngredientCreate, userId: number) {
-    return wrapWithTsRestError(
-      contract.shoppingListIngredient.create,
-      async () => {
-        await this.checkIngredientLimit(userId);
+  async create(body: TShoppingListIngredientCreate, userId: number) {
+    await this.checkIngredientLimit(userId);
 
-        const shoppingListIngredient =
-          await this.prisma.shoppingListIngredient.create({
-            data: { ...body, userId },
-          });
+    const shoppingListIngredient =
+      await this.prisma.shoppingListIngredient.create({
+        data: { ...body, userId },
+      });
 
-        return shoppingListIngredient;
-      },
-    );
+    return shoppingListIngredient;
   }
 
-  createFromRecipe(recipeId: number, userId: number) {
-    return wrapWithTsRestError(
-      contract.shoppingListIngredient.createFromRecipe,
-      async () => {
-        const recipe = await this.prisma.recipe.findUnique({
-          where: {
-            id: recipeId,
-          },
+  async createFromRecipe(recipeId: number, userId: number) {
+    const recipe = await this.prisma.recipe.findUnique({
+      where: {
+        id: recipeId,
+      },
+      select: {
+        recipeIngredients: {
           select: {
-            recipeIngredients: {
-              select: {
-                amount: true,
-                unit: true,
-                ingredientId: true,
-              },
-            },
+            amount: true,
+            unit: true,
+            ingredientId: true,
           },
-        });
-
-        if (!recipe) {
-          throw new Error('Recipe not found');
-        }
-
-        const shoppingListIngredientsToCreate = recipe.recipeIngredients.map(
-          (ingredient) => ({
-            ...ingredient,
-            userId,
-            isDone: false,
-            isDeleted: false,
-          }),
-        );
-
-        await this.checkIngredientLimit(
-          userId,
-          shoppingListIngredientsToCreate.length,
-        );
-
-        const shoppingListIngredients =
-          await this.prisma.shoppingListIngredient.createManyAndReturn({
-            data: shoppingListIngredientsToCreate,
-          });
-
-        return shoppingListIngredients;
+        },
       },
+    });
+
+    if (!recipe) {
+      throw new NotFoundException('Recipe not found');
+    }
+
+    const shoppingListIngredientsToCreate = recipe.recipeIngredients.map(
+      (ingredient) => ({
+        ...ingredient,
+        userId,
+        isDone: false,
+        isDeleted: false,
+      }),
     );
+
+    await this.checkIngredientLimit(
+      userId,
+      shoppingListIngredientsToCreate.length,
+    );
+
+    const shoppingListIngredients =
+      await this.prisma.shoppingListIngredient.createManyAndReturn({
+        data: shoppingListIngredientsToCreate,
+      });
+
+    return shoppingListIngredients;
   }
 
-  delete(id: number, userId: number) {
-    return wrapWithTsRestError(
-      contract.shoppingListIngredient.delete,
-      async () =>
-        await this.prisma.shoppingListIngredient.update({
-          where: {
-            id,
-            userId,
-          },
-          data: {
-            isDeleted: true,
-          },
-        }),
-    );
+  async delete(id: number, userId: number) {
+    return await this.prisma.shoppingListIngredient.update({
+      where: {
+        id,
+        userId,
+      },
+      data: {
+        isDeleted: true,
+      },
+    });
   }
 
-  update({
+  async update({
     data,
     id,
     userId,
@@ -156,16 +139,12 @@ export class ShoppingListIngredientsService {
     data: TShoppingListIngredientUpdate;
     userId: number;
   }) {
-    return wrapWithTsRestError(
-      contract.shoppingListIngredient.update,
-      async () =>
-        await this.prisma.shoppingListIngredient.update({
-          where: {
-            id,
-            userId,
-          },
-          data,
-        }),
-    );
+    return await this.prisma.shoppingListIngredient.update({
+      where: {
+        id,
+        userId,
+      },
+      data,
+    });
   }
 }

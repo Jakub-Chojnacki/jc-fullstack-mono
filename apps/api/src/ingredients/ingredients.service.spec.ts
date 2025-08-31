@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TsRestException } from '@ts-rest/nest';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { createRecordNotFoundError } from 'src/test-utils';
 import { IngredientsService } from './ingredients.service';
 
 describe('IngredientsService', () => {
@@ -106,14 +107,14 @@ describe('IngredientsService', () => {
     });
   });
 
-  it('should throw TsRestException if ingredient not found during delete', async () => {
-    const error = { code: 'P2025' };
+  it('should throw PrismaClientKnownRequestError if ingredient not found during delete', async () => {
+    const error = createRecordNotFoundError();
 
     prisma.ingredient.update.mockRejectedValue(error);
 
     await expect(
       service.delete({ id: 999, userId: mockUserId }),
-    ).rejects.toThrow(TsRestException);
+    ).rejects.toThrow(PrismaClientKnownRequestError);
   });
 
   it('should update an ingredient', async () => {
@@ -133,8 +134,8 @@ describe('IngredientsService', () => {
     });
   });
 
-  it('should throw TsRestException if ingredient not found during update', async () => {
-    const error = { code: 'P2025' };
+  it('should throw PrismaClientKnownRequestError if ingredient not found during update', async () => {
+    const error = createRecordNotFoundError();
 
     prisma.ingredient.update.mockRejectedValue(error);
 
@@ -144,6 +145,6 @@ describe('IngredientsService', () => {
         id: 999,
         userId: mockUserId,
       }),
-    ).rejects.toThrow(TsRestException);
+    ).rejects.toThrow(PrismaClientKnownRequestError);
   });
 });

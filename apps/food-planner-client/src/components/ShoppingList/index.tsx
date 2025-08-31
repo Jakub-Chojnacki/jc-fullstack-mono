@@ -1,9 +1,9 @@
 import { Card, CardContent } from "@jcmono/ui";
 import { ShoppingBag, ShoppingCart } from "lucide-react";
 
-import useGetShoppingListIngredients from "@queries/useGetShoppingListIngredients";
-
 import AddShoppingListItemForm from "@forms/AddShoppingListItemForm";
+
+import useGetShoppingListIngredients from "@/queries/useGetShoppingListIngredients";
 
 import HeaderWithIcon from "../HeaderWithIcon";
 

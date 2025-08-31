@@ -1,5 +1,5 @@
 import { contract } from '@jcmono/api-contract';
-import { Controller } from '@nestjs/common';
+import { Controller, NotFoundException } from '@nestjs/common';
 import { tsRestHandler, TsRestHandler } from '@ts-rest/nest';
 import { GetCurrentUserId } from 'src/common/decorators';
 import { RecipesService } from './recipes.service';
@@ -47,10 +47,7 @@ export class RecipesController {
         );
 
         if (!recipes) {
-          return {
-            status: 404,
-            body: { message: 'Recipe not found' },
-          };
+          throw new NotFoundException('Recipe not found');
         }
 
         return {

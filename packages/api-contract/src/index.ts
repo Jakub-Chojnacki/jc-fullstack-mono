@@ -2,6 +2,7 @@ import { initContract } from "@ts-rest/core";
 import { z } from "zod";
 import {
   BooleanQuerySchema,
+  ErrorResponseSchema,
   IngredientCreateSchema,
   IngredientGetQuerySchema,
   IngredientSchema,
@@ -19,7 +20,7 @@ import {
   ShoppingListIngredientSchema,
   ShoppingListIngredientUpdateSchema,
   StringToNumberSchema,
-  UserSchema
+  UserSchema,
 } from "./schemas/index";
 import {
   ScheduleMealsCreateSchema,
@@ -31,10 +32,6 @@ import {
 export * from "./schemas/index";
 
 const c = initContract();
-
-export const NotFoundSchema = z.object({
-  message: z.string(),
-});
 
 export const contract = c.router(
   {
@@ -53,7 +50,7 @@ export const contract = c.router(
         body: IngredientCreateSchema.omit({ userId: true }),
         responses: {
           201: IngredientSchema,
-          400: NotFoundSchema,
+          400: ErrorResponseSchema,
         },
       },
       update: {
@@ -68,7 +65,8 @@ export const contract = c.router(
         }),
         responses: {
           200: IngredientSchema,
-          404: NotFoundSchema,
+          400: ErrorResponseSchema,
+          404: ErrorResponseSchema,
         },
       },
       delete: {
@@ -78,7 +76,7 @@ export const contract = c.router(
         body: null,
         responses: {
           200: IngredientSchema || null,
-          404: NotFoundSchema,
+          404: ErrorResponseSchema,
         },
       },
     },
@@ -97,7 +95,7 @@ export const contract = c.router(
         body: RecipeCreateSchema.omit({ userId: true }),
         responses: {
           201: RecipeSchema,
-          400: NotFoundSchema,
+          400: ErrorResponseSchema,
         },
       },
       update: {
@@ -114,7 +112,7 @@ export const contract = c.router(
         }),
         responses: {
           200: RecipeSchema,
-          404: NotFoundSchema,
+          404: ErrorResponseSchema,
         },
       },
       getOne: {
@@ -126,7 +124,7 @@ export const contract = c.router(
         }),
         responses: {
           200: RecipeGetOneSchema,
-          404: NotFoundSchema,
+          404: ErrorResponseSchema,
         },
       },
       delete: {
@@ -136,7 +134,7 @@ export const contract = c.router(
         body: null,
         responses: {
           200: RecipeSchema || null,
-          404: NotFoundSchema,
+          404: ErrorResponseSchema,
         },
       },
     },
@@ -156,7 +154,7 @@ export const contract = c.router(
         body: RecipeIngredientCreateSchema,
         responses: {
           200: RecipeIngredientSchema,
-          404: NotFoundSchema,
+          404: ErrorResponseSchema,
         },
       },
       delete: {
@@ -165,7 +163,7 @@ export const contract = c.router(
         pathParams: z.object({ id: StringToNumberSchema }),
         responses: {
           200: RecipeIngredientSchema,
-          404: NotFoundSchema,
+          404: ErrorResponseSchema,
         },
       },
     },
@@ -176,7 +174,9 @@ export const contract = c.router(
         query: ShoppingListIngredientGetQuerySchema,
         responses: {
           200: z.array(ShoppingListIngredientGetSchema),
-          404: NotFoundSchema,
+          404: ErrorResponseSchema,
+          400: ErrorResponseSchema,
+
         },
       },
       create: {
@@ -185,6 +185,9 @@ export const contract = c.router(
         body: ShoppingListIngredientCreateSchema,
         responses: {
           201: ShoppingListIngredientSchema,
+          400: ErrorResponseSchema,
+          404: ErrorResponseSchema,
+
         },
       },
       createFromRecipe: {
@@ -194,7 +197,8 @@ export const contract = c.router(
         body: null,
         responses: {
           201: z.array(ShoppingListIngredientSchema),
-          404: NotFoundSchema,
+          400: ErrorResponseSchema,
+          404: ErrorResponseSchema,
         },
       },
       update: {
@@ -204,7 +208,8 @@ export const contract = c.router(
         body: ShoppingListIngredientUpdateSchema,
         responses: {
           200: ShoppingListIngredientSchema,
-          404: NotFoundSchema,
+          400: ErrorResponseSchema,
+          404: ErrorResponseSchema,
         },
       },
       delete: {
@@ -214,7 +219,8 @@ export const contract = c.router(
         body: null,
         responses: {
           200: null,
-          404: NotFoundSchema,
+          400: ErrorResponseSchema,
+          404: ErrorResponseSchema,
         },
       },
     },
@@ -228,7 +234,7 @@ export const contract = c.router(
         }),
         responses: {
           200: z.array(ScheduleMealsGetSchema),
-          404: NotFoundSchema,
+          404: ErrorResponseSchema,
         },
       },
       getById: {
@@ -237,7 +243,7 @@ export const contract = c.router(
         pathParams: z.object({ id: StringToNumberSchema }),
         responses: {
           200: ScheduleMealsGetSchema,
-          404: NotFoundSchema,
+          404: ErrorResponseSchema,
         },
       },
       create: {
@@ -246,7 +252,7 @@ export const contract = c.router(
         body: ScheduleMealsCreateSchema,
         responses: {
           201: ScheduleMealsSchema,
-          400: NotFoundSchema,
+          400: ErrorResponseSchema,
         },
       },
       update: {
@@ -256,7 +262,7 @@ export const contract = c.router(
         body: ScheduleMealsUpdateSchema,
         responses: {
           200: ScheduleMealsSchema,
-          404: NotFoundSchema,
+          404: ErrorResponseSchema,
         },
       },
       delete: {
@@ -266,7 +272,7 @@ export const contract = c.router(
         body: null,
         responses: {
           200: ScheduleMealsSchema,
-          404: NotFoundSchema,
+          404: ErrorResponseSchema,
         },
       },
     },
@@ -292,7 +298,7 @@ export const contract = c.router(
         path: "/auth/me",
         responses: {
           200: UserSchema,
-          404: NotFoundSchema,
+          404: ErrorResponseSchema,
         },
       },
       refreshToken: {
