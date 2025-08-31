@@ -5,7 +5,7 @@ import {
   RecipeIngredientUpdateSchema,
 } from "./ingredients";
 
-import { BooleanQuerySchema, GetQueryFilter } from "./utils";
+import { BooleanQuerySchema, GetQueryFilter, PaginationSchema } from "./utils";
 
 export const RecipeSchema = z.object({
   id: z.number(),
@@ -56,7 +56,7 @@ export const RecipeGetOneSchema = RecipeSchema.extend({
 
 export type TRecipeGetOne = z.infer<typeof RecipeGetOneSchema>;
 
-export const RecipeGetQuerySchema = z.object({
+export const RecipeGetQuerySchema = PaginationSchema.extend({
   queryFilter: GetQueryFilter.optional(),
   isDeleted: BooleanQuerySchema.optional(),
 });

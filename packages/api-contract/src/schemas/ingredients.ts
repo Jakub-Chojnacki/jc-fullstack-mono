@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { BooleanQuerySchema, GetQueryFilter } from "./utils";
+import { BooleanQuerySchema, GetQueryFilter, PaginationSchema } from "./utils";
 
 export const IngredientSchema = z.object({
   id: z.number(),
@@ -67,7 +67,7 @@ export type TRecipeIngredientCreate = z.infer<
   typeof RecipeIngredientCreateSchema
 >;
 
-export const IngredientGetQuerySchema = z.object({
+export const IngredientGetQuerySchema = PaginationSchema.extend({
   queryFilter: GetQueryFilter.optional(),
   isDeleted: BooleanQuerySchema.optional(),
 });
