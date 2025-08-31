@@ -5,10 +5,12 @@ import {
 } from '@jcmono/api-contract';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { DEFAULT_TAKE } from 'src/common/constants/main';
 import { TBaseDeleteParams } from 'src/common/types';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { validatePagination } from 'src/utils/pagination';
+import {
+  createPaginatedResponse,
+  validatePagination,
+} from 'src/utils/pagination';
 
 @Injectable()
 export class IngredientsService {
@@ -19,27 +21,39 @@ export class IngredientsService {
 
     const pagination = validatePagination(query);
 
-    if (pagination) {
-      return await this.prisma.ingredient.findMany({
-        where,
-        skip: pagination.skip,
-        take: pagination.take,
-      });
-    }
+    const finalPagination = pagination || {
+      skip: 0,
+      take: 20,
+      page: 1,
+    };
 
-    return await this.prisma.ingredient.findMany({
-      where,
-      take: DEFAULT_TAKE,
-    });
+    const [data, totalCount] = await Promise.all([
+      this.prisma.ingredient.findMany({
+        where,
+        skip: finalPagination.skip,
+        take: finalPagination.take,
+      }),
+      this.prisma.ingredient.count({ where }),
+    ]);
+
+    return createPaginatedResponse(data, totalCount, finalPagination);
   }
 
   private buildIngredientFilter(
     userId: number,
     query: TIngredientGetQuery,
   ): Prisma.IngredientWhereInput {
-    const { queryFilter, isDeleted } = query;
+    const { queryFilter, isDeleted, search } = query;
 
-    const baseFilter = { isDeleted };
+    const baseFilter: Prisma.IngredientWhereInput = { isDeleted };
+
+    // Add search filter if search term is provided
+    if (search && typeof search === 'string' && search.trim()) {
+      baseFilter.name = {
+        contains: search.trim(),
+        mode: 'insensitive' as const, // Case-insensitive search
+      };
+    }
 
     if (queryFilter === 'ALL') {
       return {

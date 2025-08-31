@@ -37,3 +37,28 @@ export const PaginationSchema = z.object({
 });
 
 export type TPagination = z.infer<typeof PaginationSchema>;
+
+export const PaginationMetaSchema = z.object({
+  currentPage: z.number(),
+  totalPages: z.number(),
+  totalCount: z.number(),
+  hasNextPage: z.boolean(),
+  hasPreviousPage: z.boolean(),
+  itemsPerPage: z.number(),
+});
+
+export type TPaginationMeta = z.infer<typeof PaginationMetaSchema>;
+
+export const PaginatedResponseSchema = <T extends z.ZodTypeAny>(itemSchema: T) =>
+  z.object({
+    data: z.array(itemSchema),
+    pagination: PaginationMetaSchema,
+  });
+
+export type TPaginatedResponse<T> = {
+  data: T[];
+  pagination: TPaginationMeta;
+};
+
+// Helper type for frontend to extract data type from paginated response
+export type TDataFromPaginated<T> = T extends TPaginatedResponse<infer U> ? U : never;

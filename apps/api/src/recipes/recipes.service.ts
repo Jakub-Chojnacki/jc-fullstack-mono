@@ -5,10 +5,12 @@ import {
 } from '@jcmono/api-contract';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { DEFAULT_TAKE } from 'src/common/constants/main';
 import { TBaseDeleteParams } from 'src/common/types';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { validatePagination } from 'src/utils/pagination';
+import {
+  createPaginatedResponse,
+  validatePagination,
+} from 'src/utils/pagination';
 
 @Injectable()
 export class RecipesService {
@@ -19,32 +21,58 @@ export class RecipesService {
 
     const pagination = validatePagination(query);
 
-    if (pagination) {
-      return await this.prisma.recipe.findMany({
-        where,
-        skip: pagination.skip,
-        take: pagination.take,
-      });
-    }
+    const finalPagination = pagination || {
+      skip: 0,
+      take: 20,
+      page: 1,
+    };
 
-    return await this.prisma.recipe.findMany({
-      where,
-      take: DEFAULT_TAKE,
-    });
+    const [data, totalCount] = await Promise.all([
+      this.prisma.recipe.findMany({
+        where,
+        skip: finalPagination.skip,
+        take: finalPagination.take,
+      }),
+      this.prisma.recipe.count({ where }),
+    ]);
+
+    return createPaginatedResponse(data, totalCount, finalPagination);
   }
 
   private buildRecipeFilter(
     userId: number,
     query: TRecipeGetQuery,
   ): Prisma.RecipeWhereInput {
-    const { queryFilter, isDeleted } = query;
+    const { queryFilter, isDeleted, search } = query;
 
-    const baseFilter = { isDeleted };
+    const baseFilter: Prisma.RecipeWhereInput = { isDeleted };
+
+    // Add search filter if search term is provided
+    if (search && typeof search === 'string' && search.trim()) {
+      baseFilter.OR = [
+        {
+          name: {
+            contains: search.trim(),
+            mode: 'insensitive' as const,
+          },
+        },
+      ];
+    }
 
     if (queryFilter === 'ALL') {
+      const userOrGlobalFilter = [{ userId }, { isGlobal: true }];
+
+      // If we already have search filters, combine them
+      if (baseFilter.OR) {
+        return {
+          ...baseFilter,
+          AND: [{ OR: userOrGlobalFilter }, { OR: baseFilter.OR }],
+        };
+      }
+
       return {
         ...baseFilter,
-        OR: [{ userId }, { isGlobal: true }],
+        OR: userOrGlobalFilter,
       };
     }
 

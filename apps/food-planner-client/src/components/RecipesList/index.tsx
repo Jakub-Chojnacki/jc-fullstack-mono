@@ -1,7 +1,7 @@
 import { Button, Input } from "@jcmono/ui";
 import { Outlet, useNavigate } from "@tanstack/react-router";
 import { Plus, Utensils } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import useDeleteRecipe from "@/queries/useDeleteRecipe";
 import useGetRecipes from "@/queries/useGetRecipes";
@@ -12,12 +12,32 @@ import SingleRecipeCard from "./components/SingleRecipeCard";
 
 function RecipesList() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 12;
+  const itemsPerPage = 20;
 
   const navigation = useNavigate({ from: "/app/recipes" });
 
-  const { data } = useGetRecipes();
+  // Debounce search term to avoid too many API calls
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+      if (searchTerm !== debouncedSearchTerm) {
+        setCurrentPage(1);
+      }
+    }, 300);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm, debouncedSearchTerm]);
+
+  const { data, isLoading } = useGetRecipes({
+    page: currentPage,
+    take: itemsPerPage,
+    search: debouncedSearchTerm,
+  });
+
   const { mutate } = useDeleteRecipe();
 
   const handleDelete = (id: number) => {
@@ -33,34 +53,23 @@ function RecipesList() {
     navigation({ to: `/app/recipes/edit/${id}` });
   };
 
-  const filteredRecipes = useMemo(() => {
-    if (!data?.body)
-      return [];
+  const displayedRecipes = useMemo(() => data?.body?.data || [], [data?.body?.data]);
+  const paginationMeta = data?.body?.pagination;
 
-    return data.body.filter(recipe =>
-      recipe.name.toLowerCase().includes(searchTerm.toLowerCase())
-      || recipe.description.toLowerCase().includes(searchTerm.toLowerCase()),
-    );
-  }, [data?.body, searchTerm]);
-
-  const totalPages = Math.ceil(filteredRecipes.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedRecipes = filteredRecipes.slice(
-    startIndex,
-    startIndex + itemsPerPage,
-  );
-
-  const handleSearchChange = (value: string) => {
+  const handleSearchChange = (value: string): void => {
     setSearchTerm(value);
-    setCurrentPage(1);
   };
 
-  const handlePreviousPage = () => {
-    setCurrentPage(prev => Math.max(prev - 1, 1));
+  const handlePreviousPage = (): void => {
+    if (paginationMeta?.hasPreviousPage) {
+      setCurrentPage(prev => prev - 1);
+    }
   };
 
-  const handleNextPage = () => {
-    setCurrentPage(prev => Math.min(prev + 1, Math.max(totalPages, 1)));
+  const handleNextPage = (): void => {
+    if (paginationMeta?.hasNextPage) {
+      setCurrentPage(prev => prev + 1);
+    }
   };
 
   return (
@@ -80,54 +89,78 @@ function RecipesList() {
       </div>
 
       <div className="flex-1 overflow-auto">
-        {paginatedRecipes.length > 0
+        {isLoading
           ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {paginatedRecipes.map(recipe => (
-                  <SingleRecipeCard
-                    key={recipe.id}
-                    recipe={recipe}
-                    onPreview={handlePreview}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                  />
-                ))}
+              <div className="flex items-center justify-center h-32 text-center text-muted-foreground">
+                Loading recipes...
               </div>
             )
-          : (
-              <div className="flex items-center justify-center h-32 text-center text-muted-foreground">
-                {searchTerm ? "No recipes found matching your search." : "No recipes found."}
-              </div>
-            )}
+          : displayedRecipes.length > 0
+            ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {displayedRecipes.map(recipe => (
+                    <SingleRecipeCard
+                      key={recipe.id}
+                      recipe={recipe}
+                      onPreview={handlePreview}
+                      onEdit={handleEdit}
+                      onDelete={handleDelete}
+                    />
+                  ))}
+                </div>
+              )
+            : (
+                <div className="flex items-center justify-center h-32 text-center text-muted-foreground">
+                  {searchTerm ? "No recipes found matching your search." : "No recipes found."}
+                </div>
+              )}
       </div>
 
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="text-sm text-muted-foreground">
-          Page
-          {" "}
-          {currentPage}
-          {" "}
-          of
-          {" "}
-          {totalPages}
+      {paginationMeta && (
+        <div className="flex items-center justify-between py-4">
+          <div className="text-sm text-muted-foreground">
+            Showing
+            {" "}
+            {displayedRecipes.length}
+            {" "}
+            of
+            {" "}
+            {paginationMeta.totalCount}
+            {" "}
+            recipes
+            {debouncedSearchTerm && ` (searching for "${debouncedSearchTerm}")`}
+          </div>
+          <div className="flex items-center space-x-4">
+            <div className="text-sm text-muted-foreground">
+              Page
+              {" "}
+              {paginationMeta.currentPage}
+              {" "}
+              of
+              {" "}
+              {paginationMeta.totalPages}
+            </div>
+            <div className="flex space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handlePreviousPage}
+                disabled={!paginationMeta.hasPreviousPage}
+              >
+                Previous
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleNextPage}
+                disabled={!paginationMeta.hasNextPage}
+              >
+                Next
+              </Button>
+            </div>
+          </div>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handlePreviousPage}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleNextPage}
-          disabled={currentPage === totalPages || !totalPages}
-        >
-          Next
-        </Button>
-      </div>
+      )}
 
       <div>
         <Outlet />

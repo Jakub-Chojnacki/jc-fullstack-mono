@@ -70,6 +70,7 @@ export type TRecipeIngredientCreate = z.infer<
 export const IngredientGetQuerySchema = PaginationSchema.extend({
   queryFilter: GetQueryFilter.optional(),
   isDeleted: BooleanQuerySchema.optional(),
+  search: z.string().optional(),
 });
 
 export type TIngredientGetQuery = z.infer<typeof IngredientGetQuerySchema>;

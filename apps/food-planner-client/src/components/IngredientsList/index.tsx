@@ -1,7 +1,7 @@
 import { Button, Input } from "@jcmono/ui";
 import { Outlet, useNavigate } from "@tanstack/react-router";
 import { Apple, Plus } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import useDeleteIngredient from "@/queries/useDeleteIngredient";
 import useGetIngredients from "@/queries/useGetIngredients";
@@ -12,13 +12,29 @@ import SingleIngredientCard from "./components/SingleIngredientCard";
 
 function IngredientsList() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 12;
+  const itemsPerPage = 20;
 
   const navigation = useNavigate({ from: "/app/ingredients" });
 
-  const { data } = useGetIngredients();
-  // TODO: Add Pagination from BE
+  // Debounce search term to avoid too many API calls
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm]);
+
+  const { data, isLoading } = useGetIngredients({
+    page: currentPage,
+    take: itemsPerPage,
+    search: debouncedSearchTerm,
+  });
+
   const { mutate } = useDeleteIngredient();
 
   const handleDelete = (id: number) => {
@@ -26,33 +42,23 @@ function IngredientsList() {
     mutate({ params: { id } });
   };
 
-  const filteredIngredients = useMemo(() => {
-    if (!data?.body)
-      return [];
-
-    return data.body.filter(({ name }) =>
-      name.toLowerCase().includes(searchTerm.toLowerCase()),
-    );
-  }, [data?.body, searchTerm]);
-
-  const totalPages = Math.ceil(filteredIngredients.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedIngredients = filteredIngredients.slice(
-    startIndex,
-    startIndex + itemsPerPage,
-  );
+  const displayedIngredients = useMemo(() => data?.body?.data || [], [data?.body?.data]);
+  const paginationMeta = data?.body?.pagination;
 
   const handleSearchChange = (value: string): void => {
     setSearchTerm(value);
-    setCurrentPage(1);
   };
 
   const handlePreviousPage = (): void => {
-    setCurrentPage(prev => Math.max(prev - 1, 1));
+    if (paginationMeta?.hasPreviousPage) {
+      setCurrentPage(prev => prev - 1);
+    }
   };
 
   const handleNextPage = (): void => {
-    setCurrentPage(prev => Math.min(prev + 1, totalPages));
+    if (paginationMeta?.hasNextPage) {
+      setCurrentPage(prev => prev + 1);
+    }
   };
 
   return (
@@ -72,48 +78,79 @@ function IngredientsList() {
       </div>
 
       <div className="flex-1 overflow-auto">
-        {paginatedIngredients.length > 0
+        {isLoading
           ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {paginatedIngredients.map(ingredient => (
-                  <SingleIngredientCard
-                    key={ingredient.id}
-                    ingredient={ingredient}
-                    handleDelete={handleDelete}
-                  />
-                ))}
+              <div className="flex items-center justify-center h-32 text-center text-muted-foreground">
+                Loading ingredients...
               </div>
             )
-          : (
-              <div className="flex items-center justify-center h-32 text-center text-muted-foreground">
-                {searchTerm
-                  ? "No ingredients found matching your search."
-                  : "No ingredients found."}
-              </div>
-            )}
+          : displayedIngredients.length > 0
+            ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {displayedIngredients.map(ingredient => (
+                    <SingleIngredientCard
+                      key={ingredient.id}
+                      ingredient={ingredient}
+                      handleDelete={handleDelete}
+                    />
+                  ))}
+                </div>
+              )
+            : (
+                <div className="flex items-center justify-center h-32 text-center text-muted-foreground">
+                  {searchTerm
+                    ? "No ingredients found matching your search."
+                    : "No ingredients found."}
+                </div>
+              )}
       </div>
 
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="text-sm text-muted-foreground">
-          {`Page ${currentPage} of ${Math.max(totalPages, 1)}`}
+      {paginationMeta && (
+        <div className="flex items-center justify-between py-4">
+          <div className="text-sm text-muted-foreground">
+            Showing
+            {" "}
+            {displayedIngredients.length}
+            {" "}
+            of
+            {" "}
+            {paginationMeta.totalCount}
+            {" "}
+            ingredients
+            {debouncedSearchTerm && ` (searching for "${debouncedSearchTerm}")`}
+          </div>
+          <div className="flex items-center space-x-4">
+            <div className="text-sm text-muted-foreground">
+              Page
+              {" "}
+              {paginationMeta.currentPage}
+              {" "}
+              of
+              {" "}
+              {paginationMeta.totalPages}
+            </div>
+            <div className="flex space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handlePreviousPage}
+                disabled={!paginationMeta.hasPreviousPage}
+              >
+                Previous
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleNextPage}
+                disabled={!paginationMeta.hasNextPage}
+              >
+                Next
+              </Button>
+            </div>
+          </div>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handlePreviousPage}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleNextPage}
-          disabled={currentPage === totalPages || !totalPages}
-        >
-          Next
-        </Button>
-      </div>
+      )}
+
       <Outlet />
     </div>
   );

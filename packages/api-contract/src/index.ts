@@ -1,32 +1,33 @@
 import { initContract } from "@ts-rest/core";
 import { z } from "zod";
 import {
-  BooleanQuerySchema,
-  ErrorResponseSchema,
-  IngredientCreateSchema,
-  IngredientGetQuerySchema,
-  IngredientSchema,
-  LoginSchema,
-  RecipeCreateSchema,
-  RecipeGetOneSchema,
-  RecipeGetQuerySchema,
-  RecipeIngredientCreateSchema,
-  RecipeIngredientSchema,
-  RecipeIngredientUpdateSchema,
-  RecipeSchema,
-  ShoppingListIngredientCreateSchema,
-  ShoppingListIngredientGetQuerySchema,
-  ShoppingListIngredientGetSchema,
-  ShoppingListIngredientSchema,
-  ShoppingListIngredientUpdateSchema,
-  StringToNumberSchema,
-  UserSchema,
+    BooleanQuerySchema,
+    ErrorResponseSchema,
+    IngredientCreateSchema,
+    IngredientGetQuerySchema,
+    IngredientSchema,
+    LoginSchema,
+    PaginatedResponseSchema,
+    RecipeCreateSchema,
+    RecipeGetOneSchema,
+    RecipeGetQuerySchema,
+    RecipeIngredientCreateSchema,
+    RecipeIngredientSchema,
+    RecipeIngredientUpdateSchema,
+    RecipeSchema,
+    ShoppingListIngredientCreateSchema,
+    ShoppingListIngredientGetQuerySchema,
+    ShoppingListIngredientGetSchema,
+    ShoppingListIngredientSchema,
+    ShoppingListIngredientUpdateSchema,
+    StringToNumberSchema,
+    UserSchema,
 } from "./schemas/index";
 import {
-  ScheduleMealsCreateSchema,
-  ScheduleMealsGetSchema,
-  ScheduleMealsSchema,
-  ScheduleMealsUpdateSchema,
+    ScheduleMealsCreateSchema,
+    ScheduleMealsGetSchema,
+    ScheduleMealsSchema,
+    ScheduleMealsUpdateSchema,
 } from "./schemas/scheduleMeals";
 
 export * from "./schemas/index";
@@ -41,7 +42,7 @@ export const contract = c.router(
         path: "/ingredients",
         query: IngredientGetQuerySchema,
         responses: {
-          200: z.array(IngredientSchema),
+          200: PaginatedResponseSchema(IngredientSchema),
         },
       },
       create: {
@@ -86,7 +87,7 @@ export const contract = c.router(
         path: "/recipes",
         query: RecipeGetQuerySchema,
         responses: {
-          200: z.array(RecipeSchema),
+          200: PaginatedResponseSchema(RecipeSchema),
         },
       },
       create: {
