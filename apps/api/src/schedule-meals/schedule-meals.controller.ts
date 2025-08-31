@@ -1,5 +1,5 @@
 import { contract } from '@jcmono/api-contract';
-import { Controller } from '@nestjs/common';
+import { Controller, NotFoundException } from '@nestjs/common';
 import { tsRestHandler, TsRestHandler } from '@ts-rest/nest';
 import { GetCurrentUserId } from 'src/common/decorators';
 import { ScheduleMealsService } from './schedule-meals.service';
@@ -82,10 +82,7 @@ export class ScheduleMealsController {
         );
 
         if (!scheduledMeal) {
-          return {
-            status: 404,
-            body: { message: 'Scheduled meal not found' },
-          };
+          throw new NotFoundException('Scheduled meal not found');
         }
 
         return {

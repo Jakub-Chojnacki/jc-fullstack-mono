@@ -1,5 +1,5 @@
 import { contract } from '@jcmono/api-contract';
-import { Controller, Res, UseGuards } from '@nestjs/common';
+import { Controller, Res, UseGuards, NotFoundException } from '@nestjs/common';
 import { tsRestHandler, TsRestHandler } from '@ts-rest/nest';
 import { type Response } from 'express';
 
@@ -60,10 +60,7 @@ export class AuthController {
       const user = await this.authService.me(userId);
 
       if (!user) {
-        return {
-          status: 404,
-          body: { message: 'User not found' },
-        };
+        throw new NotFoundException('User not found');
       }
 
       return {

@@ -1,4 +1,3 @@
-import { ErrorCodes } from '@jcmono/api-contract';
 import type { AppRoute } from '@ts-rest/core';
 import { TsRestException } from '@ts-rest/nest';
 import handlePrismaErrorCode from '../handlePrismaErrorCode';
@@ -22,7 +21,6 @@ const wrapWithTsRestError = async <T>(
       status: 500,
       body: {
         message: isNativeError ? error.message : 'Internal server error',
-        code: isNativeError ? ErrorCodes.BASIC_ERROR : ErrorCodes.UNKNOWN_ERROR,
       },
     });
   }

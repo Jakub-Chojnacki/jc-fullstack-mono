@@ -1,5 +1,4 @@
 import {
-  contract,
   TIngredientCreate,
   TIngredientGetQuery,
   TIngredientUpdate,
@@ -8,19 +7,16 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { TBaseDeleteParams } from 'src/common/types';
 import { PrismaService } from 'src/prisma/prisma.service';
-import wrapWithTsRestError from 'src/utils/wrapWithTsRestError';
 
 @Injectable()
 export class IngredientsService {
   constructor(private prisma: PrismaService) {}
 
-  get({ userId, query }: { userId: number; query: TIngredientGetQuery }) {
-    return wrapWithTsRestError(contract.recipes.get, async () => {
-      const where = this.buildIngredientFilter(userId, query);
+  async get({ userId, query }: { userId: number; query: TIngredientGetQuery }) {
+    const where = this.buildIngredientFilter(userId, query);
 
-      return await this.prisma.ingredient.findMany({
-        where,
-      });
+    return await this.prisma.ingredient.findMany({
+      where,
     });
   }
 
@@ -52,33 +48,27 @@ export class IngredientsService {
     };
   }
 
-  create(body: TIngredientCreate) {
-    return wrapWithTsRestError(contract.ingredients.create, async () => {
-      const ingredient = await this.prisma.ingredient.create({
-        data: body,
-      });
+  async create(body: TIngredientCreate) {
+    const ingredient = await this.prisma.ingredient.create({
+      data: body,
+    });
 
-      return ingredient;
+    return ingredient;
+  }
+
+  async delete({ id, userId }: TBaseDeleteParams) {
+    return await this.prisma.ingredient.update({
+      where: {
+        id,
+        userId,
+      },
+      data: {
+        isDeleted: true,
+      },
     });
   }
 
-  delete({ id, userId }: TBaseDeleteParams) {
-    return wrapWithTsRestError(
-      contract.ingredients.delete,
-      async () =>
-        await this.prisma.ingredient.update({
-          where: {
-            id,
-            userId,
-          },
-          data: {
-            isDeleted: true,
-          },
-        }),
-    );
-  }
-
-  update({
+  async update({
     id,
     body,
     userId,
@@ -87,16 +77,12 @@ export class IngredientsService {
     body: TIngredientUpdate;
     userId: number;
   }) {
-    return wrapWithTsRestError(
-      contract.ingredients.update,
-      async () =>
-        await this.prisma.ingredient.update({
-          where: {
-            id,
-            userId,
-          },
-          data: body,
-        }),
-    );
+    return await this.prisma.ingredient.update({
+      where: {
+        id,
+        userId,
+      },
+      data: body,
+    });
   }
 }

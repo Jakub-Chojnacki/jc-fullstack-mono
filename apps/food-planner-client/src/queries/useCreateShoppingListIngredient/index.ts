@@ -9,8 +9,9 @@ function useCreateShoppingListIngredient() {
       toast.success("Ingredients added to the list!");
       queryClient.invalidateQueries({ queryKey: ["shoppingListIngredients"] });
     },
-    onError: () => {
-      toast.error("Error adding ingredient to the list!");
+    onError: (error) => {
+      const message = error.status === 400 ? error.body?.message : "Error adding ingredient to the list!";
+      toast.error(message);
     },
   });
 
