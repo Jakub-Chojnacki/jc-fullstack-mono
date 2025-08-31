@@ -18,8 +18,7 @@ export class ShoppingListIngredientsService {
   async get({
     isDone,
     userId,
-    page = 1,
-    take = 50,
+    take = MAXIMUM_SAVED_SHOPPING_LIST_ITEMS,
   }: TShoppingListIngredientGetQuery & { userId: number }) {
     return await this.prisma.shoppingListIngredient.findMany({
       where: {
@@ -39,8 +38,7 @@ export class ShoppingListIngredientsService {
           },
         },
       },
-      take: 50,
-      skip: take * (page - 1),
+      take,
     });
   }
 

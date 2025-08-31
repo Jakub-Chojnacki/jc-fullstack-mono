@@ -30,3 +30,10 @@ export const ErrorResponseSchema = z.object({
 });
 
 export type TErrorResponse = z.infer<typeof ErrorResponseSchema>;
+
+export const PaginationSchema = z.object({
+  page: z.string().optional(),
+  take: z.string().optional(),
+});
+
+export type TPagination = z.infer<typeof PaginationSchema>;

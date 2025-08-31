@@ -5,8 +5,10 @@ import {
 } from '@jcmono/api-contract';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { DEFAULT_TAKE } from 'src/common/constants/main';
 import { TBaseDeleteParams } from 'src/common/types';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { validatePagination } from 'src/utils/pagination';
 
 @Injectable()
 export class RecipesService {
@@ -15,8 +17,19 @@ export class RecipesService {
   async get({ userId, query }: { userId: number; query: TRecipeGetQuery }) {
     const where = this.buildRecipeFilter(userId, query);
 
+    const pagination = validatePagination(query);
+
+    if (pagination) {
+      return await this.prisma.recipe.findMany({
+        where,
+        skip: pagination.skip,
+        take: pagination.take,
+      });
+    }
+
     return await this.prisma.recipe.findMany({
       where,
+      take: DEFAULT_TAKE,
     });
   }
 
