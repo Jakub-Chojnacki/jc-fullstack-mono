@@ -34,14 +34,11 @@ export interface PaginatedResponse<T> {
 export function validatePagination(
   params: PaginationParams,
   options: PaginationOptions = {},
-): ValidatedPagination | null {
+): ValidatedPagination {
   const { page, take } = params;
   const { maxTake = 100, defaultTake = DEFAULT_TAKE } = options;
 
-  if (page === undefined && take === undefined) {
-    return null;
-  }
-
+  // Always use defaults if parameters are not provided
   const pageStr = page ?? '1';
   const takeStr = take ?? defaultTake.toString();
 

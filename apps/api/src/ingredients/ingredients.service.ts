@@ -21,22 +21,16 @@ export class IngredientsService {
 
     const pagination = validatePagination(query);
 
-    const finalPagination = pagination || {
-      skip: 0,
-      take: 20,
-      page: 1,
-    };
-
     const [data, totalCount] = await Promise.all([
       this.prisma.ingredient.findMany({
         where,
-        skip: finalPagination.skip,
-        take: finalPagination.take,
+        skip: pagination.skip,
+        take: pagination.take,
       }),
       this.prisma.ingredient.count({ where }),
     ]);
 
-    return createPaginatedResponse(data, totalCount, finalPagination);
+    return createPaginatedResponse(data, totalCount, pagination);
   }
 
   private buildIngredientFilter(

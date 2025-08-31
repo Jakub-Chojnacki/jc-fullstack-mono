@@ -21,22 +21,16 @@ export class RecipesService {
 
     const pagination = validatePagination(query);
 
-    const finalPagination = pagination || {
-      skip: 0,
-      take: 20,
-      page: 1,
-    };
-
     const [data, totalCount] = await Promise.all([
       this.prisma.recipe.findMany({
         where,
-        skip: finalPagination.skip,
-        take: finalPagination.take,
+        skip: pagination.skip,
+        take: pagination.take,
       }),
       this.prisma.recipe.count({ where }),
     ]);
 
-    return createPaginatedResponse(data, totalCount, finalPagination);
+    return createPaginatedResponse(data, totalCount, pagination);
   }
 
   private buildRecipeFilter(
