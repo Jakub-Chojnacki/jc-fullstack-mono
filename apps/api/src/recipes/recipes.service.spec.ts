@@ -1,7 +1,8 @@
 import { TRecipe, TRecipeCreate, TRecipeUpdate } from '@jcmono/api-contract';
 import { Test, TestingModule } from '@nestjs/testing';
-import { TsRestException } from '@ts-rest/nest';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { createRecordNotFoundError } from 'src/test-utils';
 import { RecipesService } from './recipes.service';
 
 describe('RecipesService', () => {
@@ -145,14 +146,14 @@ describe('RecipesService', () => {
     expect(result).toEqual(mockRecipe);
   });
 
-  it('should throw TsRestException if recipe not found during delete', async () => {
-    const error = { code: 'P2025' };
+  it('should throw PrismaClientKnownRequestError if recipe not found during delete', async () => {
+    const error = createRecordNotFoundError();
 
     prisma.recipe.update.mockRejectedValue(error);
 
     await expect(
       service.delete({ id: 999, userId: mockUserId }),
-    ).rejects.toThrow(TsRestException);
+    ).rejects.toThrow(PrismaClientKnownRequestError);
   });
 
   it('should update the recipe and manage ingredients properly', async () => {
@@ -246,13 +247,13 @@ describe('RecipesService', () => {
     });
   });
 
-  it('should throw TsRestException if recipe not found during delete', async () => {
-    const error = { code: 'P2025' };
+  it('should throw PrismaClientKnownRequestError if recipe not found during delete', async () => {
+    const error = createRecordNotFoundError();
 
     prisma.recipe.update.mockRejectedValue(error);
 
     await expect(
       service.delete({ id: 999, userId: mockUserId }),
-    ).rejects.toThrow(TsRestException);
+    ).rejects.toThrow(PrismaClientKnownRequestError);
   });
 });

@@ -1,7 +1,8 @@
 import type { TScheduleMealsCreate } from '@jcmono/api-contract';
 import { Test, TestingModule } from '@nestjs/testing';
-import { TsRestException } from '@ts-rest/nest';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { createRecordNotFoundError } from 'src/test-utils';
 import { ScheduleMealsService } from './schedule-meals.service';
 
 describe('ScheduleMealsService', () => {
@@ -96,14 +97,14 @@ describe('ScheduleMealsService', () => {
     });
   });
 
-  it('should throw TsRestException if not found during update', async () => {
-    const error = { code: 'P2025' };
+  it('should throw PrismaClientKnownRequestError if not found during update', async () => {
+    const error = createRecordNotFoundError();
 
     prisma.scheduledMeal.update.mockRejectedValue(error);
 
     await expect(
       service.update(999, { recipeId: 1, scheduledAt: new Date() }),
-    ).rejects.toThrow(TsRestException);
+    ).rejects.toThrow(PrismaClientKnownRequestError);
   });
 
   it('should delete a scheduled meal', async () => {
@@ -120,14 +121,14 @@ describe('ScheduleMealsService', () => {
     });
   });
 
-  it('should throw TsRestException if not found during delete', async () => {
-    const error = { code: 'P2025' };
+  it('should throw PrismaClientKnownRequestError if not found during delete', async () => {
+    const error = createRecordNotFoundError('Record to delete does not exist.');
 
     prisma.scheduledMeal.delete.mockRejectedValue(error);
 
     await expect(
       service.delete({ id: 999, userId: mockUserId }),
-    ).rejects.toThrow(TsRestException);
+    ).rejects.toThrow(PrismaClientKnownRequestError);
   });
 
   it('should get scheduled meals for a user', async () => {

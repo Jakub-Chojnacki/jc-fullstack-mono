@@ -3,8 +3,9 @@ import {
   TShoppingListIngredientCreate,
 } from '@jcmono/api-contract';
 import { Test, TestingModule } from '@nestjs/testing';
-import { TsRestException } from '@ts-rest/nest';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { createRecordNotFoundError } from 'src/test-utils';
 import { ShoppingListIngredientsService } from './shopping-list-ingredients.service';
 
 describe('ShoppingListIngredientsService', () => {
@@ -172,12 +173,14 @@ describe('ShoppingListIngredientsService', () => {
     });
   });
 
-  it('should throw TsRestException if not found during delete', async () => {
-    const error = { code: 'P2025' };
+  it('should throw PrismaClientKnownRequestError if not found during delete', async () => {
+    const error = createRecordNotFoundError();
 
     prisma.shoppingListIngredient.update.mockRejectedValue(error);
 
-    await expect(service.delete(999, userId)).rejects.toThrow(TsRestException);
+    await expect(service.delete(999, userId)).rejects.toThrow(
+      PrismaClientKnownRequestError,
+    );
   });
 
   it('should update a shopping list ingredient', async () => {
@@ -206,8 +209,8 @@ describe('ShoppingListIngredientsService', () => {
     });
   });
 
-  it('should throw TsRestException if not found during update', async () => {
-    const error = { code: 'P2025' };
+  it('should throw PrismaClientKnownRequestError if not found during update', async () => {
+    const error = createRecordNotFoundError();
 
     prisma.shoppingListIngredient.update.mockRejectedValue(error);
 
@@ -220,7 +223,7 @@ describe('ShoppingListIngredientsService', () => {
         },
         userId,
       }),
-    ).rejects.toThrow(TsRestException);
+    ).rejects.toThrow(PrismaClientKnownRequestError);
   });
 
   describe('ingredient limit tests', () => {
