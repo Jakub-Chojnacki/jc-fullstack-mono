@@ -1,17 +1,25 @@
 import { QuantityUnit } from "@jcmono/api-contract";
 import { Button, Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, FormControl, FormField, FormItem, FormLabel, FormMessage, Input, Popover, PopoverContent, PopoverTrigger, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@jcmono/ui";
 import { Check, ChevronsUpDown, Trash } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 import type { TRecipeFormInput } from "@/forms/RecipeForm/schema";
+import { useDebouncedSearch } from "@/hooks/useDebouncedSearch";
 import { cn } from "@/lib/utils";
 import useGetIngredients from "@/queries/useGetIngredients";
 
 function IngredientSelect() {
-  const { data } = useGetIngredients({
+  const [openPopoverIndex, setOpenPopoverIndex] = useState<number | null>(null);
+
+  const { debouncedSearchTerm, handleSearchChange } = useDebouncedSearch({
+    delay: 300,
+  });
+
+  const { data, isLoading } = useGetIngredients({
     page: 1,
-    take: 20,
+    take: 100,
+    search: debouncedSearchTerm,
   });
   const { control, formState } = useFormContext<TRecipeFormInput>();
   const listRef = useRef<HTMLDivElement>(null);
@@ -30,18 +38,22 @@ function IngredientSelect() {
   const showErrorMessageForField = (
     index: number,
     field: keyof TRecipeFormInput["recipeIngredients"][0],
-  ): string | null => {
-    return (
-      formState?.errors?.recipeIngredients?.[index]?.[field]?.message || null
-    );
-  };
+  ): string | null => formState?.errors?.recipeIngredients?.[index]?.[field]?.message || null;
 
   return (
     <div className="flex flex-col gap-2 items-center">
       {fields.map((field, index) => (
         <div key={field.id}>
           <div className="flex flex-row gap-2 items-center" key={field.id}>
-            <Popover>
+            <Popover
+              open={openPopoverIndex === index}
+              onOpenChange={(open) => {
+                setOpenPopoverIndex(open ? index : null);
+                if (!open) {
+                  handleSearchChange("");
+                }
+              }}
+            >
               <FormField
                 control={control}
                 name={`recipeIngredients.${index}.amount`}
@@ -65,8 +77,11 @@ function IngredientSelect() {
                     </PopoverTrigger>
 
                     <PopoverContent className="w-[200px] p-0">
-                      <Command>
-                        <CommandInput placeholder="Search ingredients..." />
+                      <Command shouldFilter={false}>
+                        <CommandInput
+                          placeholder="Search ingredients..."
+                          onValueChange={handleSearchChange}
+                        />
                         <CommandList
                           ref={listRef}
                           style={{ maxHeight: "200px" }}
@@ -78,17 +93,21 @@ function IngredientSelect() {
                             }
                           }}
                         >
-                          <CommandEmpty>No ingredients found.</CommandEmpty>
+                          <CommandEmpty>
+                            {isLoading ? "Searching..." : "No ingredients found."}
+                          </CommandEmpty>
                           <CommandGroup>
                             {ingredients.map(ingredient => (
                               <CommandItem
                                 key={ingredient.value}
-                                value={String(ingredient.value)}
-                                onSelect={(currentValue) => {
+                                value={ingredient.label}
+                                onSelect={() => {
                                   update(index, {
                                     ...field,
-                                    ingredientId: Number(currentValue),
+                                    ingredientId: ingredient.value,
                                   });
+                                  setOpenPopoverIndex(null);
+                                  handleSearchChange("");
                                 }}
                               >
                                 <Check

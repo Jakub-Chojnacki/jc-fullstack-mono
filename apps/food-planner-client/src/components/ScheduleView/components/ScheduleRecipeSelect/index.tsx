@@ -3,6 +3,7 @@ import { ChevronRight } from "lucide-react";
 import { useRef, useState } from "react";
 import type { FieldValues } from "react-hook-form";
 
+import { useDebouncedSearch } from "@/hooks/useDebouncedSearch";
 import useGetRecipes from "@/queries/useGetRecipes";
 
 import type { TScheduleRecipeSelectProps } from "./types";
@@ -14,9 +15,14 @@ function ScheduleRecipeSelect<T extends FieldValues>({
   const [commandOpen, setCommandOpen] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
 
-  const { data } = useGetRecipes({
+  const { debouncedSearchTerm, handleSearchChange } = useDebouncedSearch({
+    delay: 300,
+  });
+
+  const { data, isLoading } = useGetRecipes({
     page: 1,
     take: 100,
+    search: debouncedSearchTerm,
   });
 
   return (
@@ -43,7 +49,10 @@ function ScheduleRecipeSelect<T extends FieldValues>({
                   </PopoverTrigger>
                   <PopoverContent className="w-[300px] p-0">
                     <Command>
-                      <CommandInput placeholder="Search recipes..." />
+                      <CommandInput
+                        placeholder="Search recipes..."
+                        onValueChange={handleSearchChange}
+                      />
                       <CommandList
                         ref={listRef}
                         style={{ maxHeight: "200px" }}
@@ -55,7 +64,9 @@ function ScheduleRecipeSelect<T extends FieldValues>({
                           }
                         }}
                       >
-                        <CommandEmpty>No recipes found.</CommandEmpty>
+                        <CommandEmpty>
+                          {isLoading ? "Searching..." : "No recipes found."}
+                        </CommandEmpty>
                         <CommandGroup>
                           {data?.body?.data.map(recipe => (
                             <CommandItem
