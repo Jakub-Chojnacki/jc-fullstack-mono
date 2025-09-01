@@ -17,15 +17,23 @@ export class ShoppingListIngredientsService {
 
   async get({
     isDone,
+    isDeleted,
     userId,
     take = MAXIMUM_SAVED_SHOPPING_LIST_ITEMS,
   }: TShoppingListIngredientGetQuery & { userId: number }) {
+    const where: {
+      isDone?: boolean;
+      userId: number;
+      isDeleted: boolean;
+    } = {
+      isDone,
+      userId,
+      // Only add isDeleted filter if it's explicitly provided, otherwise default to false
+      isDeleted: isDeleted !== undefined ? Boolean(isDeleted) : false,
+    };
+
     return await this.prisma.shoppingListIngredient.findMany({
-      where: {
-        isDone,
-        userId,
-        isDeleted: false,
-      },
+      where,
       omit: {
         createdAt: true,
         updatedAt: true,

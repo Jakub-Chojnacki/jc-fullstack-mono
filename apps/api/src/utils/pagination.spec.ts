@@ -1,25 +1,26 @@
 import { BadRequestException } from '@nestjs/common';
+import { DEFAULT_TAKE } from 'src/common/constants/main';
 import { validatePagination } from './pagination';
 
 describe('validatePagination', () => {
-  it('should return null when no pagination params are provided', () => {
+  it('should use defaults when no pagination params are provided', () => {
     const result = validatePagination({});
-    expect(result).toBeNull();
+    expect(result).toEqual({ skip: 0, take: DEFAULT_TAKE, page: 1 });
   });
 
   it('should use defaults when only page is provided', () => {
     const result = validatePagination({ page: '2' });
-    expect(result).toEqual({ skip: 10, take: 10 });
+    expect(result).toEqual({ skip: DEFAULT_TAKE, take: DEFAULT_TAKE, page: 2 });
   });
 
   it('should use defaults when only take is provided', () => {
     const result = validatePagination({ take: '5' });
-    expect(result).toEqual({ skip: 0, take: 5 });
+    expect(result).toEqual({ skip: 0, take: 5, page: 1 });
   });
 
   it('should calculate skip correctly for valid pagination', () => {
     const result = validatePagination({ page: '3', take: '20' });
-    expect(result).toEqual({ skip: 40, take: 20 });
+    expect(result).toEqual({ skip: 40, take: 20, page: 3 });
   });
 
   it('should throw error for invalid page number', () => {
@@ -60,6 +61,6 @@ describe('validatePagination', () => {
 
   it('should respect custom defaultTake option', () => {
     const result = validatePagination({ page: '2' }, { defaultTake: 25 });
-    expect(result).toEqual({ skip: 25, take: 25 });
+    expect(result).toEqual({ skip: 25, take: 25, page: 2 });
   });
 });

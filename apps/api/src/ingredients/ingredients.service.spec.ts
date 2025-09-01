@@ -10,6 +10,7 @@ describe('IngredientsService', () => {
   let prisma: {
     ingredient: {
       findMany: jest.Mock;
+      count: jest.Mock;
       create: jest.Mock;
       update: jest.Mock;
       delete: jest.Mock;
@@ -37,6 +38,7 @@ describe('IngredientsService', () => {
           useValue: {
             ingredient: {
               findMany: jest.fn(),
+              count: jest.fn(),
               create: jest.fn(),
               update: jest.fn(),
               delete: jest.fn(),
@@ -52,30 +54,48 @@ describe('IngredientsService', () => {
 
   it('should return global ingredients', async () => {
     const mockData = [mockIngredient];
+    const mockCount = 1;
 
     prisma.ingredient.findMany.mockResolvedValue(mockData);
+    prisma.ingredient.count.mockResolvedValue(mockCount);
 
     const result = await service.get({
-      query: { queryFilter: 'GLOBAL' },
+      query: { queryFilter: 'GLOBAL', page: '1', take: '10' },
       userId: mockData[0].userId,
     });
-    expect(result).toEqual(mockData);
+
+    expect(result.data).toEqual(mockData);
+    expect(result.pagination.totalCount).toBe(mockCount);
     expect(prisma.ingredient.findMany).toHaveBeenCalledWith({
+      where: { isGlobal: true },
+      skip: 0,
+      take: 10,
+    });
+    expect(prisma.ingredient.count).toHaveBeenCalledWith({
       where: { isGlobal: true },
     });
   });
 
   it('should return ingredients for a user', async () => {
     const mockData = [mockIngredient];
+    const mockCount = 1;
 
     prisma.ingredient.findMany.mockResolvedValue(mockData);
+    prisma.ingredient.count.mockResolvedValue(mockCount);
 
     const result = await service.get({
       userId: mockUserId,
-      query: { queryFilter: 'USER' },
+      query: { queryFilter: 'USER', page: '1', take: '10' },
     });
-    expect(result).toEqual(mockData);
+
+    expect(result.data).toEqual(mockData);
+    expect(result.pagination.totalCount).toBe(mockCount);
     expect(prisma.ingredient.findMany).toHaveBeenCalledWith({
+      where: { userId: mockUserId },
+      skip: 0,
+      take: 10,
+    });
+    expect(prisma.ingredient.count).toHaveBeenCalledWith({
       where: { userId: mockUserId },
     });
   });
