@@ -3,7 +3,7 @@ import {
   TRecipeGetQuery,
   TRecipeUpdate,
 } from '@jcmono/api-contract';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { TBaseDeleteParams } from 'src/common/types';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -15,6 +15,19 @@ import {
 @Injectable()
 export class RecipesService {
   constructor(private prisma: PrismaService) {}
+
+  private validateNoDuplicateIngredients(
+    recipeIngredients: { ingredientId: number }[],
+  ) {
+    const ingredientIds = recipeIngredients.map((ri) => ri.ingredientId);
+    const uniqueIngredientIds = new Set(ingredientIds);
+
+    if (ingredientIds.length !== uniqueIngredientIds.size) {
+      throw new BadRequestException(
+        'Cannot add the same ingredient to a recipe twice',
+      );
+    }
+  }
 
   async get({ userId, query }: { userId: number; query: TRecipeGetQuery }) {
     const where = this.buildRecipeFilter(userId, query);
@@ -123,6 +136,9 @@ export class RecipesService {
   }
 
   async create({ recipeIngredients, ...body }: TRecipeCreate) {
+    // Validate no duplicate ingredients
+    this.validateNoDuplicateIngredients(recipeIngredients);
+
     const recipe = await this.prisma.recipe.create({
       data: body,
     });
@@ -150,6 +166,9 @@ export class RecipesService {
   }
 
   async update(id: number, { recipeIngredients, ...body }: TRecipeUpdate) {
+    // Validate no duplicate ingredients in the incoming data
+    this.validateNoDuplicateIngredients(recipeIngredients);
+
     const existingIngredients = await this.prisma.recipeIngredient.findMany({
       where: { recipeId: id },
       select: { id: true },

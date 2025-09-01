@@ -17,19 +17,15 @@ export class ShoppingListIngredientsService {
 
   async get({
     isDone,
-    isDeleted,
     userId,
     take = MAXIMUM_SAVED_SHOPPING_LIST_ITEMS,
   }: TShoppingListIngredientGetQuery & { userId: number }) {
     const where: {
       isDone?: boolean;
       userId: number;
-      isDeleted: boolean;
     } = {
       isDone,
       userId,
-      // Only add isDeleted filter if it's explicitly provided, otherwise default to false
-      isDeleted: isDeleted !== undefined ? Boolean(isDeleted) : false,
     };
 
     return await this.prisma.shoppingListIngredient.findMany({
@@ -57,7 +53,6 @@ export class ShoppingListIngredientsService {
     const currentCount = await this.prisma.shoppingListIngredient.count({
       where: {
         userId,
-        isDeleted: false,
       },
     });
 
@@ -72,14 +67,37 @@ export class ShoppingListIngredientsService {
   }
 
   async create(body: TShoppingListIngredientCreate, userId: number) {
-    await this.checkIngredientLimit(userId);
-
-    const shoppingListIngredient =
-      await this.prisma.shoppingListIngredient.create({
-        data: { ...body, userId },
+    const existingIngredient =
+      await this.prisma.shoppingListIngredient.findFirst({
+        where: {
+          userId,
+          ingredientId: body.ingredientId,
+          unit: body.unit,
+        },
       });
 
-    return shoppingListIngredient;
+    if (existingIngredient) {
+      // If ingredient exists, add to the existing amount
+      return await this.prisma.shoppingListIngredient.update({
+        where: {
+          id: existingIngredient.id,
+        },
+        data: {
+          amount: existingIngredient.amount + body.amount,
+          isDone: false,
+        },
+      });
+    } else {
+      // If ingredient doesn't exist, create a new one
+      await this.checkIngredientLimit(userId);
+
+      const shoppingListIngredient =
+        await this.prisma.shoppingListIngredient.create({
+          data: { ...body, userId },
+        });
+
+      return shoppingListIngredient;
+    }
   }
 
   async createFromRecipe(recipeId: number, userId: number) {
@@ -102,36 +120,56 @@ export class ShoppingListIngredientsService {
       throw new NotFoundException('Recipe not found');
     }
 
-    const shoppingListIngredientsToCreate = recipe.recipeIngredients.map(
-      (ingredient) => ({
-        ...ingredient,
-        userId,
-        isDone: false,
-        isDeleted: false,
-      }),
-    );
+    const results: Awaited<
+      ReturnType<typeof this.prisma.shoppingListIngredient.create>
+    >[] = [];
 
-    await this.checkIngredientLimit(
-      userId,
-      shoppingListIngredientsToCreate.length,
-    );
+    // Process each ingredient individually to handle merging
+    for (const ingredient of recipe.recipeIngredients) {
+      const existingIngredient =
+        await this.prisma.shoppingListIngredient.findFirst({
+          where: {
+            userId,
+            ingredientId: ingredient.ingredientId,
+            unit: ingredient.unit,
+          },
+        });
 
-    const shoppingListIngredients =
-      await this.prisma.shoppingListIngredient.createManyAndReturn({
-        data: shoppingListIngredientsToCreate,
-      });
+      if (existingIngredient) {
+        // If ingredient exists, add to the existing amount
+        const updated = await this.prisma.shoppingListIngredient.update({
+          where: {
+            id: existingIngredient.id,
+          },
+          data: {
+            amount: existingIngredient.amount + ingredient.amount,
+            isDone: false,
+          },
+        });
+        results.push(updated);
+      } else {
+        // If ingredient doesn't exist, create a new one
+        await this.checkIngredientLimit(userId, 1);
 
-    return shoppingListIngredients;
+        const created = await this.prisma.shoppingListIngredient.create({
+          data: {
+            ...ingredient,
+            userId,
+            isDone: false,
+          },
+        });
+        results.push(created);
+      }
+    }
+
+    return results;
   }
 
   async delete(id: number, userId: number) {
-    return await this.prisma.shoppingListIngredient.update({
+    return await this.prisma.shoppingListIngredient.delete({
       where: {
         id,
         userId,
-      },
-      data: {
-        isDeleted: true,
       },
     });
   }
