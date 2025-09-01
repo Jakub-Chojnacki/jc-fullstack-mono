@@ -37,6 +37,7 @@ function IngredientsList() {
     page: currentPage,
     take: itemsPerPage,
     search: debouncedSearchTerm,
+    isDeleted: false,
   });
 
   const { mutate } = useDeleteIngredient();
