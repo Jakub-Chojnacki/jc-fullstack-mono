@@ -12,7 +12,6 @@ export const ShoppingListIngredientSchema = z.object({
   amount: z.number(),
   unit: z.enum(QuantityUnit),
   isDone: z.boolean(),
-  isDeleted: z.boolean(),
   ingredientId: z.number(),
   userId: z.number(),
 });
@@ -62,7 +61,6 @@ export type TShoppingListIngredientUpdate = z.infer<
 export const ShoppingListIngredientGetQuerySchema = z.object({
   take: z.number().optional(),
   isDone: BooleanQuerySchema.optional(),
-  isDeleted: BooleanQuerySchema.optional(),
 })
 
 export type TShoppingListIngredientGetQuery = z.infer<

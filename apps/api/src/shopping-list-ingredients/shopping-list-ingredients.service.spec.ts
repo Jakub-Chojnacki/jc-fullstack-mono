@@ -37,7 +37,6 @@ describe('ShoppingListIngredientsService', () => {
       ingredientId: 1,
       amount: 100,
       isDone: false,
-      isDeleted: false,
       unit: 'GRAMS',
       userId,
     },
@@ -45,7 +44,6 @@ describe('ShoppingListIngredientsService', () => {
       ingredientId: 2,
       amount: 50,
       isDone: false,
-      isDeleted: false,
       unit: 'GRAMS',
       userId,
     },
@@ -55,7 +53,6 @@ describe('ShoppingListIngredientsService', () => {
     ingredientId: 1,
     amount: 100,
     isDone: false,
-    isDeleted: false,
     unit: 'GRAMS',
     userId,
   };
@@ -69,6 +66,7 @@ describe('ShoppingListIngredientsService', () => {
   let prisma: {
     shoppingListIngredient: {
       findMany: jest.Mock;
+      findFirst: jest.Mock;
       create: jest.Mock;
       update: jest.Mock;
       delete: jest.Mock;
@@ -89,6 +87,7 @@ describe('ShoppingListIngredientsService', () => {
           useValue: {
             shoppingListIngredient: {
               findMany: jest.fn(),
+              findFirst: jest.fn(),
               create: jest.fn(),
               update: jest.fn(),
               delete: jest.fn(),
@@ -113,23 +112,70 @@ describe('ShoppingListIngredientsService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should create a shopping list ingredient', async () => {
+  it('should create a shopping list ingredient when it does not exist', async () => {
+    prisma.shoppingListIngredient.findFirst.mockResolvedValue(null);
     prisma.shoppingListIngredient.create.mockResolvedValue(mockData);
 
     const result = await service.create(mockData, userId);
     expect(result).toEqual(mockData);
+
+    expect(prisma.shoppingListIngredient.findFirst).toHaveBeenCalledWith({
+      where: {
+        userId,
+        ingredientId: mockData.ingredientId,
+        unit: mockData.unit,
+      },
+    });
 
     expect(prisma.shoppingListIngredient.create).toHaveBeenCalledWith({
       data: mockData,
     });
   });
 
-  it('should create multiple shopping list ingredients from recipeId', async () => {
-    prisma.shoppingListIngredient.createManyAndReturn.mockResolvedValue(
-      mockDataFromRecipe,
-    );
+  it('should add to existing shopping list ingredient when it already exists', async () => {
+    const existingIngredient = {
+      ...mockData,
+      id: 1,
+      amount: 50,
+    };
 
+    const updatedIngredient = {
+      ...existingIngredient,
+      amount: 150, // 50 + 100
+    };
+
+    prisma.shoppingListIngredient.findFirst.mockResolvedValue(
+      existingIngredient,
+    );
+    prisma.shoppingListIngredient.update.mockResolvedValue(updatedIngredient);
+
+    const result = await service.create(mockData, userId);
+    expect(result).toEqual(updatedIngredient);
+
+    expect(prisma.shoppingListIngredient.findFirst).toHaveBeenCalledWith({
+      where: {
+        userId,
+        ingredientId: mockData.ingredientId,
+        unit: mockData.unit,
+      },
+    });
+
+    expect(prisma.shoppingListIngredient.update).toHaveBeenCalledWith({
+      where: {
+        id: existingIngredient.id,
+      },
+      data: {
+        amount: 150, // existing 50 + new 100
+      },
+    });
+  });
+
+  it('should create shopping list ingredients from recipe when none exist', async () => {
     prisma.recipe.findUnique.mockResolvedValue(mockRecipe);
+    prisma.shoppingListIngredient.findFirst.mockResolvedValue(null);
+    prisma.shoppingListIngredient.create
+      .mockResolvedValueOnce(mockDataFromRecipe[0])
+      .mockResolvedValueOnce(mockDataFromRecipe[1]);
 
     const result = await service.createFromRecipe(mockRecipe.id, userId);
 
@@ -148,10 +194,26 @@ describe('ShoppingListIngredientsService', () => {
       },
     });
 
-    expect(
-      prisma.shoppingListIngredient.createManyAndReturn,
-    ).toHaveBeenCalledWith({
-      data: mockDataFromRecipe,
+    expect(prisma.shoppingListIngredient.findFirst).toHaveBeenCalledTimes(2);
+
+    expect(prisma.shoppingListIngredient.create).toHaveBeenCalledTimes(2);
+    expect(prisma.shoppingListIngredient.create).toHaveBeenNthCalledWith(1, {
+      data: {
+        ingredientId: 1,
+        amount: 100,
+        unit: 'GRAMS',
+        userId,
+        isDone: false,
+      },
+    });
+    expect(prisma.shoppingListIngredient.create).toHaveBeenNthCalledWith(2, {
+      data: {
+        ingredientId: 2,
+        amount: 50,
+        unit: 'GRAMS',
+        userId,
+        isDone: false,
+      },
     });
 
     expect(result).toEqual(mockDataFromRecipe);
@@ -162,13 +224,10 @@ describe('ShoppingListIngredientsService', () => {
 
     await service.delete(1, userId);
 
-    expect(prisma.shoppingListIngredient.update).toHaveBeenCalledWith({
+    expect(prisma.shoppingListIngredient.delete).toHaveBeenCalledWith({
       where: {
         id: 1,
         userId,
-      },
-      data: {
-        isDeleted: true,
       },
     });
   });
@@ -176,7 +235,7 @@ describe('ShoppingListIngredientsService', () => {
   it('should throw PrismaClientKnownRequestError if not found during delete', async () => {
     const error = createRecordNotFoundError();
 
-    prisma.shoppingListIngredient.update.mockRejectedValue(error);
+    prisma.shoppingListIngredient.delete.mockRejectedValue(error);
 
     await expect(service.delete(999, userId)).rejects.toThrow(
       PrismaClientKnownRequestError,
@@ -257,7 +316,6 @@ describe('ShoppingListIngredientsService', () => {
       expect(prisma.shoppingListIngredient.count).toHaveBeenCalledWith({
         where: {
           userId,
-          isDeleted: false,
         },
       });
       expect(prisma.shoppingListIngredient.create).not.toHaveBeenCalled();
@@ -276,62 +334,51 @@ describe('ShoppingListIngredientsService', () => {
       const currentCount = MAXIMUM_SAVED_SHOPPING_LIST_ITEMS - 3;
       prisma.shoppingListIngredient.count.mockResolvedValue(currentCount);
       prisma.recipe.findUnique.mockResolvedValue(mockRecipe);
-      prisma.shoppingListIngredient.createManyAndReturn.mockResolvedValue(
-        mockDataFromRecipe,
-      );
+      prisma.shoppingListIngredient.findFirst.mockResolvedValue(null);
+      prisma.shoppingListIngredient.create
+        .mockResolvedValueOnce(mockDataFromRecipe[0])
+        .mockResolvedValueOnce(mockDataFromRecipe[1]);
 
       const result = await service.createFromRecipe(mockRecipe.id, userId);
 
-      expect(prisma.shoppingListIngredient.count).toHaveBeenCalledWith({
-        where: {
-          userId,
-          isDeleted: false,
-        },
-      });
+      expect(prisma.shoppingListIngredient.count).toHaveBeenCalledTimes(2);
       expect(result).toEqual(mockDataFromRecipe);
     });
 
     it('should throw error when creating multiple ingredients from recipe would exceed the limit', async () => {
       const currentCount = MAXIMUM_SAVED_SHOPPING_LIST_ITEMS - 1;
-      prisma.shoppingListIngredient.count.mockResolvedValue(currentCount);
+      prisma.shoppingListIngredient.count
+        .mockResolvedValueOnce(currentCount) // First ingredient check - should pass
+        .mockResolvedValueOnce(currentCount + 1); // Second ingredient check - should fail
       prisma.recipe.findUnique.mockResolvedValue(mockRecipe);
+      prisma.shoppingListIngredient.findFirst
+        .mockResolvedValueOnce(null) // First ingredient doesn't exist
+        .mockResolvedValueOnce(null); // Second ingredient doesn't exist
+      prisma.shoppingListIngredient.create.mockResolvedValueOnce(
+        mockDataFromRecipe[0],
+      ); // First ingredient created successfully
 
       await expect(
         service.createFromRecipe(mockRecipe.id, userId),
-      ).rejects.toThrow(
-        getExpectedLimitErrorMessage(
-          currentCount,
-          mockRecipe.recipeIngredients.length,
-        ),
-      );
+      ).rejects.toThrow(getExpectedLimitErrorMessage(currentCount + 1, 1));
 
-      expect(prisma.shoppingListIngredient.count).toHaveBeenCalledWith({
-        where: {
-          userId,
-          isDeleted: false,
-        },
-      });
-      expect(
-        prisma.shoppingListIngredient.createManyAndReturn,
-      ).not.toHaveBeenCalled();
+      expect(prisma.shoppingListIngredient.count).toHaveBeenCalledTimes(2);
+      expect(prisma.shoppingListIngredient.create).toHaveBeenCalledTimes(1);
     });
 
     it('should handle exact limit scenario for createFromRecipe', async () => {
       const currentCount = MAXIMUM_SAVED_SHOPPING_LIST_ITEMS - 2;
       prisma.shoppingListIngredient.count.mockResolvedValue(currentCount);
       prisma.recipe.findUnique.mockResolvedValue(mockRecipe);
-      prisma.shoppingListIngredient.createManyAndReturn.mockResolvedValue(
-        mockDataFromRecipe,
-      );
+      prisma.shoppingListIngredient.findFirst.mockResolvedValue(null);
+      prisma.shoppingListIngredient.create
+        .mockResolvedValueOnce(mockDataFromRecipe[0])
+        .mockResolvedValueOnce(mockDataFromRecipe[1]);
 
       const result = await service.createFromRecipe(mockRecipe.id, userId);
 
       expect(result).toEqual(mockDataFromRecipe);
-      expect(
-        prisma.shoppingListIngredient.createManyAndReturn,
-      ).toHaveBeenCalledWith({
-        data: mockDataFromRecipe,
-      });
+      expect(prisma.shoppingListIngredient.create).toHaveBeenCalledTimes(2);
     });
   });
 });

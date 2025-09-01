@@ -1,4 +1,5 @@
 import { TRecipe, TRecipeCreate, TRecipeUpdate } from '@jcmono/api-contract';
+import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -254,6 +255,40 @@ describe('RecipesService', () => {
     });
   });
 
+  it('should throw BadRequestException when creating a recipe with duplicate ingredients', async () => {
+    const mockRecipeIngredientsWithDuplicates: TRecipeCreate['recipeIngredients'] =
+      [
+        {
+          amount: 100,
+          unit: 'GRAMS',
+          ingredientId: 1,
+          isGlobal: false,
+        },
+        {
+          amount: 200,
+          unit: 'GRAMS',
+          ingredientId: 1, // Same ingredient ID - duplicate
+          isGlobal: false,
+        },
+      ];
+
+    const createdRecipeData: Omit<TRecipeCreate, 'recipeIngredients'> = {
+      name: 'Pasta',
+      description: 'Delicious pasta',
+      isGlobal: false,
+      userId: mockUserId,
+    };
+
+    await expect(
+      service.create({
+        recipeIngredients: mockRecipeIngredientsWithDuplicates,
+        ...createdRecipeData,
+      }),
+    ).rejects.toThrow(BadRequestException);
+
+    expect(prisma.recipe.create).not.toHaveBeenCalled();
+  });
+
   it('should soft delete a recipe', async () => {
     prisma.recipe.update.mockResolvedValue(mockRecipe);
 
@@ -360,6 +395,39 @@ describe('RecipesService', () => {
       description: updateDto.description,
       isGlobal: updateDto.isGlobal,
     });
+  });
+
+  it('should throw BadRequestException when updating a recipe with duplicate ingredients', async () => {
+    const id = 1;
+
+    const mockRecipeIngredientsWithDuplicates: TRecipeUpdate['recipeIngredients'] =
+      [
+        {
+          id: 10,
+          amount: 2,
+          unit: 'GRAMS',
+          ingredientId: 5,
+        },
+        {
+          amount: 1,
+          unit: 'GRAMS',
+          ingredientId: 5, // Same ingredient ID - duplicate
+        },
+      ];
+
+    const updateDto: TRecipeCreate = {
+      name: 'Updated Recipe Name',
+      description: 'Updated description',
+      isGlobal: true,
+      userId: mockUserId,
+      recipeIngredients: mockRecipeIngredientsWithDuplicates,
+    };
+
+    await expect(service.update(id, updateDto)).rejects.toThrow(
+      BadRequestException,
+    );
+
+    expect(prisma.recipeIngredient.findMany).not.toHaveBeenCalled();
   });
 
   it('should throw PrismaClientKnownRequestError if recipe not found during delete', async () => {

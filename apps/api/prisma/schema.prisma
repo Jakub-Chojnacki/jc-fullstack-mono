@@ -77,6 +77,8 @@ model RecipeIngredient {
 
   ingredientId Int
   ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+
+  @@unique([recipeId, ingredientId])
 }
 
 model Recipe {
@@ -121,11 +123,12 @@ model ShoppingListIngredient {
   amount    Float
   unit      QuantityUnit
   isDone    Boolean      @default(false)
-  isDeleted Boolean      @default(false)
 
   ingredientId Int
   ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
 
   userId Int
   user   User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, ingredientId, unit])
 }
