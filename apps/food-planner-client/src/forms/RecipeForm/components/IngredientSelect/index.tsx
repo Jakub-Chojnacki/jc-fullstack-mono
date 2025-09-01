@@ -1,6 +1,7 @@
 import { QuantityUnit } from "@jcmono/api-contract";
 import { Button, Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, FormControl, FormField, FormItem, FormLabel, FormMessage, Input, Popover, PopoverContent, PopoverTrigger, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@jcmono/ui";
 import { Check, ChevronsUpDown, Trash } from "lucide-react";
+import { useRef } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 import type { TRecipeFormInput } from "@/forms/RecipeForm/schema";
@@ -8,8 +9,12 @@ import { cn } from "@/lib/utils";
 import useGetIngredients from "@/queries/useGetIngredients";
 
 function IngredientSelect() {
-  const { data } = useGetIngredients();
+  const { data } = useGetIngredients({
+    page: 1,
+    take: 20,
+  });
   const { control, formState } = useFormContext<TRecipeFormInput>();
+  const listRef = useRef<HTMLDivElement>(null);
 
   const { append, fields, update, remove } = useFieldArray({
     control,
@@ -62,7 +67,17 @@ function IngredientSelect() {
                     <PopoverContent className="w-[200px] p-0">
                       <Command>
                         <CommandInput placeholder="Search ingredients..." />
-                        <CommandList>
+                        <CommandList
+                          ref={listRef}
+                          style={{ maxHeight: "200px" }}
+                          onWheel={(e) => {
+                            // Ensure wheel events are handled by the scrollable element
+                            const target = e.currentTarget;
+                            if (target.scrollHeight > target.clientHeight) {
+                              e.stopPropagation();
+                            }
+                          }}
+                        >
                           <CommandEmpty>No ingredients found.</CommandEmpty>
                           <CommandGroup>
                             {ingredients.map(ingredient => (
