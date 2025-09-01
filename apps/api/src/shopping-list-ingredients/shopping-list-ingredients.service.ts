@@ -67,7 +67,6 @@ export class ShoppingListIngredientsService {
   }
 
   async create(body: TShoppingListIngredientCreate, userId: number) {
-    // Check if there's already an ingredient with the same ingredientId and unit
     const existingIngredient =
       await this.prisma.shoppingListIngredient.findFirst({
         where: {
@@ -85,6 +84,7 @@ export class ShoppingListIngredientsService {
         },
         data: {
           amount: existingIngredient.amount + body.amount,
+          isDone: false,
         },
       });
     } else {
@@ -143,6 +143,7 @@ export class ShoppingListIngredientsService {
           },
           data: {
             amount: existingIngredient.amount + ingredient.amount,
+            isDone: false,
           },
         });
         results.push(updated);
