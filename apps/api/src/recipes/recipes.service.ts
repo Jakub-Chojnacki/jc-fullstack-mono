@@ -39,7 +39,12 @@ export class RecipesService {
   ): Prisma.RecipeWhereInput {
     const { queryFilter, isDeleted, search } = query;
 
-    const baseFilter: Prisma.RecipeWhereInput = { isDeleted };
+    const baseFilter: Prisma.RecipeWhereInput = {};
+
+    // Only add isDeleted filter if it's explicitly provided
+    if (isDeleted !== undefined) {
+      baseFilter.isDeleted = isDeleted;
+    }
 
     // Add search filter if search term is provided
     if (search && typeof search === 'string' && search.trim()) {

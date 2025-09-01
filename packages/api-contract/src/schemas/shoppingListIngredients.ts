@@ -62,7 +62,8 @@ export type TShoppingListIngredientUpdate = z.infer<
 export const ShoppingListIngredientGetQuerySchema = z.object({
   take: z.number().optional(),
   isDone: BooleanQuerySchema.optional(),
- })
+  isDeleted: BooleanQuerySchema.optional(),
+})
 
 export type TShoppingListIngredientGetQuery = z.infer<
   typeof ShoppingListIngredientGetQuerySchema
