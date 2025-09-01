@@ -1,10 +1,6 @@
 import apiClient from "@/api-client";
 
-type TUseGetIngredientsParams = {
-  take?: number;
-  page?: number;
-  search?: string;
-};
+import type { TUseGetIngredientsParams } from "./types";
 
 function useGetIngredients({
   page = 1,
