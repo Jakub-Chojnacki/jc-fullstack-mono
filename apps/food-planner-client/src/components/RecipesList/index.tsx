@@ -3,6 +3,7 @@ import { Utensils } from "lucide-react";
 import { useMemo } from "react";
 
 import { useDebouncedSearch } from "@/hooks/useDebouncedSearch";
+import { useFilter } from "@/hooks/useFilter";
 import { usePagination } from "@/hooks/usePagination";
 import useDeleteRecipe from "@/queries/useDeleteRecipe";
 import useGetRecipes from "@/queries/useGetRecipes";
@@ -33,11 +34,18 @@ function RecipesList() {
     },
   });
 
+  const { filterValue, handleFilterChange } = useFilter({
+    onFilterChange: () => {
+      resetToFirstPage();
+    },
+  });
+
   const { data, isLoading } = useGetRecipes({
     page: currentPage,
     take: itemsPerPage,
     search: debouncedSearchTerm,
     isDeleted: false,
+    queryFilter: filterValue,
   });
 
   const { mutate } = useDeleteRecipe();
@@ -66,6 +74,8 @@ function RecipesList() {
         searchTerm={searchTerm}
         onSearchChange={handleSearchChange}
         searchPlaceholder="Search recipes..."
+        filterValue={filterValue}
+        onFilterChange={handleFilterChange}
         onAddClick={() => navigation({ to: "/app/recipes/add" })}
         addButtonText="Add New Recipe"
         isLoading={isLoading}

@@ -7,15 +7,17 @@ function useGetIngredients({
   take = 20,
   search,
   isDeleted,
+  queryFilter,
 }: TUseGetIngredientsParams = {}) {
   const query = apiClient.ingredients.get.useQuery(
-    ["ingredients", page, take, search, isDeleted],
+    ["ingredients", page, take, search, isDeleted, queryFilter],
     {
       query: {
         page: page.toString(),
         take: take.toString(),
         ...(search && search.trim() && { search: search.trim() }),
         ...(isDeleted !== undefined && { isDeleted: isDeleted.toString() }),
+        ...(queryFilter && { queryFilter }),
       },
     },
   );
