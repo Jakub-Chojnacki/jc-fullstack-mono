@@ -1,8 +1,10 @@
 import {
+  EMealTypes,
   TScheduleMealsCreate,
   TScheduleMealsUpdate,
 } from '@jcmono/api-contract';
 import { Injectable } from '@nestjs/common';
+import { Recipe } from '@prisma/client';
 import { TBaseDeleteParams } from 'src/common/types';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -71,5 +73,27 @@ export class ScheduleMealsService {
         recipe: true,
       },
     });
+  }
+
+  async getSuggestions({
+    userId,
+    mealType,
+  }: {
+    userId: number;
+    mealType: EMealTypes;
+  }): Promise<Recipe[]> {
+    // Use raw SQL for true random ordering at the database level
+    const suggestions = await this.prisma.$queryRaw<Recipe[]>`
+      SELECT * FROM "recipes" 
+      WHERE (
+        "userId" = ${userId} OR "isGlobal" = true
+      ) 
+      AND ${mealType} = ANY("mealTypes")
+      AND "isDeleted" = false
+      ORDER BY RANDOM()
+      LIMIT 3
+    `;
+
+    return suggestions;
   }
 }

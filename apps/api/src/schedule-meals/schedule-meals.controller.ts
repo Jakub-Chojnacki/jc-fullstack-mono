@@ -111,4 +111,28 @@ export class ScheduleMealsController {
       },
     );
   }
+
+  @TsRestHandler(contract.scheduleMeals.getSuggestions)
+  getSuggestions(@GetCurrentUserId() userId: number) {
+    return tsRestHandler(
+      contract.scheduleMeals.getSuggestions,
+      async ({ query }) => {
+        const suggestions = await this.scheduleMealsService.getSuggestions({
+          userId,
+          mealType: query.mealType as EMealTypes,
+        });
+
+        // Cast Prisma MealType to EMealTypes for each suggestion
+        const transformedSuggestions = suggestions.map((recipe) => ({
+          ...recipe,
+          mealTypes: recipe.mealTypes as unknown as EMealTypes[],
+        }));
+
+        return {
+          status: 200,
+          body: transformedSuggestions,
+        };
+      },
+    );
+  }
 }

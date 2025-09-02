@@ -1,4 +1,5 @@
 import type { TScheduleMealsCreate } from '@jcmono/api-contract';
+import { EMealTypes } from '@jcmono/api-contract';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -21,6 +22,7 @@ describe('ScheduleMealsService', () => {
       update: jest.Mock;
       delete: jest.Mock;
     };
+    $queryRaw: jest.Mock;
   };
   beforeEach(async () => {
     const fakeNow = new Date('2025-01-01T00:00:00.000Z');
@@ -50,6 +52,7 @@ describe('ScheduleMealsService', () => {
               update: jest.fn(),
               delete: jest.fn(),
             },
+            $queryRaw: jest.fn(),
           },
         },
       ],
@@ -153,5 +156,48 @@ describe('ScheduleMealsService', () => {
         recipe: true,
       },
     });
+  });
+
+  it('should get meal suggestions for a specific meal type', async () => {
+    const mockSuggestions = [
+      {
+        id: 1,
+        name: 'Pancakes',
+        description: 'Fluffy pancakes',
+        mealTypes: ['BREAKFAST'],
+        userId: mockUserId,
+        isGlobal: false,
+        isDeleted: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 2,
+        name: 'French Toast',
+        description: 'Sweet french toast',
+        mealTypes: ['BREAKFAST'],
+        userId: mockUserId,
+        isGlobal: false,
+        isDeleted: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ];
+
+    prisma.$queryRaw.mockResolvedValue(mockSuggestions);
+
+    const result = await service.getSuggestions({
+      userId: mockUserId,
+      mealType: EMealTypes.BREAKFAST,
+    });
+
+    expect(result).toEqual(mockSuggestions);
+    expect(prisma.$queryRaw).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.stringContaining('SELECT * FROM "recipes"'),
+      ]),
+      mockUserId,
+      EMealTypes.BREAKFAST,
+    );
   });
 });
