@@ -18,11 +18,14 @@ describe('ScheduleMealsService', () => {
   let prisma: {
     scheduledMeal: {
       findMany: jest.Mock;
+      findFirst: jest.Mock;
       create: jest.Mock;
       update: jest.Mock;
       delete: jest.Mock;
     };
-    $queryRaw: jest.Mock;
+    recipe: {
+      findMany: jest.Mock;
+    };
   };
   beforeEach(async () => {
     const fakeNow = new Date('2025-01-01T00:00:00.000Z');
@@ -48,11 +51,14 @@ describe('ScheduleMealsService', () => {
           useValue: {
             scheduledMeal: {
               findMany: jest.fn(),
+              findFirst: jest.fn(),
               create: jest.fn(),
               update: jest.fn(),
               delete: jest.fn(),
             },
-            $queryRaw: jest.fn(),
+            recipe: {
+              findMany: jest.fn(),
+            },
           },
         },
       ],
@@ -184,20 +190,31 @@ describe('ScheduleMealsService', () => {
       },
     ];
 
-    prisma.$queryRaw.mockResolvedValue(mockSuggestions);
+    prisma.recipe.findMany.mockResolvedValue(mockSuggestions);
 
     const result = await service.getSuggestions({
       userId: mockUserId,
       mealType: EMealTypes.BREAKFAST,
     });
 
-    expect(result).toEqual(mockSuggestions);
-    expect(prisma.$queryRaw).toHaveBeenCalledWith(
-      expect.arrayContaining([
-        expect.stringContaining('SELECT * FROM "recipes"'),
-      ]),
-      mockUserId,
-      EMealTypes.BREAKFAST,
-    );
+    expect(result).toHaveLength(2); // Should return the shuffled results
+    expect(result.every((r) => mockSuggestions.includes(r))).toBe(true); // Should be subset of mock data
+    expect(prisma.recipe.findMany).toHaveBeenCalledWith({
+      where: {
+        AND: [
+          {
+            OR: [{ userId: mockUserId }, { isGlobal: true }],
+          },
+          {
+            mealTypes: {
+              has: EMealTypes.BREAKFAST,
+            },
+          },
+          {
+            isDeleted: false,
+          },
+        ],
+      },
+    });
   });
 });

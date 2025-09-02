@@ -238,6 +238,17 @@ export const contract = c.router(
           404: ErrorResponseSchema,
         },
       },
+      getSuggestions: {
+        method: "GET",
+        path: "/scheduleMeals/suggestions",
+        query: z.object({
+          mealType: z.enum(["BREAKFAST", "LUNCH", "DINNER", "SNACK"]),
+        }),
+        responses: {
+          200: z.array(RecipeSchema).max(3),
+          404: ErrorResponseSchema,
+        },
+      },
       getById: {
         method: "GET",
         path: "/scheduleMeals/:id",
@@ -273,17 +284,6 @@ export const contract = c.router(
         body: null,
         responses: {
           200: ScheduleMealsSchema,
-          404: ErrorResponseSchema,
-        },
-      },
-      getSuggestions: {
-        method: "GET",
-        path: "/scheduleMeals/suggestions",
-        query: z.object({
-          mealType: z.enum(["BREAKFAST", "LUNCH", "DINNER", "SNACK"]),
-        }),
-        responses: {
-          200: z.array(RecipeSchema).max(3),
           404: ErrorResponseSchema,
         },
       },

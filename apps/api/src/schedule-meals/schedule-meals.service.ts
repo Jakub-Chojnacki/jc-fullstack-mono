@@ -82,15 +82,15 @@ export class ScheduleMealsService {
     userId: number;
     mealType: EMealTypes;
   }): Promise<Recipe[]> {
-    // Use raw SQL for true random ordering at the database level
+    // Use database-level randomization for optimal performance
     const suggestions = await this.prisma.$queryRaw<Recipe[]>`
-      SELECT * FROM "recipes" 
+      SELECT * FROM recipes 
       WHERE (
-        "userId" = ${userId} OR "isGlobal" = true
-      ) 
-      AND ${mealType} = ANY("mealTypes")
-      AND "isDeleted" = false
-      ORDER BY RANDOM()
+        ("userId" = ${userId} OR "isGlobal" = true) 
+        AND ${mealType}::text = ANY("mealTypes"::text[])
+        AND ("isDeleted" = false OR "isDeleted" IS NULL)
+      )
+      ORDER BY RANDOM() 
       LIMIT 3
     `;
 
