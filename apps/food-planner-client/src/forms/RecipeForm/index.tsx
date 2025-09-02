@@ -112,6 +112,9 @@ function RecipeForm({ initialData }: TRecipeFormProps) {
               <FormItem>
                 <div className="mb-4">
                   <FormLabel className="text-base">Meal Types</FormLabel>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    These are suggested meal types. Your recipe will be available for all meals when scheduling.
+                  </p>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   {[EMealTypes.BREAKFAST, EMealTypes.LUNCH, EMealTypes.DINNER, EMealTypes.SNACK].map(mealType => (
