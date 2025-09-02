@@ -68,6 +68,14 @@ export class IngredientsService {
       };
     }
 
+    if (queryFilter === 'USER') {
+      return {
+        ...baseFilter,
+        isGlobal: false,
+        userId,
+      };
+    }
+
     return {
       ...baseFilter,
       userId,

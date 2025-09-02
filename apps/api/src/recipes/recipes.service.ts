@@ -95,6 +95,14 @@ export class RecipesService {
       };
     }
 
+    if (queryFilter === 'USER') {
+      return {
+        ...baseFilter,
+        isGlobal: false,
+        userId,
+      };
+    }
+
     return {
       ...baseFilter,
       userId,

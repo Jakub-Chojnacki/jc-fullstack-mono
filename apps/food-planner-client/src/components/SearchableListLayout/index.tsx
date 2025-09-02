@@ -1,10 +1,12 @@
-import { Button, Input } from "@jcmono/ui";
+import { Button, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@jcmono/ui";
 import { Plus } from "lucide-react";
 
 import HeaderWithIcon from "../HeaderWithIcon";
 import PaginationControls from "../PaginationControls";
 
-import type { TSearchableListLayoutProps } from "./types";
+import { filterOptions } from "./const";
+
+import type { TFilterOption, TSearchableListLayoutProps } from "./types";
 
 function SearchableListLayout({
   icon,
@@ -12,6 +14,8 @@ function SearchableListLayout({
   searchTerm,
   onSearchChange,
   searchPlaceholder,
+  filterValue,
+  onFilterChange,
   onAddClick,
   addButtonText,
   isLoading,
@@ -33,12 +37,31 @@ function SearchableListLayout({
       <HeaderWithIcon icon={icon} title={title} />
 
       <div className="flex items-center justify-between gap-4 py-4">
-        <Input
-          placeholder={searchPlaceholder}
-          value={searchTerm}
-          onChange={event => onSearchChange(event.target.value)}
-          className="max-w-sm"
-        />
+        <div className="flex items-center gap-2 flex-1">
+          <Input
+            placeholder={searchPlaceholder}
+            value={searchTerm}
+            onChange={event => onSearchChange(event.target.value)}
+            className="max-w-sm"
+          />
+          {onFilterChange && (
+            <Select
+              value={filterValue}
+              onValueChange={(value: TFilterOption) => onFilterChange(value)}
+            >
+              <SelectTrigger className="w-32">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {filterOptions.map(option => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        </div>
         <Button onClick={onAddClick}>
           <Plus className="md:mr-2 h-4 w-4" />
           <span className="hidden md:block">{addButtonText}</span>

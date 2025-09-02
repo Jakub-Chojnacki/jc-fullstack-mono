@@ -1,7 +1,11 @@
+import type { TGetQueryFilter } from "@jcmono/api-contract";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 
 import type { TPaginationMeta } from "@/hooks/usePagination/types";
+
+export type TFilterOption = TGetQueryFilter;
+export type TFilterOptionWithLabel = { value: TFilterOption; label: string };
 
 export type TSearchableListLayoutProps = {
   // Header
@@ -12,6 +16,10 @@ export type TSearchableListLayoutProps = {
   searchTerm: string;
   onSearchChange: (value: string) => void;
   searchPlaceholder: string;
+
+  // Filter
+  filterValue?: TFilterOption;
+  onFilterChange?: (value: TFilterOption) => void;
 
   onAddClick: () => void;
   addButtonText: string;

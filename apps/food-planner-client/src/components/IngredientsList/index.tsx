@@ -3,6 +3,7 @@ import { Apple } from "lucide-react";
 import { useMemo } from "react";
 
 import { useDebouncedSearch } from "@/hooks/useDebouncedSearch";
+import { useFilter } from "@/hooks/useFilter";
 import { usePagination } from "@/hooks/usePagination";
 import useDeleteIngredient from "@/queries/useDeleteIngredient";
 import useGetIngredients from "@/queries/useGetIngredients";
@@ -33,11 +34,18 @@ function IngredientsList() {
     },
   });
 
+  const { filterValue, handleFilterChange } = useFilter({
+    onFilterChange: () => {
+      resetToFirstPage();
+    },
+  });
+
   const { data, isLoading } = useGetIngredients({
     page: currentPage,
     take: itemsPerPage,
     search: debouncedSearchTerm,
     isDeleted: false,
+    queryFilter: filterValue,
   });
 
   const { mutate } = useDeleteIngredient();
@@ -58,6 +66,8 @@ function IngredientsList() {
         searchTerm={searchTerm}
         onSearchChange={handleSearchChange}
         searchPlaceholder="Search ingredients..."
+        filterValue={filterValue}
+        onFilterChange={handleFilterChange}
         onAddClick={() => navigation({ to: "/app/ingredients/add" })}
         addButtonText="Add New Ingredient"
         isLoading={isLoading}
