@@ -1,4 +1,5 @@
 import type { TScheduleMealsCreate } from '@jcmono/api-contract';
+import { EMealTypes } from '@jcmono/api-contract';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -17,9 +18,13 @@ describe('ScheduleMealsService', () => {
   let prisma: {
     scheduledMeal: {
       findMany: jest.Mock;
+      findFirst: jest.Mock;
       create: jest.Mock;
       update: jest.Mock;
       delete: jest.Mock;
+    };
+    recipe: {
+      findMany: jest.Mock;
     };
   };
   beforeEach(async () => {
@@ -46,9 +51,13 @@ describe('ScheduleMealsService', () => {
           useValue: {
             scheduledMeal: {
               findMany: jest.fn(),
+              findFirst: jest.fn(),
               create: jest.fn(),
               update: jest.fn(),
               delete: jest.fn(),
+            },
+            recipe: {
+              findMany: jest.fn(),
             },
           },
         },
@@ -151,6 +160,60 @@ describe('ScheduleMealsService', () => {
       },
       include: {
         recipe: true,
+      },
+    });
+  });
+
+  it('should get meal suggestions for a specific meal type', async () => {
+    const mockSuggestions = [
+      {
+        id: 1,
+        name: 'Pancakes',
+        description: 'Fluffy pancakes',
+        mealTypes: ['BREAKFAST'],
+        userId: mockUserId,
+        isGlobal: false,
+        isDeleted: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 2,
+        name: 'French Toast',
+        description: 'Sweet french toast',
+        mealTypes: ['BREAKFAST'],
+        userId: mockUserId,
+        isGlobal: false,
+        isDeleted: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ];
+
+    prisma.recipe.findMany.mockResolvedValue(mockSuggestions);
+
+    const result = await service.getSuggestions({
+      userId: mockUserId,
+      mealType: EMealTypes.BREAKFAST,
+    });
+
+    expect(result).toHaveLength(2); // Should return the shuffled results
+    expect(result.every((r) => mockSuggestions.includes(r))).toBe(true); // Should be subset of mock data
+    expect(prisma.recipe.findMany).toHaveBeenCalledWith({
+      where: {
+        AND: [
+          {
+            OR: [{ userId: mockUserId }, { isGlobal: true }],
+          },
+          {
+            mealTypes: {
+              has: EMealTypes.BREAKFAST,
+            },
+          },
+          {
+            isDeleted: false,
+          },
+        ],
       },
     });
   });

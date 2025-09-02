@@ -80,6 +80,29 @@ export class ScheduleMealsController {
     });
   }
 
+  @TsRestHandler(contract.scheduleMeals.getSuggestions)
+  getSuggestions(@GetCurrentUserId() userId: number) {
+    return tsRestHandler(
+      contract.scheduleMeals.getSuggestions,
+      async ({ query }) => {
+        const suggestions = await this.scheduleMealsService.getSuggestions({
+          userId,
+          mealType: query.mealType as EMealTypes,
+        });
+
+        const transformedSuggestions = suggestions.map((recipe) => ({
+          ...recipe,
+          mealTypes: recipe.mealTypes as unknown as EMealTypes[],
+        }));
+
+        return {
+          status: 200,
+          body: transformedSuggestions,
+        };
+      },
+    );
+  }
+
   @TsRestHandler(contract.scheduleMeals.getById)
   getById(@GetCurrentUserId() userId: number) {
     return tsRestHandler(
