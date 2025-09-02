@@ -1,10 +1,11 @@
 import { z } from "zod";
 
 import {
-    RecipeIngredientCreateSchema,
-    RecipeIngredientUpdateSchema,
+  RecipeIngredientCreateSchema,
+  RecipeIngredientUpdateSchema,
 } from "./ingredients";
 
+import { EMealTypes } from "./scheduleMeals";
 import { BooleanQuerySchema, GetQueryFilter, PaginationSchema } from "./utils";
 
 export const RecipeSchema = z.object({
@@ -16,6 +17,7 @@ export const RecipeSchema = z.object({
   name: z.string(),
   description: z.string(),
   isDeleted: z.boolean().optional(),
+  mealTypes: z.array(z.nativeEnum(EMealTypes)),
 });
 
 export type TRecipe = z.infer<typeof RecipeSchema>;

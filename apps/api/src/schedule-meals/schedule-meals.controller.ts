@@ -1,4 +1,4 @@
-import { contract } from '@jcmono/api-contract';
+import { contract, EMealTypes } from '@jcmono/api-contract';
 import { Controller, NotFoundException } from '@nestjs/common';
 import { tsRestHandler, TsRestHandler } from '@ts-rest/nest';
 import { GetCurrentUserId } from 'src/common/decorators';
@@ -64,9 +64,18 @@ export class ScheduleMealsController {
         ...query,
       });
 
+      // Cast Prisma MealType to EMealTypes
+      const transformedMeals = scheduledMeals.map((meal) => ({
+        ...meal,
+        recipe: {
+          ...meal.recipe,
+          mealTypes: meal.recipe.mealTypes as unknown as EMealTypes[],
+        },
+      }));
+
       return {
         status: 200,
-        body: scheduledMeals,
+        body: transformedMeals,
       };
     });
   }
@@ -85,9 +94,19 @@ export class ScheduleMealsController {
           throw new NotFoundException('Scheduled meal not found');
         }
 
+        // Cast Prisma MealType to EMealTypes
+        const transformedMeal = {
+          ...scheduledMeal,
+          recipe: {
+            ...scheduledMeal.recipe,
+            mealTypes: scheduledMeal.recipe
+              .mealTypes as unknown as EMealTypes[],
+          },
+        };
+
         return {
           status: 200,
-          body: scheduledMeal,
+          body: transformedMeal,
         };
       },
     );
