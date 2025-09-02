@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { EMealTypes } from "@jcmono/api-contract";
 import { Button, Checkbox, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from "@jcmono/ui";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
@@ -17,11 +18,12 @@ function RecipeForm({ initialData }: TRecipeFormProps) {
 
   const form = useForm<z.infer<typeof RecipeFormSchema>>({
     resolver: zodResolver(RecipeFormSchema),
-    defaultValues: initialData || {
-      name: "",
-      isGlobal: false,
-      description: "",
-      recipeIngredients: [],
+    defaultValues: {
+      name: initialData?.name || "",
+      isGlobal: initialData?.isGlobal || false,
+      description: initialData?.description || "",
+      recipeIngredients: initialData?.recipeIngredients || [],
+      mealTypes: initialData?.mealTypes || [],
     },
   });
 
@@ -40,13 +42,19 @@ function RecipeForm({ initialData }: TRecipeFormProps) {
       updateRecipe({
         body: {
           ...values,
+          mealTypes: values.mealTypes || [],
           recipeIngredients: mappedIngredients,
         },
         params: { id: initialData.id },
       });
     }
     else {
-      mutate({ body: values });
+      mutate({
+        body: {
+          ...values,
+          mealTypes: values.mealTypes || [],
+        },
+      });
     }
   };
 
@@ -92,6 +100,57 @@ function RecipeForm({ initialData }: TRecipeFormProps) {
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="mealTypes"
+            render={() => (
+              <FormItem>
+                <div className="mb-4">
+                  <FormLabel className="text-base">Meal Types</FormLabel>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    These are suggested meal types. Your recipe will be available for all meals when scheduling.
+                  </p>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  {[EMealTypes.BREAKFAST, EMealTypes.LUNCH, EMealTypes.DINNER, EMealTypes.SNACK].map(mealType => (
+                    <FormField
+                      key={mealType}
+                      control={form.control}
+                      name="mealTypes"
+                      render={({ field }) => {
+                        return (
+                          <FormItem
+                            key={mealType}
+                            className="flex flex-row items-start space-x-3 space-y-0"
+                          >
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(mealType)}
+                                onCheckedChange={(checked) => {
+                                  return checked
+                                    ? field.onChange([...(field.value || []), mealType])
+                                    : field.onChange(
+                                        field.value?.filter(
+                                          value => value !== mealType,
+                                        ),
+                                      );
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="text-sm font-normal">
+                              {String(mealType).charAt(0).toUpperCase() + String(mealType).slice(1).toLowerCase()}
+                            </FormLabel>
+                          </FormItem>
+                        );
+                      }}
+                    />
+                  ))}
+                </div>
                 <FormMessage />
               </FormItem>
             )}

@@ -95,6 +95,7 @@ model Recipe {
   user              User               @relation(fields: [userId], references: [id])
   scheduledMeals    ScheduledMeal[]
   recipeIngredients RecipeIngredient[]
+  mealTypes         MealType[] 
 
   @@map("recipes")
 }

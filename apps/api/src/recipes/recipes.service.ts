@@ -4,7 +4,7 @@ import {
   TRecipeUpdate,
 } from '@jcmono/api-contract';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { MealType, Prisma } from '@prisma/client';
 import { TBaseDeleteParams } from 'src/common/types';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
@@ -148,7 +148,10 @@ export class RecipesService {
     this.validateNoDuplicateIngredients(recipeIngredients);
 
     const recipe = await this.prisma.recipe.create({
-      data: body,
+      data: {
+        ...body,
+        mealTypes: body.mealTypes as unknown as MealType[],
+      },
     });
 
     await this.prisma.recipeIngredient.createMany({
@@ -215,7 +218,10 @@ export class RecipesService {
         where: {
           id,
         },
-        data: body,
+        data: {
+          ...body,
+          mealTypes: body.mealTypes as unknown as MealType[],
+        },
       });
 
       const deleteIngredientsPromise = ingredientsToDelete.length
