@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { EMealTypes, TRecipe } from "@jcmono/api-contract";
 import {
   Button,
   DatePicker,
@@ -16,14 +17,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@jcmono/ui";
-import { format } from "date-fns";
+import { endOfDay, format, isSameDay, startOfDay } from "date-fns";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
+import MealSuggestions from "@/components/MealSuggestions/index.tsx";
 import RecipeSelect from "@/components/ScheduleView/components/ScheduleRecipeSelect";
 import { mealTypes } from "@/components/ScheduleView/const";
 import { YEAR_MONTH_DAY_FORMAT } from "@/constants/dates";
 import useCreateScheduledMeal from "@/queries/useCreateScheduledMeal";
+import useGetMealSuggestions from "@/queries/useGetMealSuggestions";
+import useGetScheduledMeals from "@/queries/useGetScheduledMeals";
 
 import type {
   TScheduleMealFormValues,
@@ -49,6 +54,27 @@ function ScheduleMealForm({
     },
   });
 
+  const currentMealType = form.watch("mealType");
+  const selectedDate = form.watch("scheduledAt");
+
+  const { data: scheduledMealsData } = useGetScheduledMeals({
+    query: {
+      startDate: startOfDay(selectedDate),
+      endDate: endOfDay(selectedDate),
+    },
+  });
+
+  const existingMeals = scheduledMealsData?.body || [];
+
+  const {
+    data: suggestionsData,
+    isLoading: isSuggestionsLoading,
+    refetch: refetchSuggestions,
+    isFetching: isRefetchingSuggestions,
+  } = useGetMealSuggestions(currentMealType as EMealTypes);
+
+  const suggestions = suggestionsData?.body || [];
+
   const handleCloseDialog = (): void => {
     form.reset();
     closeDialog();
@@ -56,11 +82,41 @@ function ScheduleMealForm({
 
   const { mutate } = useCreateScheduledMeal();
 
+  const handleSelectSuggestion = (recipe: TRecipe) => {
+    form.setValue("recipeId", { id: recipe.id, name: recipe.name });
+  };
+
+  // Clear selected recipe when meal type changes to show suggestions again
+  useEffect(() => {
+    const currentRecipeId = form.watch("recipeId");
+    if (currentRecipeId) {
+      form.setValue("recipeId", null);
+    }
+  }, [currentMealType, form]);
+
+  const handleRefreshSuggestions = () => {
+    refetchSuggestions();
+  };
+
   const onSubmit = (values: TScheduleMealFormValues): void => {
     if (!values.recipeId) {
       form.setError("recipeId", {
         type: "manual",
         message: "Please select a recipe",
+      });
+      return;
+    }
+
+    const duplicateMeal = existingMeals.find(
+      meal =>
+        meal.mealType === values.mealType
+        && isSameDay(new Date(meal.scheduledAt), values.scheduledAt),
+    );
+
+    if (duplicateMeal) {
+      form.setError("mealType", {
+        type: "manual",
+        message: `A ${values.mealType.toLowerCase()} is already scheduled for this day`,
       });
       return;
     }
@@ -103,14 +159,14 @@ function ScheduleMealForm({
               <FormField
                 control={form.control}
                 name="mealType"
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Meal Type</label>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className={fieldState.error ? "border-red-500" : ""}>
                         <SelectValue placeholder="Select meal type" />
                       </SelectTrigger>
                       <SelectContent>
@@ -121,6 +177,9 @@ function ScheduleMealForm({
                         ))}
                       </SelectContent>
                     </Select>
+                    {fieldState.error && (
+                      <p className="text-sm text-red-500">{fieldState.error.message}</p>
+                    )}
                   </div>
                 )}
               />
@@ -131,10 +190,23 @@ function ScheduleMealForm({
                 label="Scheduled day"
               />
 
-              <RecipeSelect<TScheduleMealFormValues>
-                control={form.control}
-                name="recipeId"
-              />
+              <div className="space-y-2">
+                <MealSuggestions
+                  suggestions={suggestions}
+                  isLoading={isSuggestionsLoading}
+                  onSelectSuggestion={handleSelectSuggestion}
+                  onRefreshSuggestions={handleRefreshSuggestions}
+                  isRefreshing={isRefetchingSuggestions}
+                  selectedRecipeId={form.watch("recipeId")?.id}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <RecipeSelect<TScheduleMealFormValues>
+                  control={form.control}
+                  name="recipeId"
+                />
+              </div>
             </div>
 
             <DialogFooter className="mt-4">
