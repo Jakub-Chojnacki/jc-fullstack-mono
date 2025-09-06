@@ -21,7 +21,7 @@ import {
   ShoppingListIngredientSchema,
   ShoppingListIngredientUpdateSchema,
   StringToNumberSchema,
-  UserSchema,
+  UserSchema
 } from "./schemas/index";
 import {
   ScheduleMealsCreateSchema,
@@ -177,7 +177,6 @@ export const contract = c.router(
           200: z.array(ShoppingListIngredientGetSchema),
           404: ErrorResponseSchema,
           400: ErrorResponseSchema,
-
         },
       },
       create: {
@@ -188,7 +187,6 @@ export const contract = c.router(
           201: ShoppingListIngredientSchema,
           400: ErrorResponseSchema,
           404: ErrorResponseSchema,
-
         },
       },
       createFromRecipe: {
@@ -330,7 +328,22 @@ export const contract = c.router(
         },
       },
     },
+    file: {
+      upload: {
+        method: "POST",
+        path: "/upload",
+        contentType:'multipart/form-data',
+        body: null,
+        responses: {
+          200: z.string(),
+          429: z.object({
+            message: z.string()
+          })
+        },
+      },
+    },
   },
+
   {
     pathPrefix: "/api",
   }

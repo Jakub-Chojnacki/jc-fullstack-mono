@@ -11,10 +11,11 @@ import { RecipeIngredientsModule } from './recipe-ingredients/recipe-ingredients
 import { RecipesModule } from './recipes/recipes.module';
 import { ScheduleMealsModule } from './schedule-meals/schedule-meals.module';
 import { ShoppingListIngredientsModule } from './shopping-list-ingredients/shopping-list-ingredients.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     IngredientsModule,
     AuthModule,
     PrismaModule,
@@ -22,6 +23,7 @@ import { ShoppingListIngredientsModule } from './shopping-list-ingredients/shopp
     RecipeIngredientsModule,
     ScheduleMealsModule,
     ShoppingListIngredientsModule,
+    UploadModule,
   ],
   providers: [
     {

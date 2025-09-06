@@ -49,7 +49,9 @@ export const PaginationMetaSchema = z.object({
 
 export type TPaginationMeta = z.infer<typeof PaginationMetaSchema>;
 
-export const PaginatedResponseSchema = <T extends z.ZodTypeAny>(itemSchema: T) =>
+export const PaginatedResponseSchema = <T extends z.ZodTypeAny>(
+  itemSchema: T
+) =>
   z.object({
     data: z.array(itemSchema),
     pagination: PaginationMetaSchema,
@@ -61,4 +63,5 @@ export type TPaginatedResponse<T> = {
 };
 
 // Helper type for frontend to extract data type from paginated response
-export type TDataFromPaginated<T> = T extends TPaginatedResponse<infer U> ? U : never;
+export type TDataFromPaginated<T> =
+  T extends TPaginatedResponse<infer U> ? U : never;
