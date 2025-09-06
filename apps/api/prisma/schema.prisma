@@ -56,6 +56,7 @@ model Ingredient {
   user      User    @relation(fields: [userId], references: [id])
   isGlobal  Boolean @default(false)
   isDeleted Boolean @default(false)
+  imageUrl    String? 
 
   recipeIngredients      RecipeIngredient[]
   shoppingListIngredient ShoppingListIngredient[]
@@ -90,6 +91,7 @@ model Recipe {
   description String
   isGlobal    Boolean @default(false)
   isDeleted   Boolean @default(false)
+  imageUrl    String? 
 
   userId            Int
   user              User               @relation(fields: [userId], references: [id])

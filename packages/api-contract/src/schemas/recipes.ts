@@ -18,6 +18,7 @@ export const RecipeSchema = z.object({
   description: z.string(),
   isDeleted: z.boolean().optional(),
   mealTypes: z.array(z.nativeEnum(EMealTypes)),
+  imageUrl:z.string().nullable()
 });
 
 export type TRecipe = z.infer<typeof RecipeSchema>;

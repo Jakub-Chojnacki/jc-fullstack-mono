@@ -9,6 +9,7 @@ export const IngredientSchema = z.object({
   userId: z.number(),
   isGlobal: z.boolean().optional(),
   isDeleted: z.boolean().optional(),
+  imageUrl:z.string().nullable()
 });
 
 export type TIngredient = z.infer<typeof IngredientSchema>;
