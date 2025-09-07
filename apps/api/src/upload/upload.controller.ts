@@ -5,12 +5,15 @@ import {
   MaxFileSizeValidator,
   ParseFilePipe,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ThrottlerGuard } from '@nestjs/throttler';
 import { tsRestHandler, TsRestHandler } from '@ts-rest/nest';
 import { UploadService } from './upload.service';
 
+@UseGuards(ThrottlerGuard)
 @Controller()
 export class UploadController {
   constructor(private readonly uploadService: UploadService) {}
@@ -29,11 +32,14 @@ export class UploadController {
     file: Express.Multer.File,
   ) {
     return tsRestHandler(contract.file.upload, async () => {
-      await this.uploadService.upload(file.originalname, file.buffer);
+      const { url } = await this.uploadService.upload(
+        file.originalname,
+        file.buffer,
+      );
 
       return {
         status: 200,
-        body: `Uploaded: ${file.originalname}`,
+        body: url,
       };
     });
   }
