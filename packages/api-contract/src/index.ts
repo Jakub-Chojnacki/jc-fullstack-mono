@@ -332,10 +332,11 @@ export const contract = c.router(
       upload: {
         method: "POST",
         path: "/upload",
-        contentType:'multipart/form-data',
-        body: null,
+        contentType: 'multipart/form-data',
+        body: z.any(), // FormData will be handled by NestJS interceptor
         responses: {
           200: z.string(),
+          400: ErrorResponseSchema,
           429: z.object({
             message: z.string()
           })

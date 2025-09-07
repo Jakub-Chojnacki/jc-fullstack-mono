@@ -15,7 +15,7 @@ function RecipePreview({ id }: TRecipePreviewProps) {
   }
 
   if (data) {
-    const { name, description, isGlobal, recipeIngredients } = data.body;
+    const { name, description, isGlobal, recipeIngredients, imageUrl } = data.body;
 
     return (
       <Card className="w-full  overflow-hidden transition-all hover:shadow-md border-0">
@@ -49,7 +49,7 @@ function RecipePreview({ id }: TRecipePreviewProps) {
         <CardContent>
           <div className="h-40 w-full overflow-hidden rounded-md bg-muted">
             <img
-              src="https://placehold.co/320x160/e2e8f0/a1a1aa?text=Recipe+Image"
+              src={imageUrl ?? "https://placehold.co/320x160/e2e8f0/a1a1aa?text=Recipe+Image"}
               alt={`${name} recipe`}
               className="h-full w-full object-cover transition-all hover:scale-105"
             />

@@ -26,6 +26,15 @@ export const RecipeFormSchema = z.object({
   description: z.string(),
   recipeIngredients: z.array(IngredientWithAmountSchema),
   mealTypes: z.array(z.nativeEnum(EMealTypes)).optional(),
+  file: z
+    .custom<File>(val => val instanceof File, "File is required")
+    .refine(file => !file || file.type === "image/jpeg", {
+      message: "Only JPEG images are allowed",
+    })
+    .refine(file => !file || file.size <= 5 * 1024 * 1024, {
+      message: "Max size is 5MB",
+    })
+    .optional(),
 });
 
 export type TRecipeFormValues = z.infer<typeof RecipeFormSchema>;
