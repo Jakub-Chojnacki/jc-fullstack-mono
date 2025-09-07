@@ -3,4 +3,6 @@ export type TImageUploadProps = {
   onChange: (file: File | undefined) => void;
   disabled?: boolean;
   className?: string;
+  existingImageUrl?: string | null;
+  onRemoveExisting?: () => void;
 };

@@ -10,9 +10,21 @@ const ImageUpload: React.FC<TImageUploadProps> = ({
   onChange,
   disabled = false,
   className = "",
+  existingImageUrl,
+  onRemoveExisting,
 }) => {
   const [isDragOver, setIsDragOver] = useState(false);
+  const [isRemoved, setIsRemoved] = useState(false);
   const currentObjectUrl = useRef<string | null>(null);
+  const prevExistingImageUrl = useRef<string | null | undefined>(existingImageUrl);
+
+  // Reset removed state when existingImageUrl changes
+  if (prevExistingImageUrl.current !== existingImageUrl) {
+    prevExistingImageUrl.current = existingImageUrl;
+    if (isRemoved) {
+      setIsRemoved(false);
+    }
+  }
 
   const preview = useMemo(() => {
     // Clean up previous object URL
@@ -27,8 +39,13 @@ const ImageUpload: React.FC<TImageUploadProps> = ({
       return objectUrl;
     }
 
+    // Show existing image if no new file is selected and not removed
+    if (existingImageUrl && !isRemoved) {
+      return existingImageUrl;
+    }
+
     return null;
-  }, [value]);
+  }, [value, existingImageUrl, isRemoved]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -40,7 +57,12 @@ const ImageUpload: React.FC<TImageUploadProps> = ({
     };
   }, []);
 
-  const handleFileChange = (file: File | undefined): void => onChange(file);
+  const handleFileChange = (file: File | undefined): void => {
+    onChange(file);
+    if (file) {
+      setIsRemoved(false); // Reset removed state when new file is selected
+    }
+  };
 
   const handleDrop = (e: React.DragEvent): void => {
     e.preventDefault();
@@ -74,7 +96,13 @@ const ImageUpload: React.FC<TImageUploadProps> = ({
     handleFileChange(file);
   };
 
-  const handleRemove = (): void => handleFileChange(undefined);
+  const handleRemove = (): void => {
+    handleFileChange(undefined);
+    setIsRemoved(true);
+    if (existingImageUrl && onRemoveExisting) {
+      onRemoveExisting();
+    }
+  };
 
   return (
     <div className={cn("w-full", className)}>
@@ -84,7 +112,7 @@ const ImageUpload: React.FC<TImageUploadProps> = ({
               <div className="relative aspect-video w-full overflow-hidden rounded-lg border bg-muted">
                 <img
                   src={preview}
-                  alt="Recipe preview"
+                  alt="Image preview"
                   className="h-full w-full object-cover"
                 />
                 <button
@@ -97,12 +125,22 @@ const ImageUpload: React.FC<TImageUploadProps> = ({
                 </button>
               </div>
               <p className="mt-2 text-sm text-muted-foreground">
-                {value?.name}
-                {" "}
-                (
-                {((value?.size || 0) / 1024 / 1024).toFixed(2)}
-                {" "}
-                MB)
+                {value
+                  ? (
+                      <>
+                        {value.name}
+                        {" "}
+                        (
+                        {((value.size || 0) / 1024 / 1024).toFixed(2)}
+                        {" "}
+                        MB)
+                      </>
+                    )
+                  : existingImageUrl
+                    ? (
+                        "Current image"
+                      )
+                    : null}
               </p>
             </div>
           )
@@ -138,7 +176,7 @@ const ImageUpload: React.FC<TImageUploadProps> = ({
                 </div>
                 <div className="space-y-1">
                   <p className="text-sm font-medium">
-                    {isDragOver ? "Drop your image here" : "Upload recipe image"}
+                    {isDragOver ? "Drop your image here" : "Upload image"}
                   </p>
                   <p className="text-xs text-muted-foreground">
                     Drag and drop or click to browse

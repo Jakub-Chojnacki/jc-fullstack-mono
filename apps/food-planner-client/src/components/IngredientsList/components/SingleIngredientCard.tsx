@@ -1,5 +1,5 @@
 import { Button, Card, CardContent } from "@jcmono/ui";
-import { Trash } from "lucide-react";
+import { Edit, Trash } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -8,11 +8,12 @@ import type { TIngredientCardProps } from "./types";
 function SingleIngredientCard({
   ingredient,
   handleDelete,
+  handleEdit,
   className,
 }: TIngredientCardProps) {
-  const { name, id } = ingredient;
+  const { name, id, imageUrl } = ingredient;
 
-  const imageUrl = "https://placehold.co/64x64?text=Food+Placeholder";
+  const displayImageUrl = imageUrl || "https://placehold.co/64x64?text=Food+Placeholder";
 
   return (
     <Card className={cn("overflow-hidden", className)}>
@@ -20,7 +21,7 @@ function SingleIngredientCard({
         <div className="flex items-center gap-4 p-4">
           <div className="w-16 h-16 flex-shrink-0 relative bg-muted rounded-md overflow-hidden">
             <img
-              src={imageUrl}
+              src={displayImageUrl}
               alt={name}
               className="w-full h-full object-cover"
             />
@@ -30,15 +31,26 @@ function SingleIngredientCard({
               {name}
             </h3>
           </div>
-          {handleDelete && (
-            <Button
-              variant="ghost"
-              type="button"
-              onClick={() => handleDelete(id)}
-            >
-              <Trash />
-            </Button>
-          )}
+          <div className="flex gap-2">
+            {handleEdit && (
+              <Button
+                variant="ghost"
+                type="button"
+                onClick={() => handleEdit(id)}
+              >
+                <Edit />
+              </Button>
+            )}
+            {handleDelete && (
+              <Button
+                variant="ghost"
+                type="button"
+                onClick={() => handleDelete(id)}
+              >
+                <Trash />
+              </Button>
+            )}
+          </div>
         </div>
       </CardContent>
     </Card>

@@ -11,6 +11,7 @@ import {
   FormMessage,
   Input,
 } from "@jcmono/ui";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
@@ -28,6 +29,7 @@ function RecipeForm({ initialData }: TRecipeFormProps) {
   const createRecipe = useCreateRecipe();
   const updateRecipe = useUpdateRecipe();
   const { mutateAsync: uploadFile, isPending: isUploading } = useUploadFile();
+  const [isExistingImageRemoved, setIsExistingImageRemoved] = useState(false);
 
   const form = useForm<z.infer<typeof RecipeFormSchema>>({
     resolver: zodResolver(RecipeFormSchema),
@@ -42,7 +44,12 @@ function RecipeForm({ initialData }: TRecipeFormProps) {
 
   const onSubmit = async (values: z.infer<typeof RecipeFormSchema>) => {
     try {
-      let imageUrl: string | undefined;
+      let imageUrl: string | undefined = initialData?.imageUrl || undefined;
+
+      // If existing image was removed, clear the imageUrl
+      if (isExistingImageRemoved) {
+        imageUrl = undefined;
+      }
 
       if (values.file instanceof File) {
         const formData = new FormData();
@@ -100,6 +107,8 @@ function RecipeForm({ initialData }: TRecipeFormProps) {
                     value={field.value}
                     onChange={field.onChange}
                     disabled={form.formState.isSubmitting || isUploading}
+                    existingImageUrl={initialData?.imageUrl}
+                    onRemoveExisting={() => setIsExistingImageRemoved(true)}
                   />
                 </FormControl>
                 <FormMessage />
