@@ -19,7 +19,7 @@ export class UploadService {
 
     await this.s3Client.send(
       new PutObjectCommand({
-        Bucket: 'jc-fullstack-mono',
+        Bucket: this.configService.getOrThrow('AWS_BUCKET_NAME'),
         Key: key,
         Body: file,
       }),

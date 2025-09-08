@@ -65,3 +65,13 @@ export type TPaginatedResponse<T> = {
 // Helper type for frontend to extract data type from paginated response
 export type TDataFromPaginated<T> =
   T extends TPaginatedResponse<infer U> ? U : never;
+
+export const ImageUploadSchema = z
+  .custom<File>((val) => val instanceof File, "File is required")
+  .refine((file) => !file || file.type === "image/jpeg", {
+    message: "Only JPEG images are allowed",
+  })
+  .refine((file) => !file || file.size <= 5 * 1024 * 1024, {
+    message: "Max size is 5MB",
+  })
+  .optional();

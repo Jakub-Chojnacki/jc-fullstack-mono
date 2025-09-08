@@ -1,5 +1,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Checkbox, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from "@jcmono/ui";
+import {
+  Button,
+  Checkbox,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+} from "@jcmono/ui";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
@@ -26,6 +36,14 @@ function IngredientForm({ initialData }: TIngredientFormProps) {
       isGlobal: initialData?.isGlobal || false,
     },
   });
+
+  const getButtonText = (): string => {
+    if (isUploading)
+      return "Uploading image...";
+    if (form.formState.isSubmitting)
+      return "Saving...";
+    return initialData ? "Update ingredient" : "Add ingredient";
+  };
 
   const onSubmit = async (values: z.infer<typeof IngredientFormSchema>) => {
     try {
@@ -68,6 +86,8 @@ function IngredientForm({ initialData }: TIngredientFormProps) {
     }
   };
 
+  const isDisabled = form.formState.isSubmitting || isUploading;
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -82,7 +102,7 @@ function IngredientForm({ initialData }: TIngredientFormProps) {
                   <ImageUpload
                     value={field.value}
                     onChange={field.onChange}
-                    disabled={form.formState.isSubmitting || isUploading}
+                    disabled={isDisabled}
                     className="max-w-sm mx-auto"
                     existingImageUrl={initialData?.imageUrl}
                     onRemoveExisting={() => setIsExistingImageRemoved(true)}
@@ -127,15 +147,9 @@ function IngredientForm({ initialData }: TIngredientFormProps) {
           <Button
             type="submit"
             className="w-full"
-            disabled={form.formState.isSubmitting || isUploading}
+            disabled={isDisabled}
           >
-            {isUploading
-              ? "Uploading image..."
-              : form.formState.isSubmitting
-                ? "Saving..."
-                : initialData
-                  ? "Update ingredient"
-                  : "Add ingredient"}
+            {getButtonText()}
           </Button>
         </div>
       </form>
