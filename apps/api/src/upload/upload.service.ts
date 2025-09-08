@@ -15,12 +15,18 @@ export class UploadService {
   constructor(private readonly configService: ConfigService) {}
 
   async upload(fileName: string, file: Buffer) {
+    const key = `${Date.now()}-${fileName}`;
+
     await this.s3Client.send(
       new PutObjectCommand({
-        Bucket: 'jc-fullstack-mono',
-        Key: fileName,
+        Bucket: this.configService.getOrThrow('AWS_BUCKET_NAME'),
+        Key: key,
         Body: file,
       }),
     );
+
+    const url = `${this.configService.getOrThrow('CLOUDFRONT_URL')}/${key}`;
+
+    return { url };
   }
 }

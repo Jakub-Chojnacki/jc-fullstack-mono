@@ -55,6 +55,10 @@ function IngredientsList() {
     mutate({ params: { id } });
   };
 
+  const handleEdit = (id: number): void => {
+    navigation({ to: "/app/ingredients/edit/$id", params: { id: String(id) } });
+  };
+
   const displayedIngredients = useMemo(() => data?.body?.data || [], [data?.body?.data]);
   const paginationMeta = data?.body?.pagination;
 
@@ -85,6 +89,7 @@ function IngredientsList() {
             key={ingredient.id}
             ingredient={ingredient}
             handleDelete={handleDelete}
+            handleEdit={handleEdit}
           />
         ))}
       </SearchableListLayout>

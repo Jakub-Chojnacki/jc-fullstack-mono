@@ -20,7 +20,7 @@ function RouteComponent() {
   if (data) {
     return (
       <Dialog open onOpenChange={() => navigate({ to: "/app/recipes" })}>
-        <DialogContent>
+        <DialogContent className="overflow-y-auto max-h-[90dvh]">
           <RecipeForm initialData={data.body} />
         </DialogContent>
       </Dialog>

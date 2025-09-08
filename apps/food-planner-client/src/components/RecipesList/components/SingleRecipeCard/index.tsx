@@ -12,16 +12,14 @@ function SingleRecipeCard({
   onDelete,
   className,
 }: TRecipeCardProps) {
-  const { name, description, id, isGlobal } = recipe;
-
-  const imageUrl = "https://placehold.co/200x120?text=Recipe+Image";
+  const { name, description, id, isGlobal, imageUrl } = recipe;
 
   return (
     <Card className={cn("overflow-hidden", className)}>
       <CardContent className="p-0">
         <div className="relative">
           <img
-            src={imageUrl}
+            src={imageUrl || "https://placehold.co/200x120?text=Recipe+Image"}
             alt={name}
             className="w-full h-32 object-cover"
           />

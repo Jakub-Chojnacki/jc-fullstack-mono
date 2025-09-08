@@ -1,4 +1,4 @@
-import { EMealTypes, QuantityUnit } from "@jcmono/api-contract";
+import { EMealTypes, ImageUploadSchema, QuantityUnit } from "@jcmono/api-contract";
 import { z } from "zod";
 
 export const IngredientWithAmountSchema = z.object({
@@ -26,6 +26,7 @@ export const RecipeFormSchema = z.object({
   description: z.string(),
   recipeIngredients: z.array(IngredientWithAmountSchema),
   mealTypes: z.array(z.nativeEnum(EMealTypes)).optional(),
+  file: ImageUploadSchema,
 });
 
 export type TRecipeFormValues = z.infer<typeof RecipeFormSchema>;

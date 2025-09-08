@@ -1,20 +1,35 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EMealTypes } from "@jcmono/api-contract";
-import { Button, Checkbox, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from "@jcmono/ui";
+import {
+  Button,
+  Checkbox,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+} from "@jcmono/ui";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
+import ImageUpload from "@/components/ImageUpload";
 import IngredientSelect from "@/forms/RecipeForm/components/IngredientSelect";
 import useCreateRecipe from "@/queries/useCreateRecipe";
 import useUpdateRecipe from "@/queries/useUpdateRecipe";
+import useUploadFile from "@/queries/useUploadFile";
 
 import { RecipeFormSchema } from "./schema";
 
 import type { TRecipeFormProps } from "./types";
 
 function RecipeForm({ initialData }: TRecipeFormProps) {
-  const { mutate } = useCreateRecipe();
-  const { mutate: updateRecipe } = useUpdateRecipe();
+  const createRecipe = useCreateRecipe();
+  const updateRecipe = useUpdateRecipe();
+  const { mutateAsync: uploadFile, isPending: isUploading } = useUploadFile();
+  const [isExistingImageRemoved, setIsExistingImageRemoved] = useState(false);
 
   const form = useForm<z.infer<typeof RecipeFormSchema>>({
     resolver: zodResolver(RecipeFormSchema),
@@ -27,41 +42,80 @@ function RecipeForm({ initialData }: TRecipeFormProps) {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof RecipeFormSchema>) => {
-    if (initialData) {
-      const mappedIngredients = values.recipeIngredients.map((ingredient) => {
-        return {
+  const onSubmit = async (values: z.infer<typeof RecipeFormSchema>) => {
+    try {
+      let imageUrl: string | undefined = initialData?.imageUrl || undefined;
+
+      // If existing image was removed, clear the imageUrl
+      if (isExistingImageRemoved) {
+        imageUrl = undefined;
+      }
+
+      if (values.file instanceof File) {
+        const formData = new FormData();
+        formData.append("file", values.file);
+
+        const result = await uploadFile({
+          body: formData,
+        });
+
+        imageUrl = result.body;
+      }
+
+      const payload = {
+        ...values,
+        imageUrl,
+        mealTypes: values.mealTypes || [],
+      };
+
+      if (initialData) {
+        const mappedIngredients = values.recipeIngredients.map(ingredient => ({
           ...ingredient,
           id: typeof ingredient.id === "number" ? ingredient.id : undefined,
           ingredientId: ingredient.ingredientId,
           amount: ingredient.amount,
           unit: ingredient.unit,
-        };
-      });
+        }));
 
-      updateRecipe({
-        body: {
-          ...values,
-          mealTypes: values.mealTypes || [],
-          recipeIngredients: mappedIngredients,
-        },
-        params: { id: initialData.id },
-      });
+        updateRecipe.mutate({
+          body: { ...payload, recipeIngredients: mappedIngredients },
+          params: { id: initialData.id },
+        });
+      }
+      else {
+        createRecipe.mutate({ body: payload });
+      }
     }
-    else {
-      mutate({
-        body: {
-          ...values,
-          mealTypes: values.mealTypes || [],
-        },
-      });
+    catch (error) {
+      // errors are handled in the mutation
+      return error;
     }
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 ">
+          <FormField
+            control={form.control}
+            name="file"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Recipe Image</FormLabel>
+                <FormControl>
+                  <ImageUpload
+                    value={field.value}
+                    onChange={field.onChange}
+                    disabled={form.formState.isSubmitting || isUploading}
+                    existingImageUrl={initialData?.imageUrl}
+                    onRemoveExisting={() => setIsExistingImageRemoved(true)}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name="name"
@@ -75,6 +129,7 @@ function RecipeForm({ initialData }: TRecipeFormProps) {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="description"
@@ -88,6 +143,7 @@ function RecipeForm({ initialData }: TRecipeFormProps) {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="isGlobal"
@@ -113,27 +169,28 @@ function RecipeForm({ initialData }: TRecipeFormProps) {
                 <div className="mb-4">
                   <FormLabel className="text-base">Meal Types</FormLabel>
                   <p className="text-sm text-muted-foreground mt-1">
-                    These are suggested meal types. Your recipe will be available for all meals when scheduling.
+                    These are suggested meal types. Your recipe will be available
+                    for all meals when scheduling.
                   </p>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  {[EMealTypes.BREAKFAST, EMealTypes.LUNCH, EMealTypes.DINNER, EMealTypes.SNACK].map(mealType => (
-                    <FormField
-                      key={mealType}
-                      control={form.control}
-                      name="mealTypes"
-                      render={({ field }) => {
-                        return (
-                          <FormItem
-                            key={mealType}
-                            className="flex flex-row items-start space-x-3 space-y-0"
-                          >
+                  {[EMealTypes.BREAKFAST, EMealTypes.LUNCH, EMealTypes.DINNER, EMealTypes.SNACK].map(
+                    mealType => (
+                      <FormField
+                        key={mealType}
+                        control={form.control}
+                        name="mealTypes"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                             <FormControl>
                               <Checkbox
                                 checked={field.value?.includes(mealType)}
                                 onCheckedChange={(checked) => {
                                   return checked
-                                    ? field.onChange([...(field.value || []), mealType])
+                                    ? field.onChange([
+                                        ...(field.value || []),
+                                        mealType,
+                                      ])
                                     : field.onChange(
                                         field.value?.filter(
                                           value => value !== mealType,
@@ -143,13 +200,14 @@ function RecipeForm({ initialData }: TRecipeFormProps) {
                               />
                             </FormControl>
                             <FormLabel className="text-sm font-normal">
-                              {String(mealType).charAt(0).toUpperCase() + String(mealType).slice(1).toLowerCase()}
+                              {String(mealType).charAt(0).toUpperCase()
+                                + String(mealType).slice(1).toLowerCase()}
                             </FormLabel>
                           </FormItem>
-                        );
-                      }}
-                    />
-                  ))}
+                        )}
+                      />
+                    ),
+                  )}
                 </div>
                 <FormMessage />
               </FormItem>
@@ -157,8 +215,13 @@ function RecipeForm({ initialData }: TRecipeFormProps) {
           />
 
           <IngredientSelect />
-          <Button type="submit" className="w-full">
-            Save recipe
+
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={form.formState.isSubmitting || isUploading}
+          >
+            {isUploading ? "Uploading image..." : form.formState.isSubmitting ? "Saving..." : "Save recipe"}
           </Button>
         </div>
       </form>
