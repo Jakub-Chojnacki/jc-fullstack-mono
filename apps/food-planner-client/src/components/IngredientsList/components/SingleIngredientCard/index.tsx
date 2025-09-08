@@ -2,18 +2,25 @@ import { Button, Card, CardContent } from "@jcmono/ui";
 import { Edit, Trash } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import useAuthMe from "@/queries/useAuthMe";
 
-import type { TIngredientCardProps } from "./types";
+import type { TSingleIngredientCardProps } from "./types";
 
 function SingleIngredientCard({
   ingredient,
   handleDelete,
   handleEdit,
   className,
-}: TIngredientCardProps) {
+}: TSingleIngredientCardProps) {
+  const { data: userData } = useAuthMe();
+  const userId = userData?.body?.id;
+
   const { name, id, imageUrl } = ingredient;
 
-  const displayImageUrl = imageUrl || "https://placehold.co/64x64?text=Food+Placeholder";
+  const displayImageUrl
+    = imageUrl || "https://placehold.co/64x64?text=Food+Placeholder";
+
+  const canEditAndDelete = userId === ingredient.userId;
 
   return (
     <Card className={cn("overflow-hidden", className)}>
@@ -32,7 +39,7 @@ function SingleIngredientCard({
             </h3>
           </div>
           <div className="flex gap-2">
-            {handleEdit && (
+            {handleEdit && canEditAndDelete && (
               <Button
                 variant="ghost"
                 type="button"
@@ -41,7 +48,7 @@ function SingleIngredientCard({
                 <Edit />
               </Button>
             )}
-            {handleDelete && (
+            {handleDelete && canEditAndDelete && (
               <Button
                 variant="ghost"
                 type="button"
