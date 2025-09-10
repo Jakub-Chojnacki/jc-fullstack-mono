@@ -17,7 +17,7 @@ function RouteComponent() {
 
   return (
     <Dialog open onOpenChange={() => navigate({ to: "/app/recipes" })}>
-      <DialogContent>
+      <DialogContent className="overflow-y-auto max-h-[90dvh]">
         <DialogHeader>
           <DialogTitle>Add a recipe</DialogTitle>
         </DialogHeader>

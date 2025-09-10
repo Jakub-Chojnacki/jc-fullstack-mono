@@ -1,5 +1,5 @@
-import { contract } from '@jcmono/api-contract';
-import { Controller } from '@nestjs/common';
+import { contract, EMealTypes } from '@jcmono/api-contract';
+import { Controller, NotFoundException } from '@nestjs/common';
 import { tsRestHandler, TsRestHandler } from '@ts-rest/nest';
 import { GetCurrentUserId } from 'src/common/decorators';
 import { RecipesService } from './recipes.service';
@@ -18,7 +18,10 @@ export class RecipesController {
 
       return {
         status: 201,
-        body: createdRecipe,
+        body: {
+          ...createdRecipe,
+          mealTypes: createdRecipe.mealTypes as unknown as EMealTypes[],
+        },
       };
     });
   }
@@ -28,9 +31,18 @@ export class RecipesController {
     return tsRestHandler(contract.recipes.get, async ({ query }) => {
       const recipes = await this.recipesService.get({ query, userId });
 
+      // Cast Prisma MealType to EMealTypes for each recipe
+      const transformedRecipes = {
+        ...recipes,
+        data: recipes.data.map((recipe) => ({
+          ...recipe,
+          mealTypes: recipe.mealTypes as unknown as EMealTypes[],
+        })),
+      };
+
       return {
         status: 200,
-        body: recipes,
+        body: transformedRecipes,
       };
     });
   }
@@ -47,15 +59,15 @@ export class RecipesController {
         );
 
         if (!recipes) {
-          return {
-            status: 404,
-            body: { message: 'Recipe not found' },
-          };
+          throw new NotFoundException('Recipe not found');
         }
 
         return {
           status: 200,
-          body: recipes,
+          body: {
+            ...recipes,
+            mealTypes: recipes.mealTypes as unknown as EMealTypes[],
+          },
         };
       },
     );
@@ -70,7 +82,10 @@ export class RecipesController {
 
         return {
           status: 200,
-          body: recipes,
+          body: {
+            ...recipes,
+            mealTypes: recipes.mealTypes as unknown as EMealTypes[],
+          },
         };
       },
     );
@@ -85,7 +100,10 @@ export class RecipesController {
 
         return {
           status: 200,
-          body: recipes,
+          body: {
+            ...recipes,
+            mealTypes: recipes.mealTypes as unknown as EMealTypes[],
+          },
         };
       },
     );

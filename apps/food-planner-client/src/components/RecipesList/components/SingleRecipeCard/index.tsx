@@ -2,6 +2,7 @@ import { Button, Card, CardContent } from "@jcmono/ui";
 import { Edit, Search, Trash } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import useAuthMe from "@/queries/useAuthMe";
 
 import type { TRecipeCardProps } from "./types";
 
@@ -12,18 +13,20 @@ function SingleRecipeCard({
   onDelete,
   className,
 }: TRecipeCardProps) {
-  const { name, description, id, isGlobal } = recipe;
+  const { data } = useAuthMe();
+  const { name, description, id, isGlobal, imageUrl, userId } = recipe;
 
-  const imageUrl = "https://placehold.co/200x120?text=Recipe+Image";
+  const canEditAndDelete = userId === data?.body?.id;
 
   return (
     <Card className={cn("overflow-hidden", className)}>
       <CardContent className="p-0">
         <div className="relative">
           <img
-            src={imageUrl}
+            src={imageUrl || "https://placehold.co/200x120?text=Recipe+Image"}
             alt={name}
-            className="w-full h-32 object-cover"
+            className="w-full h-32 object-cover hover:scale-105 transition-transform duration-200 ease-in-out hover:cursor-pointer"
+            onClick={() => onPreview && onPreview(id)}
           />
           {isGlobal && (
             <span className="absolute top-2 left-2 bg-primary text-primary-foreground text-xs px-2 py-1 rounded">
@@ -52,7 +55,7 @@ function SingleRecipeCard({
                 <Search className="h-4 w-4" />
               </Button>
             )}
-            {onEdit && (
+            {canEditAndDelete && onEdit && (
               <Button
                 variant="ghost"
                 size="icon"
@@ -63,7 +66,7 @@ function SingleRecipeCard({
                 <Edit className="h-4 w-4" />
               </Button>
             )}
-            {onDelete && (
+            {canEditAndDelete && onDelete && (
               <Button
                 variant="ghost"
                 size="icon"

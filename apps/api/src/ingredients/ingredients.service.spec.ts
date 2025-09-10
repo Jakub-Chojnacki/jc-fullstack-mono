@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TsRestException } from '@ts-rest/nest';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { createRecordNotFoundError } from 'src/test-utils';
 import { IngredientsService } from './ingredients.service';
 
 describe('IngredientsService', () => {
@@ -9,6 +10,7 @@ describe('IngredientsService', () => {
   let prisma: {
     ingredient: {
       findMany: jest.Mock;
+      count: jest.Mock;
       create: jest.Mock;
       update: jest.Mock;
       delete: jest.Mock;
@@ -36,6 +38,7 @@ describe('IngredientsService', () => {
           useValue: {
             ingredient: {
               findMany: jest.fn(),
+              count: jest.fn(),
               create: jest.fn(),
               update: jest.fn(),
               delete: jest.fn(),
@@ -51,30 +54,48 @@ describe('IngredientsService', () => {
 
   it('should return global ingredients', async () => {
     const mockData = [mockIngredient];
+    const mockCount = 1;
 
     prisma.ingredient.findMany.mockResolvedValue(mockData);
+    prisma.ingredient.count.mockResolvedValue(mockCount);
 
     const result = await service.get({
-      query: { queryFilter: 'GLOBAL' },
+      query: { queryFilter: 'GLOBAL', page: '1', take: '10' },
       userId: mockData[0].userId,
     });
-    expect(result).toEqual(mockData);
+
+    expect(result.data).toEqual(mockData);
+    expect(result.pagination.totalCount).toBe(mockCount);
     expect(prisma.ingredient.findMany).toHaveBeenCalledWith({
+      where: { isGlobal: true },
+      skip: 0,
+      take: 10,
+    });
+    expect(prisma.ingredient.count).toHaveBeenCalledWith({
       where: { isGlobal: true },
     });
   });
 
   it('should return ingredients for a user', async () => {
     const mockData = [mockIngredient];
+    const mockCount = 1;
 
     prisma.ingredient.findMany.mockResolvedValue(mockData);
+    prisma.ingredient.count.mockResolvedValue(mockCount);
 
     const result = await service.get({
       userId: mockUserId,
-      query: { queryFilter: 'USER' },
+      query: { queryFilter: 'USER', page: '1', take: '10' },
     });
-    expect(result).toEqual(mockData);
+
+    expect(result.data).toEqual(mockData);
+    expect(result.pagination.totalCount).toBe(mockCount);
     expect(prisma.ingredient.findMany).toHaveBeenCalledWith({
+      where: { userId: mockUserId },
+      skip: 0,
+      take: 10,
+    });
+    expect(prisma.ingredient.count).toHaveBeenCalledWith({
       where: { userId: mockUserId },
     });
   });
@@ -106,14 +127,14 @@ describe('IngredientsService', () => {
     });
   });
 
-  it('should throw TsRestException if ingredient not found during delete', async () => {
-    const error = { code: 'P2025' };
+  it('should throw PrismaClientKnownRequestError if ingredient not found during delete', async () => {
+    const error = createRecordNotFoundError();
 
     prisma.ingredient.update.mockRejectedValue(error);
 
     await expect(
       service.delete({ id: 999, userId: mockUserId }),
-    ).rejects.toThrow(TsRestException);
+    ).rejects.toThrow(PrismaClientKnownRequestError);
   });
 
   it('should update an ingredient', async () => {
@@ -133,8 +154,8 @@ describe('IngredientsService', () => {
     });
   });
 
-  it('should throw TsRestException if ingredient not found during update', async () => {
-    const error = { code: 'P2025' };
+  it('should throw PrismaClientKnownRequestError if ingredient not found during update', async () => {
+    const error = createRecordNotFoundError();
 
     prisma.ingredient.update.mockRejectedValue(error);
 
@@ -144,6 +165,6 @@ describe('IngredientsService', () => {
         id: 999,
         userId: mockUserId,
       }),
-    ).rejects.toThrow(TsRestException);
+    ).rejects.toThrow(PrismaClientKnownRequestError);
   });
 });

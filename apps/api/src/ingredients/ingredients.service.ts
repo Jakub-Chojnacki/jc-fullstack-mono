@@ -1,5 +1,4 @@
 import {
-  contract,
   TIngredientCreate,
   TIngredientGetQuery,
   TIngredientUpdate,
@@ -8,29 +7,52 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { TBaseDeleteParams } from 'src/common/types';
 import { PrismaService } from 'src/prisma/prisma.service';
-import wrapWithTsRestError from 'src/utils/wrapWithTsRestError';
+import {
+  createPaginatedResponse,
+  validatePagination,
+} from 'src/utils/pagination';
 
 @Injectable()
 export class IngredientsService {
   constructor(private prisma: PrismaService) {}
 
-  get({ userId, query }: { userId: number; query: TIngredientGetQuery }) {
-    return wrapWithTsRestError(contract.recipes.get, async () => {
-      const where = this.buildIngredientFilter(userId, query);
+  async get({ userId, query }: { userId: number; query: TIngredientGetQuery }) {
+    const where = this.buildIngredientFilter(userId, query);
 
-      return await this.prisma.ingredient.findMany({
+    const pagination = validatePagination(query);
+
+    const [data, totalCount] = await Promise.all([
+      this.prisma.ingredient.findMany({
         where,
-      });
-    });
+        skip: pagination.skip,
+        take: pagination.take,
+      }),
+      this.prisma.ingredient.count({ where }),
+    ]);
+
+    return createPaginatedResponse(data, totalCount, pagination);
   }
 
   private buildIngredientFilter(
     userId: number,
     query: TIngredientGetQuery,
   ): Prisma.IngredientWhereInput {
-    const { queryFilter, isDeleted } = query;
+    const { queryFilter, isDeleted, search } = query;
 
-    const baseFilter = { isDeleted };
+    const baseFilter: Prisma.IngredientWhereInput = {};
+
+    // Only add isDeleted filter if it's explicitly provided
+    if (isDeleted !== undefined) {
+      baseFilter.isDeleted = isDeleted;
+    }
+
+    // Add search filter if search term is provided
+    if (search && typeof search === 'string' && search.trim()) {
+      baseFilter.name = {
+        contains: search.trim(),
+        mode: 'insensitive' as const,
+      };
+    }
 
     if (queryFilter === 'ALL') {
       return {
@@ -46,39 +68,41 @@ export class IngredientsService {
       };
     }
 
+    if (queryFilter === 'USER') {
+      return {
+        ...baseFilter,
+        isGlobal: false,
+        userId,
+      };
+    }
+
     return {
       ...baseFilter,
       userId,
     };
   }
 
-  create(body: TIngredientCreate) {
-    return wrapWithTsRestError(contract.ingredients.create, async () => {
-      const ingredient = await this.prisma.ingredient.create({
-        data: body,
-      });
+  async create(body: TIngredientCreate) {
+    const ingredient = await this.prisma.ingredient.create({
+      data: body,
+    });
 
-      return ingredient;
+    return ingredient;
+  }
+
+  async delete({ id, userId }: TBaseDeleteParams) {
+    return await this.prisma.ingredient.update({
+      where: {
+        id,
+        userId,
+      },
+      data: {
+        isDeleted: true,
+      },
     });
   }
 
-  delete({ id, userId }: TBaseDeleteParams) {
-    return wrapWithTsRestError(
-      contract.ingredients.delete,
-      async () =>
-        await this.prisma.ingredient.update({
-          where: {
-            id,
-            userId,
-          },
-          data: {
-            isDeleted: true,
-          },
-        }),
-    );
-  }
-
-  update({
+  async update({
     id,
     body,
     userId,
@@ -87,16 +111,12 @@ export class IngredientsService {
     body: TIngredientUpdate;
     userId: number;
   }) {
-    return wrapWithTsRestError(
-      contract.ingredients.update,
-      async () =>
-        await this.prisma.ingredient.update({
-          where: {
-            id,
-            userId,
-          },
-          data: body,
-        }),
-    );
+    return await this.prisma.ingredient.update({
+      where: {
+        id,
+        userId,
+      },
+      data: body,
+    });
   }
 }

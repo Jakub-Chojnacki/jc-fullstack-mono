@@ -1,5 +1,5 @@
-import { contract } from '@jcmono/api-contract';
-import { Controller } from '@nestjs/common';
+import { contract, EMealTypes } from '@jcmono/api-contract';
+import { Controller, NotFoundException } from '@nestjs/common';
 import { tsRestHandler, TsRestHandler } from '@ts-rest/nest';
 import { GetCurrentUserId } from 'src/common/decorators';
 import { ScheduleMealsService } from './schedule-meals.service';
@@ -64,11 +64,43 @@ export class ScheduleMealsController {
         ...query,
       });
 
+      // Cast Prisma MealType to EMealTypes
+      const transformedMeals = scheduledMeals.map((meal) => ({
+        ...meal,
+        recipe: {
+          ...meal.recipe,
+          mealTypes: meal.recipe.mealTypes as unknown as EMealTypes[],
+        },
+      }));
+
       return {
         status: 200,
-        body: scheduledMeals,
+        body: transformedMeals,
       };
     });
+  }
+
+  @TsRestHandler(contract.scheduleMeals.getSuggestions)
+  getSuggestions(@GetCurrentUserId() userId: number) {
+    return tsRestHandler(
+      contract.scheduleMeals.getSuggestions,
+      async ({ query }) => {
+        const suggestions = await this.scheduleMealsService.getSuggestions({
+          userId,
+          mealType: query.mealType as EMealTypes,
+        });
+
+        const transformedSuggestions = suggestions.map((recipe) => ({
+          ...recipe,
+          mealTypes: recipe.mealTypes as unknown as EMealTypes[],
+        }));
+
+        return {
+          status: 200,
+          body: transformedSuggestions,
+        };
+      },
+    );
   }
 
   @TsRestHandler(contract.scheduleMeals.getById)
@@ -82,15 +114,22 @@ export class ScheduleMealsController {
         );
 
         if (!scheduledMeal) {
-          return {
-            status: 404,
-            body: { message: 'Scheduled meal not found' },
-          };
+          throw new NotFoundException('Scheduled meal not found');
         }
+
+        // Cast Prisma MealType to EMealTypes
+        const transformedMeal = {
+          ...scheduledMeal,
+          recipe: {
+            ...scheduledMeal.recipe,
+            mealTypes: scheduledMeal.recipe
+              .mealTypes as unknown as EMealTypes[],
+          },
+        };
 
         return {
           status: 200,
-          body: scheduledMeal,
+          body: transformedMeal,
         };
       },
     );

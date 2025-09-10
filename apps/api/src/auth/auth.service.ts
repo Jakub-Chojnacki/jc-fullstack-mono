@@ -1,4 +1,4 @@
-import { AuthDto, contract, Tokens } from '@jcmono/api-contract';
+import { AuthDto, Tokens } from '@jcmono/api-contract';
 import {
   ForbiddenException,
   Injectable,
@@ -9,7 +9,6 @@ import * as bcrypt from 'bcrypt';
 import { type Response } from 'express';
 
 import { PrismaService } from 'src/prisma/prisma.service';
-import wrapWithTsRestError from 'src/utils/wrapWithTsRestError';
 
 @Injectable()
 export class AuthService {
@@ -26,10 +25,13 @@ export class AuthService {
     accessToken: string,
     refreshToken?: string,
   ) {
+    const isProduction = process.env.NODE_ENV === 'production';
+    const isSecure = process.env.NODE_ENV === 'production';
+    const sameSite = isProduction ? 'none' : 'lax';
     response.cookie('access_token', accessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
+      secure: isSecure,
+      sameSite,
       maxAge: this.accessExpirationSeconds * 1000, // 15 minutes in milliseconds
     });
 
@@ -37,8 +39,8 @@ export class AuthService {
     if (refreshToken) {
       response.cookie('refresh_token', refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'none',
+        secure: isSecure,
+        sameSite,
         maxAge: this.refreshExpirationSeconds * 1000, // 7 days in milliseconds
       });
     }
@@ -159,19 +161,15 @@ export class AuthService {
   }
 
   async me(userId: number) {
-    return wrapWithTsRestError(
-      contract.auth.me,
-      async () =>
-        await this.prisma.user.findUnique({
-          where: {
-            id: userId,
-          },
-          select: {
-            id: true,
-            email: true,
-            name: true,
-          },
-        }),
-    );
+    return await this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+      },
+    });
   }
 }

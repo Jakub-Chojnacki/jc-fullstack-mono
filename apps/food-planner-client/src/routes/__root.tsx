@@ -6,7 +6,7 @@ import { ThemeProvider } from "@components/ThemeProvider";
 export const Route = createRootRoute({
   component: RootComponent,
   head: () => ({
-    meta: [{ title: "MealMaster" }],
+    meta: [{ title: "MealSelect" }],
     links: [
       {
         rel: "apple-touch-icon",

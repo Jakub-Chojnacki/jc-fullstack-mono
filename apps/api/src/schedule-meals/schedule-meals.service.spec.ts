@@ -1,7 +1,9 @@
 import type { TScheduleMealsCreate } from '@jcmono/api-contract';
+import { EMealTypes } from '@jcmono/api-contract';
 import { Test, TestingModule } from '@nestjs/testing';
-import { TsRestException } from '@ts-rest/nest';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { createRecordNotFoundError } from 'src/test-utils';
 import { ScheduleMealsService } from './schedule-meals.service';
 
 describe('ScheduleMealsService', () => {
@@ -16,9 +18,13 @@ describe('ScheduleMealsService', () => {
   let prisma: {
     scheduledMeal: {
       findMany: jest.Mock;
+      findFirst: jest.Mock;
       create: jest.Mock;
       update: jest.Mock;
       delete: jest.Mock;
+    };
+    recipe: {
+      findMany: jest.Mock;
     };
   };
   beforeEach(async () => {
@@ -45,9 +51,13 @@ describe('ScheduleMealsService', () => {
           useValue: {
             scheduledMeal: {
               findMany: jest.fn(),
+              findFirst: jest.fn(),
               create: jest.fn(),
               update: jest.fn(),
               delete: jest.fn(),
+            },
+            recipe: {
+              findMany: jest.fn(),
             },
           },
         },
@@ -96,14 +106,14 @@ describe('ScheduleMealsService', () => {
     });
   });
 
-  it('should throw TsRestException if not found during update', async () => {
-    const error = { code: 'P2025' };
+  it('should throw PrismaClientKnownRequestError if not found during update', async () => {
+    const error = createRecordNotFoundError();
 
     prisma.scheduledMeal.update.mockRejectedValue(error);
 
     await expect(
       service.update(999, { recipeId: 1, scheduledAt: new Date() }),
-    ).rejects.toThrow(TsRestException);
+    ).rejects.toThrow(PrismaClientKnownRequestError);
   });
 
   it('should delete a scheduled meal', async () => {
@@ -120,14 +130,14 @@ describe('ScheduleMealsService', () => {
     });
   });
 
-  it('should throw TsRestException if not found during delete', async () => {
-    const error = { code: 'P2025' };
+  it('should throw PrismaClientKnownRequestError if not found during delete', async () => {
+    const error = createRecordNotFoundError('Record to delete does not exist.');
 
     prisma.scheduledMeal.delete.mockRejectedValue(error);
 
     await expect(
       service.delete({ id: 999, userId: mockUserId }),
-    ).rejects.toThrow(TsRestException);
+    ).rejects.toThrow(PrismaClientKnownRequestError);
   });
 
   it('should get scheduled meals for a user', async () => {
@@ -150,6 +160,60 @@ describe('ScheduleMealsService', () => {
       },
       include: {
         recipe: true,
+      },
+    });
+  });
+
+  it('should get meal suggestions for a specific meal type', async () => {
+    const mockSuggestions = [
+      {
+        id: 1,
+        name: 'Pancakes',
+        description: 'Fluffy pancakes',
+        mealTypes: ['BREAKFAST'],
+        userId: mockUserId,
+        isGlobal: false,
+        isDeleted: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 2,
+        name: 'French Toast',
+        description: 'Sweet french toast',
+        mealTypes: ['BREAKFAST'],
+        userId: mockUserId,
+        isGlobal: false,
+        isDeleted: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ];
+
+    prisma.recipe.findMany.mockResolvedValue(mockSuggestions);
+
+    const result = await service.getSuggestions({
+      userId: mockUserId,
+      mealType: EMealTypes.BREAKFAST,
+    });
+
+    expect(result).toHaveLength(2); // Should return the shuffled results
+    expect(result.every((r) => mockSuggestions.includes(r))).toBe(true); // Should be subset of mock data
+    expect(prisma.recipe.findMany).toHaveBeenCalledWith({
+      where: {
+        AND: [
+          {
+            OR: [{ userId: mockUserId }, { isGlobal: true }],
+          },
+          {
+            mealTypes: {
+              has: EMealTypes.BREAKFAST,
+            },
+          },
+          {
+            isDeleted: false,
+          },
+        ],
       },
     });
   });

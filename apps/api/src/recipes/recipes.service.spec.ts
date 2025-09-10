@@ -1,7 +1,9 @@
 import { TRecipe, TRecipeCreate, TRecipeUpdate } from '@jcmono/api-contract';
+import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { TsRestException } from '@ts-rest/nest';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { createRecordNotFoundError } from 'src/test-utils';
 import { RecipesService } from './recipes.service';
 
 describe('RecipesService', () => {
@@ -10,6 +12,7 @@ describe('RecipesService', () => {
   let prisma: {
     recipe: {
       findMany: jest.Mock;
+      count: jest.Mock;
       create: jest.Mock;
       update: jest.Mock;
       delete: jest.Mock;
@@ -48,6 +51,7 @@ describe('RecipesService', () => {
           useValue: {
             recipe: {
               findMany: jest.fn(),
+              count: jest.fn(),
               create: jest.fn(),
               update: jest.fn(),
               delete: jest.fn(),
@@ -73,16 +77,26 @@ describe('RecipesService', () => {
 
   it('should return global recipes', async () => {
     const mockRecipes: TRecipeWithoutMeta[] = [mockRecipe];
+    const mockCount = 1;
 
     prisma.recipe.findMany.mockResolvedValue(mockRecipes);
+    prisma.recipe.count.mockResolvedValue(mockCount);
 
     const result = await service.get({
       userId: mockUserId,
-      query: { queryFilter: 'GLOBAL' },
+      query: { queryFilter: 'GLOBAL', page: '1', take: '10' },
     });
 
-    expect(result).toEqual(mockRecipes);
+    expect(result.data).toEqual(mockRecipes);
+    expect(result.pagination.totalCount).toBe(mockCount);
     expect(prisma.recipe.findMany).toHaveBeenCalledWith({
+      where: {
+        isGlobal: true,
+      },
+      skip: 0,
+      take: 10,
+    });
+    expect(prisma.recipe.count).toHaveBeenCalledWith({
       where: {
         isGlobal: true,
       },
@@ -91,16 +105,119 @@ describe('RecipesService', () => {
 
   it('should return recipes for a user', async () => {
     const mockRecipes: TRecipeWithoutMeta[] = [mockRecipe];
+    const mockCount = 1;
 
     prisma.recipe.findMany.mockResolvedValue(mockRecipes);
+    prisma.recipe.count.mockResolvedValue(mockCount);
 
     const result = await service.get({
       userId: mockUserId,
-      query: { queryFilter: 'USER' },
+      query: { queryFilter: 'USER', page: '1', take: '10' },
     });
 
-    expect(result).toEqual(mockRecipes);
+    expect(result.data).toEqual(mockRecipes);
+    expect(result.pagination.totalCount).toBe(mockCount);
     expect(prisma.recipe.findMany).toHaveBeenCalledWith({
+      where: {
+        userId: mockUserId,
+      },
+      skip: 0,
+      take: 10,
+    });
+    expect(prisma.recipe.count).toHaveBeenCalledWith({
+      where: {
+        userId: mockUserId,
+      },
+    });
+  });
+
+  it('should filter recipes by isDeleted=false when provided', async () => {
+    const mockRecipes: TRecipeWithoutMeta[] = [mockRecipe];
+    const mockCount = 1;
+
+    prisma.recipe.findMany.mockResolvedValue(mockRecipes);
+    prisma.recipe.count.mockResolvedValue(mockCount);
+
+    const result = await service.get({
+      userId: mockUserId,
+      query: { queryFilter: 'USER', isDeleted: false, page: '1', take: '10' },
+    });
+
+    expect(result.data).toEqual(mockRecipes);
+    expect(result.pagination.totalCount).toBe(mockCount);
+    expect(prisma.recipe.findMany).toHaveBeenCalledWith({
+      where: {
+        userId: mockUserId,
+        isDeleted: false,
+      },
+      skip: 0,
+      take: 10,
+    });
+    expect(prisma.recipe.count).toHaveBeenCalledWith({
+      where: {
+        userId: mockUserId,
+        isDeleted: false,
+      },
+    });
+  });
+
+  it('should filter recipes by isDeleted=true when provided', async () => {
+    const mockRecipes: TRecipeWithoutMeta[] = [
+      { ...mockRecipe, isDeleted: true },
+    ];
+    const mockCount = 1;
+
+    prisma.recipe.findMany.mockResolvedValue(mockRecipes);
+    prisma.recipe.count.mockResolvedValue(mockCount);
+
+    const result = await service.get({
+      userId: mockUserId,
+      query: { queryFilter: 'USER', isDeleted: true, page: '1', take: '10' },
+    });
+
+    expect(result.data).toEqual(mockRecipes);
+    expect(result.pagination.totalCount).toBe(mockCount);
+    expect(prisma.recipe.findMany).toHaveBeenCalledWith({
+      where: {
+        userId: mockUserId,
+        isDeleted: true,
+      },
+      skip: 0,
+      take: 10,
+    });
+    expect(prisma.recipe.count).toHaveBeenCalledWith({
+      where: {
+        userId: mockUserId,
+        isDeleted: true,
+      },
+    });
+  });
+
+  it('should return all recipes when isDeleted is not provided', async () => {
+    const mockRecipes: TRecipeWithoutMeta[] = [
+      mockRecipe,
+      { ...mockRecipe, id: 2, isDeleted: true },
+    ];
+    const mockCount = 2;
+
+    prisma.recipe.findMany.mockResolvedValue(mockRecipes);
+    prisma.recipe.count.mockResolvedValue(mockCount);
+
+    const result = await service.get({
+      userId: mockUserId,
+      query: { queryFilter: 'USER', page: '1', take: '10' },
+    });
+
+    expect(result.data).toEqual(mockRecipes);
+    expect(result.pagination.totalCount).toBe(mockCount);
+    expect(prisma.recipe.findMany).toHaveBeenCalledWith({
+      where: {
+        userId: mockUserId,
+      },
+      skip: 0,
+      take: 10,
+    });
+    expect(prisma.recipe.count).toHaveBeenCalledWith({
       where: {
         userId: mockUserId,
       },
@@ -138,6 +255,40 @@ describe('RecipesService', () => {
     });
   });
 
+  it('should throw BadRequestException when creating a recipe with duplicate ingredients', async () => {
+    const mockRecipeIngredientsWithDuplicates: TRecipeCreate['recipeIngredients'] =
+      [
+        {
+          amount: 100,
+          unit: 'GRAMS',
+          ingredientId: 1,
+          isGlobal: false,
+        },
+        {
+          amount: 200,
+          unit: 'GRAMS',
+          ingredientId: 1, // Same ingredient ID - duplicate
+          isGlobal: false,
+        },
+      ];
+
+    const createdRecipeData: Omit<TRecipeCreate, 'recipeIngredients'> = {
+      name: 'Pasta',
+      description: 'Delicious pasta',
+      isGlobal: false,
+      userId: mockUserId,
+    };
+
+    await expect(
+      service.create({
+        recipeIngredients: mockRecipeIngredientsWithDuplicates,
+        ...createdRecipeData,
+      }),
+    ).rejects.toThrow(BadRequestException);
+
+    expect(prisma.recipe.create).not.toHaveBeenCalled();
+  });
+
   it('should soft delete a recipe', async () => {
     prisma.recipe.update.mockResolvedValue(mockRecipe);
 
@@ -145,14 +296,14 @@ describe('RecipesService', () => {
     expect(result).toEqual(mockRecipe);
   });
 
-  it('should throw TsRestException if recipe not found during delete', async () => {
-    const error = { code: 'P2025' };
+  it('should throw PrismaClientKnownRequestError if recipe not found during delete', async () => {
+    const error = createRecordNotFoundError();
 
     prisma.recipe.update.mockRejectedValue(error);
 
     await expect(
       service.delete({ id: 999, userId: mockUserId }),
-    ).rejects.toThrow(TsRestException);
+    ).rejects.toThrow(PrismaClientKnownRequestError);
   });
 
   it('should update the recipe and manage ingredients properly', async () => {
@@ -246,13 +397,46 @@ describe('RecipesService', () => {
     });
   });
 
-  it('should throw TsRestException if recipe not found during delete', async () => {
-    const error = { code: 'P2025' };
+  it('should throw BadRequestException when updating a recipe with duplicate ingredients', async () => {
+    const id = 1;
+
+    const mockRecipeIngredientsWithDuplicates: TRecipeUpdate['recipeIngredients'] =
+      [
+        {
+          id: 10,
+          amount: 2,
+          unit: 'GRAMS',
+          ingredientId: 5,
+        },
+        {
+          amount: 1,
+          unit: 'GRAMS',
+          ingredientId: 5, // Same ingredient ID - duplicate
+        },
+      ];
+
+    const updateDto: TRecipeCreate = {
+      name: 'Updated Recipe Name',
+      description: 'Updated description',
+      isGlobal: true,
+      userId: mockUserId,
+      recipeIngredients: mockRecipeIngredientsWithDuplicates,
+    };
+
+    await expect(service.update(id, updateDto)).rejects.toThrow(
+      BadRequestException,
+    );
+
+    expect(prisma.recipeIngredient.findMany).not.toHaveBeenCalled();
+  });
+
+  it('should throw PrismaClientKnownRequestError if recipe not found during delete', async () => {
+    const error = createRecordNotFoundError();
 
     prisma.recipe.update.mockRejectedValue(error);
 
     await expect(
       service.delete({ id: 999, userId: mockUserId }),
-    ).rejects.toThrow(TsRestException);
+    ).rejects.toThrow(PrismaClientKnownRequestError);
   });
 });

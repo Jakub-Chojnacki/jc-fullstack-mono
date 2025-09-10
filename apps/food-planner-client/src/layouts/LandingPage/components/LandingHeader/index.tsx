@@ -10,7 +10,7 @@ function LandingHeader() {
       <div className="ml-auto mr-auto container px-4 lg:px-8 flex h-20 items-center justify-between">
         <div className="flex items-center gap-2">
           <ChefHat className="h-6 w-6 text-violet-600 dark:text-violet-400" />
-          <span className="text-xl font-bold">MealMaster</span>
+          <span className="text-xl font-bold">MealSelect</span>
         </div>
         <nav className="hidden md:flex items-center gap-8">
           <a

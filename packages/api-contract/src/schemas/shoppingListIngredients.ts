@@ -3,6 +3,8 @@ import { z } from "zod";
 import { QuantityUnit } from "./ingredients";
 import { BooleanQuerySchema } from "./utils";
 
+export const MAXIMUM_SAVED_SHOPPING_LIST_ITEMS = 50;
+
 export const ShoppingListIngredientSchema = z.object({
   id: z.number(),
   createdAt: z.date(),
@@ -10,7 +12,6 @@ export const ShoppingListIngredientSchema = z.object({
   amount: z.number(),
   unit: z.enum(QuantityUnit),
   isDone: z.boolean(),
-  isDeleted: z.boolean(),
   ingredientId: z.number(),
   userId: z.number(),
 });
@@ -58,10 +59,9 @@ export type TShoppingListIngredientUpdate = z.infer<
 >;
 
 export const ShoppingListIngredientGetQuerySchema = z.object({
-  page: z.number().optional(),
   take: z.number().optional(),
   isDone: BooleanQuerySchema.optional(),
- })
+})
 
 export type TShoppingListIngredientGetQuery = z.infer<
   typeof ShoppingListIngredientGetQuerySchema

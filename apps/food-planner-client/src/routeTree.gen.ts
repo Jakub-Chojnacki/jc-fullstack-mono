@@ -25,6 +25,7 @@ import { Route as AppRouteRecipesAddImport } from './routes/app/_route.recipes.a
 import { Route as AppRouteIngredientsAddImport } from './routes/app/_route.ingredients.add'
 import { Route as AppRouteRecipesPreviewIdImport } from './routes/app/_route.recipes.preview.$id'
 import { Route as AppRouteRecipesEditIdImport } from './routes/app/_route.recipes.edit.$id'
+import { Route as AppRouteIngredientsEditIdImport } from './routes/app/_route.ingredients.edit.$id'
 
 // Create Virtual Routes
 
@@ -109,6 +110,12 @@ const AppRouteRecipesEditIdRoute = AppRouteRecipesEditIdImport.update({
   getParentRoute: () => AppRouteRecipesRoute,
 } as any)
 
+const AppRouteIngredientsEditIdRoute = AppRouteIngredientsEditIdImport.update({
+  id: '/edit/$id',
+  path: '/edit/$id',
+  getParentRoute: () => AppRouteIngredientsRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -190,6 +197,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRouteRecipesAddImport
       parentRoute: typeof AppRouteRecipesImport
     }
+    '/app/_route/ingredients/edit/$id': {
+      id: '/app/_route/ingredients/edit/$id'
+      path: '/edit/$id'
+      fullPath: '/app/ingredients/edit/$id'
+      preLoaderRoute: typeof AppRouteIngredientsEditIdImport
+      parentRoute: typeof AppRouteIngredientsImport
+    }
     '/app/_route/recipes/edit/$id': {
       id: '/app/_route/recipes/edit/$id'
       path: '/edit/$id'
@@ -211,10 +225,12 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteIngredientsRouteChildren {
   AppRouteIngredientsAddRoute: typeof AppRouteIngredientsAddRoute
+  AppRouteIngredientsEditIdRoute: typeof AppRouteIngredientsEditIdRoute
 }
 
 const AppRouteIngredientsRouteChildren: AppRouteIngredientsRouteChildren = {
   AppRouteIngredientsAddRoute: AppRouteIngredientsAddRoute,
+  AppRouteIngredientsEditIdRoute: AppRouteIngredientsEditIdRoute,
 }
 
 const AppRouteIngredientsRouteWithChildren =
@@ -275,6 +291,7 @@ export interface FileRoutesByFullPath {
   '/app/': typeof AppRouteIndexRoute
   '/app/ingredients/add': typeof AppRouteIngredientsAddRoute
   '/app/recipes/add': typeof AppRouteRecipesAddRoute
+  '/app/ingredients/edit/$id': typeof AppRouteIngredientsEditIdRoute
   '/app/recipes/edit/$id': typeof AppRouteRecipesEditIdRoute
   '/app/recipes/preview/$id': typeof AppRouteRecipesPreviewIdRoute
 }
@@ -289,6 +306,7 @@ export interface FileRoutesByTo {
   '/app/shopping': typeof AppRouteShoppingRoute
   '/app/ingredients/add': typeof AppRouteIngredientsAddRoute
   '/app/recipes/add': typeof AppRouteRecipesAddRoute
+  '/app/ingredients/edit/$id': typeof AppRouteIngredientsEditIdRoute
   '/app/recipes/edit/$id': typeof AppRouteRecipesEditIdRoute
   '/app/recipes/preview/$id': typeof AppRouteRecipesPreviewIdRoute
 }
@@ -306,6 +324,7 @@ export interface FileRoutesById {
   '/app/_route/': typeof AppRouteIndexRoute
   '/app/_route/ingredients/add': typeof AppRouteIngredientsAddRoute
   '/app/_route/recipes/add': typeof AppRouteRecipesAddRoute
+  '/app/_route/ingredients/edit/$id': typeof AppRouteIngredientsEditIdRoute
   '/app/_route/recipes/edit/$id': typeof AppRouteRecipesEditIdRoute
   '/app/_route/recipes/preview/$id': typeof AppRouteRecipesPreviewIdRoute
 }
@@ -323,6 +342,7 @@ export interface FileRouteTypes {
     | '/app/'
     | '/app/ingredients/add'
     | '/app/recipes/add'
+    | '/app/ingredients/edit/$id'
     | '/app/recipes/edit/$id'
     | '/app/recipes/preview/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -336,6 +356,7 @@ export interface FileRouteTypes {
     | '/app/shopping'
     | '/app/ingredients/add'
     | '/app/recipes/add'
+    | '/app/ingredients/edit/$id'
     | '/app/recipes/edit/$id'
     | '/app/recipes/preview/$id'
   id:
@@ -351,6 +372,7 @@ export interface FileRouteTypes {
     | '/app/_route/'
     | '/app/_route/ingredients/add'
     | '/app/_route/recipes/add'
+    | '/app/_route/ingredients/edit/$id'
     | '/app/_route/recipes/edit/$id'
     | '/app/_route/recipes/preview/$id'
   fileRoutesById: FileRoutesById
@@ -415,7 +437,8 @@ export const routeTree = rootRoute
       "filePath": "app/_route.ingredients.tsx",
       "parent": "/app/_route",
       "children": [
-        "/app/_route/ingredients/add"
+        "/app/_route/ingredients/add",
+        "/app/_route/ingredients/edit/$id"
       ]
     },
     "/app/_route/recipes": {
@@ -442,6 +465,10 @@ export const routeTree = rootRoute
     "/app/_route/recipes/add": {
       "filePath": "app/_route.recipes.add.tsx",
       "parent": "/app/_route/recipes"
+    },
+    "/app/_route/ingredients/edit/$id": {
+      "filePath": "app/_route.ingredients.edit.$id.tsx",
+      "parent": "/app/_route/ingredients"
     },
     "/app/_route/recipes/edit/$id": {
       "filePath": "app/_route.recipes.edit.$id.tsx",

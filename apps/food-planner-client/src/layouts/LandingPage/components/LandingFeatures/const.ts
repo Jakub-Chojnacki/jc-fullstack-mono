@@ -9,15 +9,15 @@ type TFeature = {
 export const features: TFeature[] = [
   {
     icon: "ClipboardList",
-    title: "Ingredient Management",
+    title: "Ingredient and Recipe Management",
     description:
       "Add, organize, and track your ingredients and get access to public ingredients added by others.",
   },
   {
     icon: "ChefHat",
-    title: "Recipe Collection",
+    title: "Meal suggestions",
     description:
-      "Create and store your favorite recipes with ingredient lists.",
+      "Use our suggestion engine to get meal ideas based on your recipe collection",
   },
   {
     icon: "CalendarDays",

@@ -1,8 +1,9 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { RecipeIngredientsService } from './recipe-ingredients.service';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { TRecipeIngredientCreate } from '@jcmono/api-contract';
-import { TsRestException } from '@ts-rest/nest';
+import { Test, TestingModule } from '@nestjs/testing';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { createRecordNotFoundError } from 'src/test-utils';
+import { RecipeIngredientsService } from './recipe-ingredients.service';
 
 describe('RecipeIngredientsService', () => {
   let service: RecipeIngredientsService;
@@ -67,8 +68,8 @@ describe('RecipeIngredientsService', () => {
     });
   });
 
-  it('should throw TsRestException when updating a non-existing recipe ingredient', async () => {
-    const error = { code: 'P2025' };
+  it('should throw PrismaClientKnownRequestError when updating a non-existing recipe ingredient', async () => {
+    const error = createRecordNotFoundError();
 
     prisma.recipeIngredient.update.mockRejectedValue(error);
 
@@ -83,7 +84,7 @@ describe('RecipeIngredientsService', () => {
           unit: 'GRAMS',
         },
       }),
-    ).rejects.toThrow(TsRestException);
+    ).rejects.toThrow(PrismaClientKnownRequestError);
   });
 
   it('should delete a recipe ingredient', async () => {
@@ -97,11 +98,13 @@ describe('RecipeIngredientsService', () => {
     });
   });
 
-  it('should throw TsRestException when deleting a non-existing recipe ingredient', async () => {
-    const error = { code: 'P2025' };
+  it('should throw PrismaClientKnownRequestError when deleting a non-existing recipe ingredient', async () => {
+    const error = createRecordNotFoundError('Record to delete does not exist.');
 
     prisma.recipeIngredient.delete.mockRejectedValue(error);
 
-    await expect(service.delete({ id: 999 })).rejects.toThrow(TsRestException);
+    await expect(service.delete({ id: 999 })).rejects.toThrow(
+      PrismaClientKnownRequestError,
+    );
   });
 });

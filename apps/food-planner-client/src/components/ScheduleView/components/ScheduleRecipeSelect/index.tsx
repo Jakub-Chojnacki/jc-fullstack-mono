@@ -1,8 +1,9 @@
 import { Button, Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, FormControl, FormField, FormItem, FormLabel, FormMessage, Popover, PopoverContent, PopoverTrigger } from "@jcmono/ui";
 import { ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { FieldValues } from "react-hook-form";
 
+import { useDebouncedSearch } from "@/hooks/useDebouncedSearch";
 import useGetRecipes from "@/queries/useGetRecipes";
 
 import type { TScheduleRecipeSelectProps } from "./types";
@@ -12,8 +13,17 @@ function ScheduleRecipeSelect<T extends FieldValues>({
   name,
 }: TScheduleRecipeSelectProps<T>) {
   const [commandOpen, setCommandOpen] = useState(false);
+  const listRef = useRef<HTMLDivElement>(null);
 
-  const { data } = useGetRecipes();
+  const { debouncedSearchTerm, handleSearchChange } = useDebouncedSearch({
+    delay: 300,
+  });
+
+  const { data, isLoading } = useGetRecipes({
+    page: 1,
+    take: 100,
+    search: debouncedSearchTerm,
+  });
 
   return (
     <FormField
@@ -39,11 +49,26 @@ function ScheduleRecipeSelect<T extends FieldValues>({
                   </PopoverTrigger>
                   <PopoverContent className="w-[300px] p-0">
                     <Command>
-                      <CommandInput placeholder="Search recipes..." />
-                      <CommandList>
-                        <CommandEmpty>No recipes found.</CommandEmpty>
+                      <CommandInput
+                        placeholder="Search recipes..."
+                        onValueChange={handleSearchChange}
+                      />
+                      <CommandList
+                        ref={listRef}
+                        style={{ maxHeight: "200px" }}
+                        onWheel={(e) => {
+                          // Ensure wheel events are handled by the scrollable element
+                          const target = e.currentTarget;
+                          if (target.scrollHeight > target.clientHeight) {
+                            e.stopPropagation();
+                          }
+                        }}
+                      >
+                        <CommandEmpty>
+                          {isLoading ? "Searching..." : "No recipes found."}
+                        </CommandEmpty>
                         <CommandGroup>
-                          {data?.body.map(recipe => (
+                          {data?.body?.data.map(recipe => (
                             <CommandItem
                               key={recipe.id}
                               value={recipe.name}

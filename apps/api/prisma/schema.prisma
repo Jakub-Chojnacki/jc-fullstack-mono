@@ -56,6 +56,7 @@ model Ingredient {
   user      User    @relation(fields: [userId], references: [id])
   isGlobal  Boolean @default(false)
   isDeleted Boolean @default(false)
+  imageUrl    String? 
 
   recipeIngredients      RecipeIngredient[]
   shoppingListIngredient ShoppingListIngredient[]
@@ -77,6 +78,8 @@ model RecipeIngredient {
 
   ingredientId Int
   ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+
+  @@unique([recipeId, ingredientId])
 }
 
 model Recipe {
@@ -88,11 +91,13 @@ model Recipe {
   description String
   isGlobal    Boolean @default(false)
   isDeleted   Boolean @default(false)
+  imageUrl    String? 
 
   userId            Int
   user              User               @relation(fields: [userId], references: [id])
   scheduledMeals    ScheduledMeal[]
   recipeIngredients RecipeIngredient[]
+  mealTypes         MealType[] 
 
   @@map("recipes")
 }
@@ -121,11 +126,12 @@ model ShoppingListIngredient {
   amount    Float
   unit      QuantityUnit
   isDone    Boolean      @default(false)
-  isDeleted Boolean      @default(false)
 
   ingredientId Int
   ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
 
   userId Int
   user   User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, ingredientId, unit])
 }

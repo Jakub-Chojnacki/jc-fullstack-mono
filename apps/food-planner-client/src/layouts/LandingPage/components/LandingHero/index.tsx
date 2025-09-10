@@ -31,7 +31,7 @@ function LandingHero() {
           </div>
           <div className="order-1 mx-auto lg:ml-auto lg:order-2">
             <img
-              src="https://placehold.co/600x400"
+              src="/hero-img.svg"
               alt="Meal planning app interface"
               width={600}
               height={400}
