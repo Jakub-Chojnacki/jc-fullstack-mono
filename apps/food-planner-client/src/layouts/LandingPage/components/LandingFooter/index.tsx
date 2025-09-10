@@ -10,7 +10,7 @@ function LandingFooter() {
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <ChefHat className="h-6 w-6 text-violet-600 dark:text-violet-400" />
-              <span className="text-xl font-bold">MealMaster</span>
+              <span className="text-xl font-bold">MealSelect</span>
             </div>
             <p className="max-w-[350px] text-sm text-muted-foreground">
               Simplifying meal planning for busy people. Plan your meals,
@@ -43,7 +43,7 @@ function LandingFooter() {
             {" "}
             {new Date().getFullYear()}
             {" "}
-            MealMaster. All rights reserved.
+            MealSelect. All rights reserved.
           </p>
         </div>
       </div>
