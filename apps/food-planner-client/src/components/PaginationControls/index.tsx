@@ -32,7 +32,7 @@ function PaginationControls({
           {" "}
           of
           {" "}
-          {paginationMeta.totalPages}
+          {Math.max(paginationMeta.totalPages, 1)}
         </div>
         <div className="flex space-x-2">
           <Button
