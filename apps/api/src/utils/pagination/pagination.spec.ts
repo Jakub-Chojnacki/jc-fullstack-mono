@@ -1,6 +1,6 @@
 import { BadRequestException } from '@nestjs/common';
 import { DEFAULT_TAKE } from 'src/common/constants/main';
-import { validatePagination } from './pagination';
+import { validatePagination } from '.';
 
 describe('validatePagination', () => {
   it('should use defaults when no pagination params are provided', () => {
