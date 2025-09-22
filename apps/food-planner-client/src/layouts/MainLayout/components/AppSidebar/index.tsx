@@ -19,7 +19,7 @@ function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar collapsible="none" {...props} className="min-h-screen">
       <SidebarHeader>
         <div className="flex items-center justify-between truncate">
-          <span className="text-lg font-semibold">Food Planner</span>
+          <span className="text-lg font-semibold">MealSelect</span>
           <ThemeToggle />
         </div>
       </SidebarHeader>

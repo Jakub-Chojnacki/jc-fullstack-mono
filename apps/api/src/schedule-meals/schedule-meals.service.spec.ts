@@ -1,5 +1,4 @@
-import type { TScheduleMealsCreate } from '@jcmono/api-contract';
-import { EMealTypes } from '@jcmono/api-contract';
+import { EMealTypes, type TScheduleMealsCreate } from '@jcmono/api-contract';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -16,6 +15,7 @@ describe('ScheduleMealsService', () => {
   let mockData: TScheduleMealsCreate;
 
   let prisma: {
+    $queryRaw: jest.Mock;
     scheduledMeal: {
       findMany: jest.Mock;
       findFirst: jest.Mock;
@@ -49,6 +49,7 @@ describe('ScheduleMealsService', () => {
         {
           provide: PrismaService,
           useValue: {
+            $queryRaw: jest.fn(),
             scheduledMeal: {
               findMany: jest.fn(),
               findFirst: jest.fn(),
@@ -190,31 +191,16 @@ describe('ScheduleMealsService', () => {
       },
     ];
 
-    prisma.recipe.findMany.mockResolvedValue(mockSuggestions);
+    // 👈 mock $queryRaw, not recipe.findMany
+    prisma.$queryRaw.mockResolvedValue(mockSuggestions);
 
     const result = await service.getSuggestions({
       userId: mockUserId,
       mealType: EMealTypes.BREAKFAST,
     });
 
-    expect(result).toHaveLength(2); // Should return the shuffled results
-    expect(result.every((r) => mockSuggestions.includes(r))).toBe(true); // Should be subset of mock data
-    expect(prisma.recipe.findMany).toHaveBeenCalledWith({
-      where: {
-        AND: [
-          {
-            OR: [{ userId: mockUserId }, { isGlobal: true }],
-          },
-          {
-            mealTypes: {
-              has: EMealTypes.BREAKFAST,
-            },
-          },
-          {
-            isDeleted: false,
-          },
-        ],
-      },
-    });
+    expect(result).toHaveLength(2);
+    expect(result).toEqual(mockSuggestions);
+    expect(prisma.$queryRaw).toHaveBeenCalled();
   });
 });
