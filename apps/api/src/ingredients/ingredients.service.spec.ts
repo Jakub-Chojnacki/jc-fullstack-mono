@@ -91,12 +91,12 @@ describe('IngredientsService', () => {
     expect(result.data).toEqual(mockData);
     expect(result.pagination.totalCount).toBe(mockCount);
     expect(prisma.ingredient.findMany).toHaveBeenCalledWith({
-      where: { userId: mockUserId },
+      where: { userId: mockUserId, isGlobal: false },
       skip: 0,
       take: 10,
     });
     expect(prisma.ingredient.count).toHaveBeenCalledWith({
-      where: { userId: mockUserId },
+      where: { userId: mockUserId, isGlobal: false },
     });
   });
 

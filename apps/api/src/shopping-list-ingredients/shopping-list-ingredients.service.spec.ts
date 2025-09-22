@@ -166,6 +166,7 @@ describe('ShoppingListIngredientsService', () => {
       },
       data: {
         amount: 150, // existing 50 + new 100
+        isDone: false,
       },
     });
   });

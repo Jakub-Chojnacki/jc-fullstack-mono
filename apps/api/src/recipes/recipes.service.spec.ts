@@ -1,4 +1,9 @@
-import { TRecipe, TRecipeCreate, TRecipeUpdate } from '@jcmono/api-contract';
+import {
+  EMealTypes,
+  TRecipe,
+  TRecipeCreate,
+  TRecipeUpdate,
+} from '@jcmono/api-contract';
 import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
@@ -31,6 +36,7 @@ describe('RecipesService', () => {
 
   const mockUserId = 123;
   const mockId = 1;
+  const userRecipeWhere = { userId: mockUserId, isGlobal: false };
 
   type TRecipeWithoutMeta = Omit<TRecipe, 'createdAt' | 'updatedAt'>;
 
@@ -40,6 +46,7 @@ describe('RecipesService', () => {
     description: 'Delicious pasta',
     isGlobal: false,
     userId: mockUserId,
+    mealTypes: [EMealTypes.LUNCH],
   };
 
   beforeEach(async () => {
@@ -118,16 +125,12 @@ describe('RecipesService', () => {
     expect(result.data).toEqual(mockRecipes);
     expect(result.pagination.totalCount).toBe(mockCount);
     expect(prisma.recipe.findMany).toHaveBeenCalledWith({
-      where: {
-        userId: mockUserId,
-      },
+      where: userRecipeWhere,
       skip: 0,
       take: 10,
     });
     expect(prisma.recipe.count).toHaveBeenCalledWith({
-      where: {
-        userId: mockUserId,
-      },
+      where: userRecipeWhere,
     });
   });
 
@@ -146,18 +149,12 @@ describe('RecipesService', () => {
     expect(result.data).toEqual(mockRecipes);
     expect(result.pagination.totalCount).toBe(mockCount);
     expect(prisma.recipe.findMany).toHaveBeenCalledWith({
-      where: {
-        userId: mockUserId,
-        isDeleted: false,
-      },
+      where: { ...userRecipeWhere, isDeleted: false },
       skip: 0,
       take: 10,
     });
     expect(prisma.recipe.count).toHaveBeenCalledWith({
-      where: {
-        userId: mockUserId,
-        isDeleted: false,
-      },
+      where: { ...userRecipeWhere, isDeleted: false },
     });
   });
 
@@ -178,18 +175,12 @@ describe('RecipesService', () => {
     expect(result.data).toEqual(mockRecipes);
     expect(result.pagination.totalCount).toBe(mockCount);
     expect(prisma.recipe.findMany).toHaveBeenCalledWith({
-      where: {
-        userId: mockUserId,
-        isDeleted: true,
-      },
+      where: { ...userRecipeWhere, isDeleted: true },
       skip: 0,
       take: 10,
     });
     expect(prisma.recipe.count).toHaveBeenCalledWith({
-      where: {
-        userId: mockUserId,
-        isDeleted: true,
-      },
+      where: { ...userRecipeWhere, isDeleted: true },
     });
   });
 
@@ -211,16 +202,12 @@ describe('RecipesService', () => {
     expect(result.data).toEqual(mockRecipes);
     expect(result.pagination.totalCount).toBe(mockCount);
     expect(prisma.recipe.findMany).toHaveBeenCalledWith({
-      where: {
-        userId: mockUserId,
-      },
+      where: userRecipeWhere,
       skip: 0,
       take: 10,
     });
     expect(prisma.recipe.count).toHaveBeenCalledWith({
-      where: {
-        userId: mockUserId,
-      },
+      where: userRecipeWhere,
     });
   });
 
@@ -241,6 +228,7 @@ describe('RecipesService', () => {
       description: 'Delicious pasta',
       isGlobal: false,
       userId: mockUserId,
+      mealTypes: [EMealTypes.LUNCH],
     };
 
     const result = await service.create({
@@ -277,6 +265,7 @@ describe('RecipesService', () => {
       description: 'Delicious pasta',
       isGlobal: false,
       userId: mockUserId,
+      mealTypes: [EMealTypes.LUNCH],
     };
 
     await expect(
@@ -331,6 +320,7 @@ describe('RecipesService', () => {
       isGlobal: true,
       userId: mockUserId,
       recipeIngredients: mockRecipeIngredients,
+      mealTypes: [EMealTypes.DINNER],
     };
 
     prisma.recipeIngredient.findMany.mockResolvedValue([
@@ -370,6 +360,7 @@ describe('RecipesService', () => {
         description: updateDto.description,
         isGlobal: updateDto.isGlobal,
         userId: mockUserId,
+        mealTypes: [EMealTypes.DINNER],
       },
     });
 
@@ -421,6 +412,7 @@ describe('RecipesService', () => {
       isGlobal: true,
       userId: mockUserId,
       recipeIngredients: mockRecipeIngredientsWithDuplicates,
+      mealTypes: [EMealTypes.DINNER],
     };
 
     await expect(service.update(id, updateDto)).rejects.toThrow(
