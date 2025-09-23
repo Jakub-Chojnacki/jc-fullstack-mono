@@ -13,7 +13,7 @@ function SingleIngredientCard({
   className,
 }: TSingleIngredientCardProps) {
   const { data: userData } = useAuthMe();
-  const userId = userData?.body?.id;
+  const userId = userData?.user.id;
 
   const { name, id, imageUrl } = ingredient;
 

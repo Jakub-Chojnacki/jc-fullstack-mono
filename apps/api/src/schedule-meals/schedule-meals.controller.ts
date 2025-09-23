@@ -9,7 +9,7 @@ export class ScheduleMealsController {
   constructor(private readonly scheduleMealsService: ScheduleMealsService) {}
 
   @TsRestHandler(contract.scheduleMeals.create)
-  create(@GetCurrentUserId() userId: number) {
+  create(@GetCurrentUserId() userId: string) {
     return tsRestHandler(contract.scheduleMeals.create, async ({ body }) => {
       const createdScheduledMeal = await this.scheduleMealsService.create(
         userId,
@@ -39,7 +39,7 @@ export class ScheduleMealsController {
   }
 
   @TsRestHandler(contract.scheduleMeals.delete)
-  delete(@GetCurrentUserId() userId: number) {
+  delete(@GetCurrentUserId() userId: string) {
     return tsRestHandler(
       contract.scheduleMeals.delete,
       async ({ params: { id } }) => {
@@ -57,7 +57,7 @@ export class ScheduleMealsController {
   }
 
   @TsRestHandler(contract.scheduleMeals.get)
-  get(@GetCurrentUserId() userId: number) {
+  get(@GetCurrentUserId() userId: string) {
     return tsRestHandler(contract.scheduleMeals.get, async ({ query }) => {
       const scheduledMeals = await this.scheduleMealsService.get({
         userId,
@@ -81,7 +81,7 @@ export class ScheduleMealsController {
   }
 
   @TsRestHandler(contract.scheduleMeals.getSuggestions)
-  getSuggestions(@GetCurrentUserId() userId: number) {
+  getSuggestions(@GetCurrentUserId() userId: string) {
     return tsRestHandler(
       contract.scheduleMeals.getSuggestions,
       async ({ query }) => {
@@ -104,7 +104,7 @@ export class ScheduleMealsController {
   }
 
   @TsRestHandler(contract.scheduleMeals.getById)
-  getById(@GetCurrentUserId() userId: number) {
+  getById(@GetCurrentUserId() userId: string) {
     return tsRestHandler(
       contract.scheduleMeals.getById,
       async ({ params: { id } }) => {

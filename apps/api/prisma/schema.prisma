@@ -29,19 +29,22 @@ enum MealType {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String      @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   email    String  @unique
-  hash     String
-  hashedRt String?
   name     String?
 
   ingredients             Ingredient[]
   recipes                 Recipe[]
   scheduledMeals          ScheduledMeal[]
   shoppingListIngredients ShoppingListIngredient[]
+
+  emailVerified Boolean   @default(false)
+  image         String?
+  sessions      Session[]
+  accounts      Account[]
 
   @@map("users")
 }
@@ -51,13 +54,12 @@ model Ingredient {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name      String
-  userId    Int
-  user      User    @relation(fields: [userId], references: [id])
-  isGlobal  Boolean @default(false)
-  isDeleted Boolean @default(false)
-  imageUrl    String? 
-
+  name                   String
+  userId                 String
+  user                   User                     @relation(fields: [userId], references: [id])
+  isGlobal               Boolean                  @default(false)
+  isDeleted              Boolean                  @default(false)
+  imageUrl               String?
   recipeIngredients      RecipeIngredient[]
   shoppingListIngredient ShoppingListIngredient[]
 
@@ -87,17 +89,16 @@ model Recipe {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name        String
-  description String
-  isGlobal    Boolean @default(false)
-  isDeleted   Boolean @default(false)
-  imageUrl    String? 
-
-  userId            Int
+  name              String
+  description       String
+  isGlobal          Boolean            @default(false)
+  isDeleted         Boolean            @default(false)
+  imageUrl          String?
+  userId            String
   user              User               @relation(fields: [userId], references: [id])
   scheduledMeals    ScheduledMeal[]
   recipeIngredients RecipeIngredient[]
-  mealTypes         MealType[] 
+  mealTypes         MealType[]
 
   @@map("recipes")
 }
@@ -107,7 +108,7 @@ model ScheduledMeal {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  userId      Int
+  userId      String
   user        User      @relation(fields: [userId], references: [id])
   mealType    MealType? @default(DINNER)
   scheduledAt DateTime
@@ -123,15 +124,60 @@ model ShoppingListIngredient {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  amount    Float
-  unit      QuantityUnit
-  isDone    Boolean      @default(false)
+  amount Float
+  unit   QuantityUnit
+  isDone Boolean      @default(false)
 
   ingredientId Int
   ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
 
-  userId Int
+  userId String
   user   User @relation(fields: [userId], references: [id])
 
   @@unique([userId, ingredientId, unit])
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+
+  @@map("verification")
 }

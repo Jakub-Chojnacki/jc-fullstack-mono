@@ -16,7 +16,7 @@ import {
 export class IngredientsService {
   constructor(private prisma: PrismaService) {}
 
-  async get({ userId, query }: { userId: number; query: TIngredientGetQuery }) {
+  async get({ userId, query }: { userId: string; query: TIngredientGetQuery }) {
     const where = this.buildIngredientFilter(userId, query);
 
     const pagination = validatePagination(query);
@@ -34,7 +34,7 @@ export class IngredientsService {
   }
 
   private buildIngredientFilter(
-    userId: number,
+    userId: string,
     query: TIngredientGetQuery,
   ): Prisma.IngredientWhereInput {
     const { queryFilter, isDeleted, search } = query;
@@ -109,7 +109,7 @@ export class IngredientsService {
   }: {
     id: number;
     body: TIngredientUpdate;
-    userId: number;
+    userId: string;
   }) {
     return await this.prisma.ingredient.update({
       where: {

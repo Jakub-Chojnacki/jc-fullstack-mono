@@ -1,15 +1,18 @@
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@jcmono/ui";
 import { LogOut } from "lucide-react";
+import toast from "react-hot-toast";
 
+import { authClient } from "@/lib/auth";
+import { router } from "@/main";
 import useAuthMe from "@/queries/useAuthMe";
-import useLogout from "@/queries/useLogout";
 
 function NavUser() {
   const { data, isLoading } = useAuthMe();
-  const { mutate } = useLogout();
 
-  const handleLogout = (): void => {
-    mutate({});
+  const handleLogout = async (): Promise<void> => {
+    await authClient.signOut();
+    router.navigate({ to: "/signin" });
+    toast.success("Logged out successfully");
   };
 
   if (isLoading) {

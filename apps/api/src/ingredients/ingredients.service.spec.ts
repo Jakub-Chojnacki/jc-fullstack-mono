@@ -17,7 +17,7 @@ describe('IngredientsService', () => {
     };
   };
 
-  const mockUserId = 123;
+  const mockUserId = 'random-id';
   const mockId = 1;
 
   const mockIngredient = {

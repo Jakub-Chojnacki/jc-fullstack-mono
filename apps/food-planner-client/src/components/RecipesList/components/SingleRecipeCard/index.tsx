@@ -16,7 +16,7 @@ function SingleRecipeCard({
   const { data } = useAuthMe();
   const { name, description, id, isGlobal, imageUrl, userId } = recipe;
 
-  const canEditAndDelete = userId === data?.body?.id;
+  const canEditAndDelete = userId === data?.user.id;
 
   return (
     <Card className={cn("overflow-hidden", className)}>

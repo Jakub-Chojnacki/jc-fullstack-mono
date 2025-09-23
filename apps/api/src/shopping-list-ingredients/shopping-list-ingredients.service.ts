@@ -19,10 +19,10 @@ export class ShoppingListIngredientsService {
     isDone,
     userId,
     take = MAXIMUM_SAVED_SHOPPING_LIST_ITEMS,
-  }: TShoppingListIngredientGetQuery & { userId: number }) {
+  }: TShoppingListIngredientGetQuery & { userId: string }) {
     const where: {
       isDone?: boolean;
-      userId: number;
+      userId: string;
     } = {
       isDone,
       userId,
@@ -47,7 +47,7 @@ export class ShoppingListIngredientsService {
   }
 
   async checkIngredientLimit(
-    userId: number,
+    userId: string,
     ingredientsToBeAddedCount: number = 1,
   ) {
     const currentCount = await this.prisma.shoppingListIngredient.count({
@@ -66,7 +66,7 @@ export class ShoppingListIngredientsService {
     }
   }
 
-  async create(body: TShoppingListIngredientCreate, userId: number) {
+  async create(body: TShoppingListIngredientCreate, userId: string) {
     const existingIngredient =
       await this.prisma.shoppingListIngredient.findFirst({
         where: {
@@ -100,7 +100,7 @@ export class ShoppingListIngredientsService {
     }
   }
 
-  async createFromRecipe(recipeId: number, userId: number) {
+  async createFromRecipe(recipeId: number, userId: string) {
     const recipe = await this.prisma.recipe.findUnique({
       where: {
         id: recipeId,
@@ -165,7 +165,7 @@ export class ShoppingListIngredientsService {
     return results;
   }
 
-  async delete(id: number, userId: number) {
+  async delete(id: number, userId: string) {
     return await this.prisma.shoppingListIngredient.delete({
       where: {
         id,
@@ -181,7 +181,7 @@ export class ShoppingListIngredientsService {
   }: {
     id: number;
     data: TShoppingListIngredientUpdate;
-    userId: number;
+    userId: string;
   }) {
     return await this.prisma.shoppingListIngredient.update({
       where: {
