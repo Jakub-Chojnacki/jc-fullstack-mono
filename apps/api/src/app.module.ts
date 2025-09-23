@@ -12,7 +12,6 @@ import { RecipesModule } from './recipes/recipes.module';
 import { ScheduleMealsModule } from './schedule-meals/schedule-meals.module';
 import { ShoppingListIngredientsModule } from './shopping-list-ingredients/shopping-list-ingredients.module';
 import { UploadModule } from './upload/upload.module';
-import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -29,7 +28,6 @@ import { UsersModule } from './users/users.module';
     ScheduleMealsModule,
     ShoppingListIngredientsModule,
     UploadModule,
-    UsersModule,
   ],
   providers: [
     {

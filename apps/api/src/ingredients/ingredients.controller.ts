@@ -1,8 +1,7 @@
 import { contract } from '@jcmono/api-contract';
-import { Controller, UseGuards } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
 
-import { AuthGuard, Session, UserSession } from '@mguay/nestjs-better-auth';
 import { GetCurrentUserId } from 'src/common/decorators';
 import { IngredientsService } from './ingredients.service';
 
@@ -10,13 +9,12 @@ import { IngredientsService } from './ingredients.service';
 export class IngredientsController {
   constructor(private readonly ingredientsService: IngredientsService) {}
 
-  @UseGuards(AuthGuard)
   @TsRestHandler(contract.ingredients.create)
-  create(@Session() session: UserSession) {
+  create(@GetCurrentUserId() userId: string) {
     return tsRestHandler(contract.ingredients.create, async ({ body }) => {
       const createdIngredient = await this.ingredientsService.create({
         ...body,
-        userId: session.user.id || '',
+        userId,
       });
 
       return {
