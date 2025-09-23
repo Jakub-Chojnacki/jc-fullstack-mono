@@ -9,7 +9,7 @@ export class RecipesController {
   constructor(private readonly recipesService: RecipesService) {}
 
   @TsRestHandler(contract.recipes.create)
-  create(@GetCurrentUserId() userId: number) {
+  create(@GetCurrentUserId() userId: string) {
     return tsRestHandler(contract.recipes.create, async ({ body }) => {
       const createdRecipe = await this.recipesService.create({
         ...body,
@@ -27,7 +27,7 @@ export class RecipesController {
   }
 
   @TsRestHandler(contract.recipes.get)
-  get(@GetCurrentUserId() userId: number) {
+  get(@GetCurrentUserId() userId: string) {
     return tsRestHandler(contract.recipes.get, async ({ query }) => {
       const recipes = await this.recipesService.get({ query, userId });
 
@@ -48,7 +48,7 @@ export class RecipesController {
   }
 
   @TsRestHandler(contract.recipes.getOne)
-  getOne(@GetCurrentUserId() userId: number) {
+  getOne(@GetCurrentUserId() userId: string) {
     return tsRestHandler(
       contract.recipes.getOne,
       async ({ params: { id }, query: { withIngredients } }) => {
@@ -74,7 +74,7 @@ export class RecipesController {
   }
 
   @TsRestHandler(contract.recipes.delete)
-  delete(@GetCurrentUserId() userId: number) {
+  delete(@GetCurrentUserId() userId: string) {
     return tsRestHandler(
       contract.recipes.delete,
       async ({ params: { id } }) => {

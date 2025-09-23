@@ -13,7 +13,7 @@ export const ShoppingListIngredientSchema = z.object({
   unit: z.enum(QuantityUnit),
   isDone: z.boolean(),
   ingredientId: z.number(),
-  userId: z.number(),
+  userId: z.string(),
 });
 
 export type TShoppingListIngredient = z.infer<

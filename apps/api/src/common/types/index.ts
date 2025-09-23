@@ -1,1 +1,1 @@
-export type TBaseDeleteParams = { id: number; userId: number };
+export type TBaseDeleteParams = { id: number; userId: string };

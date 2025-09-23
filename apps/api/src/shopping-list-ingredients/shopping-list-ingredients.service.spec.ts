@@ -11,7 +11,7 @@ import { ShoppingListIngredientsService } from './shopping-list-ingredients.serv
 describe('ShoppingListIngredientsService', () => {
   let service: ShoppingListIngredientsService;
 
-  const userId = 123;
+  const userId = 'random-id';
 
   const mockRecipe = {
     id: 1,
@@ -31,7 +31,7 @@ describe('ShoppingListIngredientsService', () => {
   };
 
   const mockDataFromRecipe: (TShoppingListIngredientCreate & {
-    userId: number;
+    userId: string;
   })[] = [
     {
       ingredientId: 1,
@@ -49,7 +49,7 @@ describe('ShoppingListIngredientsService', () => {
     },
   ];
 
-  const mockData: TShoppingListIngredientCreate & { userId: number } = {
+  const mockData: TShoppingListIngredientCreate & { userId: string } = {
     ingredientId: 1,
     amount: 100,
     isDone: false,
