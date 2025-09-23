@@ -8,7 +8,7 @@ import { ScheduleMealsService } from './schedule-meals.service';
 describe('ScheduleMealsService', () => {
   let service: ScheduleMealsService;
 
-  const mockUserId = 123;
+  const mockUserId = 'random-id';
 
   let startDate: string;
   let endDate: string;

@@ -1,8 +1,8 @@
 import {
-  EMealTypes,
-  TRecipe,
-  TRecipeCreate,
-  TRecipeUpdate,
+    EMealTypes,
+    TRecipe,
+    TRecipeCreate,
+    TRecipeUpdate,
 } from '@jcmono/api-contract';
 import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -34,7 +34,7 @@ describe('RecipesService', () => {
     $transaction: jest.Mock;
   };
 
-  const mockUserId = 123;
+  const mockUserId = 'random-id';
   const mockId = 1;
   const userRecipeWhere = { userId: mockUserId, isGlobal: false };
 

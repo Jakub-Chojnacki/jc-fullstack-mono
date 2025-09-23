@@ -12,7 +12,7 @@ export const RecipeSchema = z.object({
   id: z.number(),
   createdAt: z.date(),
   updatedAt: z.date(),
-  userId: z.number(),
+  userId: z.string(),
   isGlobal: z.boolean().optional(),
   name: z.string(),
   description: z.string(),

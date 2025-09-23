@@ -12,7 +12,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class ScheduleMealsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(userId: number, body: TScheduleMealsCreate) {
+  async create(userId: string, body: TScheduleMealsCreate) {
     const scheduledMeal = await this.prisma.scheduledMeal.create({
       data: { userId, ...body },
     });
@@ -43,7 +43,7 @@ export class ScheduleMealsService {
     startDate,
     endDate,
   }: {
-    userId: number;
+    userId: string;
     startDate: string;
     endDate: string;
   }) {
@@ -63,7 +63,7 @@ export class ScheduleMealsService {
     return scheduledMeals;
   }
 
-  async getById(userId: number, id: number) {
+  async getById(userId: string, id: number) {
     return await this.prisma.scheduledMeal.findFirst({
       where: {
         userId,
@@ -79,7 +79,7 @@ export class ScheduleMealsService {
     userId,
     mealType,
   }: {
-    userId: number;
+    userId: string;
     mealType: EMealTypes;
   }): Promise<Recipe[]> {
     // Use database-level randomization for optimal performance

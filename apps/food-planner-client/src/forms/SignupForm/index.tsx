@@ -1,17 +1,29 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from "@jcmono/ui";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+} from "@jcmono/ui";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import type { z } from "zod";
 
-import { queryClient } from "@/main";
-import { AUTH_ME_QUERY_KEY } from "@/queries/useAuthMe/const";
-import useSignUp from "@/queries/useSignUp";
+import { authClient } from "@/lib/auth";
 
 import { signupFormSchema } from "./schema";
 
 function SignupForm() {
-  const { mutate } = useSignUp();
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof signupFormSchema>>({
@@ -19,7 +31,7 @@ function SignupForm() {
     defaultValues: { email: "", password: "", confirmPassword: "" },
   });
 
-  const onSubmit = (values: z.infer<typeof signupFormSchema>) => {
+  const onSubmit = async (values: z.infer<typeof signupFormSchema>) => {
     if (values.password !== values.confirmPassword) {
       form.setError("confirmPassword", {
         type: "manual",
@@ -29,15 +41,16 @@ function SignupForm() {
       return;
     }
 
-    mutate(
-      { body: values },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: AUTH_ME_QUERY_KEY });
-          navigate({ from: "/signup", to: "/app" });
-        },
-      },
-    );
+    const { data, error } = await authClient.signUp.email({
+      ...values,
+    });
+
+    if (data) {
+      navigate({ from: "/signup", to: "/app" });
+    }
+    else {
+      toast.error(error?.message || "Something went wrong");
+    }
   };
 
   return (

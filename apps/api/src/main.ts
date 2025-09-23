@@ -1,13 +1,18 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { toNodeHandler } from 'better-auth/node';
 import * as cookieParser from 'cookie-parser';
+import type { Express } from 'express';
+import { json } from 'express';
 import helmet from 'helmet';
 
+import { AuthService } from '@mguay/nestjs-better-auth';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-
+  const app = await NestFactory.create(AppModule, {
+    bodyParser: false, // required so Better Auth can read the raw request body
+  });
   const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:5173')
     .split(',')
     .map((origin) => origin.trim());
@@ -25,6 +30,16 @@ async function bootstrap() {
 
   app.use(helmet());
   app.use(cookieParser());
+  const expressApp = app.getHttpAdapter().getInstance() as Express;
+
+  // Access BetterAuth instance from AuthService
+  const authService = app.get<AuthService>(AuthService);
+
+  expressApp.all(
+    /^\/api\/auth\/.*/,
+    toNodeHandler(authService.instance.handler),
+  );
+  expressApp.use(json());
 
   const config = new DocumentBuilder()
     .setTitle('Food Planner API')

@@ -29,7 +29,7 @@ export class RecipesService {
     }
   }
 
-  async get({ userId, query }: { userId: number; query: TRecipeGetQuery }) {
+  async get({ userId, query }: { userId: string; query: TRecipeGetQuery }) {
     const where = this.buildRecipeFilter(userId, query);
 
     const pagination = validatePagination(query);
@@ -47,7 +47,7 @@ export class RecipesService {
   }
 
   private buildRecipeFilter(
-    userId: number,
+    userId: string,
     query: TRecipeGetQuery,
   ): Prisma.RecipeWhereInput {
     const { queryFilter, isDeleted, search } = query;
@@ -109,7 +109,7 @@ export class RecipesService {
     };
   }
 
-  async getOne(id: number, userId: number, withIngredients?: boolean) {
+  async getOne(id: number, userId: string, withIngredients?: boolean) {
     const recipe = await this.prisma.recipe.findUnique({
       where: {
         id,

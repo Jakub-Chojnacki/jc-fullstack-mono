@@ -11,7 +11,7 @@ export class ShoppingListIngredientsController {
   ) {}
 
   @TsRestHandler(contract.shoppingListIngredient.get)
-  get(@GetCurrentUserId() userId: number) {
+  get(@GetCurrentUserId() userId: string) {
     return tsRestHandler(
       contract.shoppingListIngredient.get,
       async ({ query }) => {
@@ -27,7 +27,7 @@ export class ShoppingListIngredientsController {
   }
 
   @TsRestHandler(contract.shoppingListIngredient.create)
-  create(@GetCurrentUserId() userId: number) {
+  create(@GetCurrentUserId() userId: string) {
     return tsRestHandler(
       contract.shoppingListIngredient.create,
       async ({ body }) => {
@@ -43,7 +43,7 @@ export class ShoppingListIngredientsController {
   }
 
   @TsRestHandler(contract.shoppingListIngredient.createFromRecipe)
-  createFromRecipe(@GetCurrentUserId() userId: number) {
+  createFromRecipe(@GetCurrentUserId() userId: string) {
     return tsRestHandler(
       contract.shoppingListIngredient.createFromRecipe,
       async ({ params: { id } }) => {
@@ -62,7 +62,7 @@ export class ShoppingListIngredientsController {
   }
 
   @TsRestHandler(contract.shoppingListIngredient.delete)
-  delete(@GetCurrentUserId() userId: number) {
+  delete(@GetCurrentUserId() userId: string) {
     return tsRestHandler(
       contract.shoppingListIngredient.delete,
       async ({ params: { id } }) => {
@@ -77,7 +77,7 @@ export class ShoppingListIngredientsController {
   }
 
   @TsRestHandler(contract.shoppingListIngredient.update)
-  update(@GetCurrentUserId() userId: number) {
+  update(@GetCurrentUserId() userId: string) {
     return tsRestHandler(
       contract.shoppingListIngredient.update,
       async ({ params: { id }, body }) => {

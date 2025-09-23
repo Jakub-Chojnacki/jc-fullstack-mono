@@ -14,13 +14,9 @@ COPY --from=pruner /app/turbo.json ./turbo.json
 COPY --from=pruner /app/apps/api/prisma ./prisma
 RUN npm install --frozen-lockfile
 RUN npm install -g prisma
-RUN prisma generate
+RUN npx prisma generate
 
 FROM node:lts-alpine AS builder
-ARG TURBO_TEAM
-ENV TURBO_TEAM=$TURBO_TEAM
-ARG TURBO_TOKEN
-ENV TURBO_TOKEN=$TURBO_TOKEN
 WORKDIR /app
 COPY --from=installer /app/ .
 COPY --from=pruner /app/out/full .

@@ -1,17 +1,28 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input } from "@jcmono/ui";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+} from "@jcmono/ui";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
-import { queryClient } from "@/main";
-import { AUTH_ME_QUERY_KEY } from "@/queries/useAuthMe/const";
-import useSignIn from "@/queries/useSignIn";
+import { authClient } from "@/lib/auth";
 
 import { loginFormSchema } from "./schema";
 
 function LoginForm() {
-  const { mutate } = useSignIn();
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
@@ -19,16 +30,13 @@ function LoginForm() {
     defaultValues: { email: "", password: "" },
   });
 
-  const onSubmit = (values: z.infer<typeof loginFormSchema>) => {
-    mutate(
-      { body: values },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: AUTH_ME_QUERY_KEY });
-          navigate({ from: "/signin", to: "/app" });
-        },
-      },
-    );
+  const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
+    const { data } = await authClient.signIn.email({
+      ...values,
+    });
+
+    if (data)
+      navigate({ from: "/signin", to: "/app" });
   };
 
   return (

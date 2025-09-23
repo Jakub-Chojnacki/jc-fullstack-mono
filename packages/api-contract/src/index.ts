@@ -6,7 +6,6 @@ import {
   IngredientCreateSchema,
   IngredientGetQuerySchema,
   IngredientSchema,
-  LoginSchema,
   PaginatedResponseSchema,
   RecipeCreateSchema,
   RecipeGetOneSchema,
@@ -20,8 +19,7 @@ import {
   ShoppingListIngredientGetSchema,
   ShoppingListIngredientSchema,
   ShoppingListIngredientUpdateSchema,
-  StringToNumberSchema,
-  UserSchema
+  StringToNumberSchema
 } from "./schemas/index";
 import {
   ScheduleMealsCreateSchema,
@@ -283,48 +281,6 @@ export const contract = c.router(
         responses: {
           200: ScheduleMealsSchema,
           404: ErrorResponseSchema,
-        },
-      },
-    },
-    auth: {
-      signup: {
-        method: "POST",
-        path: "/auth/signup",
-        body: LoginSchema,
-        responses: {
-          201: z.string(),
-        },
-      },
-      signin: {
-        method: "POST",
-        path: "/auth/signin",
-        body: LoginSchema,
-        responses: {
-          200: z.string(),
-        },
-      },
-      me: {
-        method: "GET",
-        path: "/auth/me",
-        responses: {
-          200: UserSchema,
-          404: ErrorResponseSchema,
-        },
-      },
-      refreshToken: {
-        method: "POST",
-        path: "/auth/refresh",
-        body: null,
-        responses: {
-          200: z.string(),
-        },
-      },
-      logout: {
-        method: "POST",
-        path: "/auth/logout",
-        body: null,
-        responses: {
-          200: null,
         },
       },
     },

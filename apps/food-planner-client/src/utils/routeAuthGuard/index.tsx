@@ -1,12 +1,15 @@
-import apiClient from "@/api-client";
+import { authClient } from "@/lib/auth";
 
 async function routeAuthGuard() {
   try {
-    const user = await apiClient.auth.me.query();
-    return user;
+    const { data } = await authClient.getSession();
+    if (!data?.user) {
+      return { user: null, error: null };
+    }
+    return { user: data.user, error: null };
   }
   catch {
-    throw new Error("Unauthorized");
+    return { user: null, error: "network" };
   }
 }
 

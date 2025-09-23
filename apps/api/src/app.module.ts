@@ -1,11 +1,11 @@
+import { AuthGuard, AuthModule } from '@mguay/nestjs-better-auth';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
-import { AuthModule } from './auth/auth.module';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
-import { AtGuard } from './common/guards';
 import { IngredientsModule } from './ingredients/ingredients.module';
+import { auth } from './lib/auth';
 import { PrismaModule } from './prisma/prisma.module';
 import { RecipeIngredientsModule } from './recipe-ingredients/recipe-ingredients.module';
 import { RecipesModule } from './recipes/recipes.module';
@@ -16,8 +16,12 @@ import { UploadModule } from './upload/upload.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    AuthModule.forRootAsync({
+      useFactory: () => ({
+        auth,
+      }),
+    }),
     IngredientsModule,
-    AuthModule,
     PrismaModule,
     RecipesModule,
     RecipeIngredientsModule,
@@ -27,16 +31,16 @@ import { UploadModule } from './upload/upload.module';
   ],
   providers: [
     {
-      provide: APP_GUARD,
-      useClass: AtGuard,
-    },
-    {
       provide: APP_FILTER,
       useClass: PrismaExceptionFilter,
     },
     {
       provide: APP_FILTER,
       useClass: GlobalExceptionFilter,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
     },
   ],
 })
