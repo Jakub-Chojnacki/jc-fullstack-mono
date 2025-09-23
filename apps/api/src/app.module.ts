@@ -1,7 +1,7 @@
-import { AuthModule } from '@mguay/nestjs-better-auth';
+import { AuthGuard, AuthModule } from '@mguay/nestjs-better-auth';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
 import { IngredientsModule } from './ingredients/ingredients.module';
@@ -39,6 +39,10 @@ import { UsersModule } from './users/users.module';
     {
       provide: APP_FILTER,
       useClass: GlobalExceptionFilter,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
     },
   ],
 })

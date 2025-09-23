@@ -1,10 +1,10 @@
-import apiClient from "@/api-client";
+import { authClient } from "@/lib/auth";
 import { router } from "@/main";
 
 async function redirectLoggedUser() {
-  const user = await apiClient.auth.me.query();
+  const { data } = await authClient.getSession();
 
-  if (user.status === 200) {
+  if (data?.user) {
     router.navigate({ to: "/app" });
   }
 }

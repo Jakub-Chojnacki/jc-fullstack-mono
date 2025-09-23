@@ -13,5 +13,5 @@ export const auth = betterAuth({
   }),
   // Enable simple email+password to start. (We'll add OAuth/Passkeys later.)
   emailAndPassword: { enabled: true },
-  trustedOrigins: ['http://localhost:3000'],
+  trustedOrigins: [process.env.CORS_ORIGIN || 'http://localhost:5173'],
 });
