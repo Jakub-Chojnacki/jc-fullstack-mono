@@ -16,6 +16,7 @@ import {
 } from "@jcmono/ui";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import type { z } from "zod";
 
 import { authClient } from "@/lib/auth";
@@ -31,12 +32,30 @@ function LoginForm() {
   });
 
   const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
-    const { data } = await authClient.signIn.email({
-      ...values,
+    const { data, error } = await authClient.signIn.email(values);
+
+    if (data) {
+      navigate({ from: "/signin", to: "/app" });
+    }
+    else if (error) {
+      toast.error(error?.message || "Google sign-in failed");
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    const callbackURL = `${window.location.origin}/app`;
+    const { data, error } = await authClient.signIn.social({
+      provider: "google",
+      callbackURL,
     });
 
-    if (data)
-      navigate({ from: "/signin", to: "/app" });
+    if (data) {
+      toast.success("You have been logged in successfully!");
+    }
+
+    if (error) {
+      toast.error(error?.message || "Google sign-in failed");
+    }
   };
 
   return (
@@ -89,6 +108,21 @@ function LoginForm() {
 
                 <Button type="submit" className="w-full">
                   Login
+                </Button>
+
+                <div className="relative my-4 flex items-center">
+                  <span className="flex-grow border-t" />
+                  <span className="mx-2 text-xs text-muted-foreground">OR</span>
+                  <span className="flex-grow border-t" />
+                </div>
+
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full"
+                  onClick={handleGoogleSignIn}
+                >
+                  Sign in with Google
                 </Button>
               </div>
 
