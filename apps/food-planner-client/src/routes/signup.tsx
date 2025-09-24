@@ -6,7 +6,7 @@ import redirectLoggedUser from "@/utils/redirectLoggedUser";
 
 export const Route = createFileRoute("/signup")({
   component: RouteComponent,
-  loader: redirectLoggedUser,
+  beforeLoad: redirectLoggedUser,
   errorComponent: () => <Navigate to="/app" />,
 });
 

@@ -11,7 +11,12 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: 'postgresql',
   }),
-  // Enable simple email+password to start. (We'll add OAuth/Passkeys later.)
   emailAndPassword: { enabled: true },
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    },
+  },
   trustedOrigins: [process.env.CORS_ORIGIN || 'http://localhost:5173'],
 });
