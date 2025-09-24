@@ -1,13 +1,14 @@
-import { createFileRoute, Navigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 
 import LoginForm from "@forms/LoginForm";
 
+import ErrorView from "@/components/ErrorView";
 import redirectLoggedUser from "@/utils/redirectLoggedUser";
 
 export const Route = createFileRoute("/signin")({
   component: RouteComponent,
-  loader: redirectLoggedUser,
-  errorComponent: () => <Navigate to="/app" />,
+  errorComponent: ErrorView,
+  beforeLoad: redirectLoggedUser,
 });
 
 function RouteComponent() {
