@@ -4,13 +4,6 @@ import { BasePrismaSchema } from "./utils";
 
 export const MealTypes = ["BREAKFAST", "LUNCH", "DINNER", "SNACK"] as const;
 
-export enum EMealTypes {
-  BREAKFAST = "BREAKFAST",
-  LUNCH = "LUNCH",
-  DINNER = "DINNER",
-  SNACK = "SNACK",
-}
-
 export const ScheduleMealsSchema = BasePrismaSchema.extend({
   recipeId: z.number(),
   mealType: z.enum(MealTypes).nullish(),
