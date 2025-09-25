@@ -1,8 +1,8 @@
 import {
-    EMealTypes,
-    TRecipe,
-    TRecipeCreate,
-    TRecipeUpdate,
+  EMealTypes,
+  TRecipe,
+  TRecipeCreate,
+  TRecipeUpdate,
 } from '@jcmono/api-contract';
 import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
