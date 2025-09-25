@@ -21,6 +21,7 @@ import type { z } from "zod";
 
 import { authClient } from "@/lib/auth";
 
+import { LOGIN_FALLBACK_ERROR_MESSAGE } from "./const";
 import { loginFormSchema } from "./schema";
 
 function LoginForm() {
@@ -38,7 +39,7 @@ function LoginForm() {
       navigate({ from: "/signin", to: "/app" });
     }
     else if (error) {
-      toast.error(error?.message || "Google sign-in failed");
+      toast.error(error?.message || LOGIN_FALLBACK_ERROR_MESSAGE);
     }
   };
 
@@ -50,11 +51,11 @@ function LoginForm() {
     });
 
     if (data) {
-      toast.success("You have been logged in successfully!");
+      navigate({ from: "/signin", to: "/app" });
     }
 
     if (error) {
-      toast.error(error?.message || "Google sign-in failed");
+      toast.error(error?.message || LOGIN_FALLBACK_ERROR_MESSAGE);
     }
   };
 
