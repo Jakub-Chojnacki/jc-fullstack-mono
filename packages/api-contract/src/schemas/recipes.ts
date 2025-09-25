@@ -5,8 +5,7 @@ import {
   RecipeIngredientUpdateSchema,
 } from "./ingredients";
 
-import { EMealTypes } from "./scheduleMeals";
-import { BooleanQuerySchema, GetQueryFilter, PaginationSchema } from "./utils";
+import { BooleanQuerySchema, EMealTypes, GetQueryFilter, PaginationSchema } from "./utils";
 
 export const RecipeSchema = z.object({
   id: z.number(),

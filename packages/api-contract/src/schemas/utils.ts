@@ -75,3 +75,10 @@ export const ImageUploadSchema = z
     message: "Max size is 5MB",
   })
   .optional();
+
+export enum EMealTypes {
+  BREAKFAST = "BREAKFAST",
+  LUNCH = "LUNCH",
+  DINNER = "DINNER",
+  SNACK = "SNACK",
+}
