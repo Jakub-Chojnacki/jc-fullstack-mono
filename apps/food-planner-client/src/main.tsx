@@ -18,12 +18,13 @@ declare module "@tanstack/react-router" {
 
 export type SinglePath = keyof (typeof router)["routesByPath"];
 
-export const queryClient = new QueryClient({ defaultOptions: {
-  queries: {
-    retry: false,
-    refetchOnWindowFocus: false,
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
   },
-} });
+});
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

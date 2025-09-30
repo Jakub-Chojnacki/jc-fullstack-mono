@@ -1,10 +1,6 @@
 import apiClient from "@/api-client";
 
-type UseGetShoppingListIngredientsParams = {
-  take?: number;
-  isDone?: boolean;
-  isDeleted?: boolean;
-};
+import type { UseGetShoppingListIngredientsParams } from "./types";
 
 function useGetShoppingListIngredients(params: UseGetShoppingListIngredientsParams = {}) {
   const { take, isDone, isDeleted } = params;
