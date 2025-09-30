@@ -8,8 +8,6 @@ import { axiosClient } from "./axios-client";
 export const apiClient = initQueryClient(contract, {
   baseHeaders: {},
   baseUrl: "",
-  // eslint-disable-next-line ts/ban-ts-comment
-  // @ts-ignore
   // https://ts-rest.com/client/fetch#using-alternative-http-clients
   api: async ({ path, method, headers, body }) => {
     try {
